@@ -337,7 +337,7 @@ a {
 .search-result-meta { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
 #legend,
-#copyright,
+footer,
 #controls-container,
 #breadcrumb-stack {
 	position: absolute;
@@ -385,7 +385,7 @@ a {
 		stroke-width: 3;
 	}
 }
-#copyright {
+footer {
 	bottom: 1em;
 	right: 1em;
 	padding: .5em 1em;
@@ -394,6 +394,7 @@ a {
 	border: none;
 	box-shadow: none;
 	background: transparent;
+	text-align: center;
 }
 
 svg {
@@ -509,9 +510,10 @@ svg {
 		</defs>
 	</svg>
 	<div id="nodes-layer"></div>
-	<div id="copyright">
-		&copy; 2026 <a href="https://x.com/MrBang21" target="_blank">@MrBang21</a>
-	</div>
+<footer>
+	<p>By <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></p>
+	<p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> — share freely with attribution.</p>
+</footer>
 </div>
 
 <script>
