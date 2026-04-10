@@ -134,31 +134,22 @@ a {
 
 #graph-container {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100vw;
-	height: 100vh;
+	inset: 0;
 	z-index: 1;
 	overflow: hidden;
 }
-
-#lines-layer {
+#lines-layer,
+#nodes-layer {
 	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	inset: 0;
+}
+#lines-layer {
 	z-index: 1;
 	pointer-events: none;
 	overflow: visible;
 }
-
 #nodes-layer {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
+	inset: 0;
 	z-index: 2;
 }
 
@@ -1190,8 +1181,9 @@ function updateBreadcrumbs(centerId) {
 function renderGraph(centerId) {
 	currentCenterId = centerId;
 	const
+		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
-		centerY = window.innerHeight / 2,
+		centerY = (window.innerHeight / 2) + (6 * emSize),
 		path = getBreadcrumbPath(centerId),
 		parentId = path && path.length > 1 ? path[path.length - 2] : null,
 		centerNodeData = nodes.find(n => n.id === centerId);
