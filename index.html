@@ -338,15 +338,22 @@ a {
 	padding: .5em 1em;
 	border-radius: .5em;
 	corner-shape: squircle;
+	height: 2.5em;
+	line-height: 1;
 	display: flex;
-	flex-wrap: wrap;
+	flex-wrap: nowrap;
 	flex-direction: row;
-	justify-content: flex-start;
-	overflow: clip;
+	justify-content: flex-end;
+	overflow: hidden;
 	gap: .25em;
 	align-items: center;
-	flex: 1 1 50%;
+	flex: 0 1 min-content;
 	transition: background-color 0.3s;
+}
+
+#breadcrumb-stack > * {
+	white-space: nowrap;
+	flex-shrink: 0;
 }
 
 .breadcrumb-item {
@@ -378,7 +385,7 @@ select, input {
 
 #controls-container {
 	display: flex;
-	gap: 1em;
+	gap: .25em;
 	flex: 1 1 50%;
 	justify-content: flex-end;
 	position: relative;
@@ -405,7 +412,7 @@ select, input {
 
 	#search-container {
 		position: relative;
-		flex: 0 1 50%;
+		flex: 0 1 auto;
 
 		#search-input {
 			width: 100%;
@@ -844,7 +851,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<p>Human Sensory Atlas v1.1 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></p>
+		<p>Human Sensory Atlas v1.2 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></p>
 		<p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</p>
 	</footer>
 </div>
@@ -1443,8 +1450,14 @@ function updateLinesLoop() {
 	requestAnimationFrame(updateLinesLoop);
 }
 
+let resizeTimeout;
 window.addEventListener('resize', () => {
-	if (nodes.length > 0) renderGraph(currentCenterId);
+	if (nodes.length > 0) {
+		clearTimeout(resizeTimeout);
+		resizeTimeout = setTimeout(() => {
+			renderGraph(currentCenterId);
+		}, 500);
+	}
 });
 
 window.addEventListener('hashchange', () => {
