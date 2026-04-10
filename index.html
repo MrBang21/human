@@ -1183,7 +1183,7 @@ function renderGraph(centerId) {
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
-		centerY = (window.innerHeight / 2) + (6 * emSize),
+		centerY = (window.innerHeight / 2) + (3 * emSize),
 		path = getBreadcrumbPath(centerId),
 		parentId = path && path.length > 1 ? path[path.length - 2] : null,
 		centerNodeData = nodes.find(n => n.id === centerId);
