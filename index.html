@@ -41,7 +41,7 @@
 	--hue-removed: 20;
 	--hue-consequence: 60;
 	--hue-benefit: 160;
-	--hue-harm: 40;
+	--hue-harm: 20;
 	--hue-url: 240;
 
 	--trait-male: oklch(var(--text-lightness) var(--text-chroma) var(--hue-male));
@@ -719,8 +719,8 @@ svg {
 		<div id="controls-container">
 			<div class="select">
 				<select id="depth-control" title="Set the number of connection layers to display">
-					<option value="1" selected>1</option>
-					<option value="2">2</option>
+					<option value="1">1</option>
+					<option value="2" selected>2</option>
 					<option value="3">3</option>
 				</select>
 			</div>
@@ -747,7 +747,7 @@ svg {
 	<div id="legend">
 		<div class="legend-section-title">Connection Types</div>
 		<div class="legend-item">
-			<div class="legend-line anatomy"></div> Anatomy / Default
+			<div class="legend-line anatomy"></div> Default Anatomy
 		</div>
 		<div class="legend-item">
 			<div class="legend-line removed"></div> Excised / Removed
@@ -759,7 +759,7 @@ svg {
 			<div class="legend-line benefit"></div> Claimed Benefit
 		</div>
 		<div class="legend-item">
-			<div class="legend-line harm"></div> Claimed Harm
+			<div class="legend-line harm"></div> Direct Harm
 		</div>
 		<div class="legend-divider"></div>
 		<div class="legend-section-title">Biological Traits</div>
@@ -913,8 +913,17 @@ async function loadGraphData() {
 	}
 }
 
+function updateUrlState(id) {
+	const url = new URL(window.location);
+	url.hash = id;
+	url.searchParams.set('depth', depthDropdown.value);
+	url.searchParams.set('trait', currentTraitFilter);
+	history.pushState(null, null, url.toString());
+}
+
 traitFilterDropdown.addEventListener('change', (e) => {
 	currentTraitFilter = e.target.value;
+	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	if (searchInput.value) {
 		searchInput.dispatchEvent(new Event('input'));
@@ -923,6 +932,7 @@ traitFilterDropdown.addEventListener('change', (e) => {
 });
 
 depthDropdown.addEventListener('change', (e) => {
+	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	e.target.blur();
 });
@@ -933,6 +943,16 @@ function getIdFromHash() {
 }
 
 function initGraph() {
+	const url = new URL(window.location);
+	const initialDepth = url.searchParams.get('depth');
+	if (initialDepth) depthDropdown.value = initialDepth;
+
+	const initialTrait = url.searchParams.get('trait');
+	if (initialTrait) {
+		traitFilterDropdown.value = initialTrait;
+		currentTraitFilter = initialTrait;
+	}
+
 	currentCenterId = getIdFromHash();
 
 	nodes.forEach(node => {
@@ -993,7 +1013,7 @@ searchInput.addEventListener('input', (e) => {
 
 			itemEl.addEventListener('click', () => {
 				const id = itemEl.getAttribute('data-id');
-				history.pushState(null, null, '#' + id);
+				updateUrlState(id);
 				renderGraph(id);
 				searchInput.value = '';
 				searchResults.style.display = 'none';
@@ -1066,7 +1086,7 @@ function setupInteractions(card, id) {
 
 		if (!hasMoved) {
 			if (currentCenterId !== id) {
-				history.pushState(null, null, '#' + id);
+				updateUrlState(id);
 			}
 			renderGraph(id);
 		}
@@ -1164,7 +1184,7 @@ function updateBreadcrumbs(centerId) {
 		} else {
 			span.className = 'breadcrumb-item';
 			span.onclick = () => {
-				history.pushState(null, null, '#' + nodeId);
+				updateUrlState(nodeId);
 				renderGraph(nodeId);
 			};
 		}
@@ -1295,55 +1315,72 @@ function renderGraph(centerId) {
 			groups[nData.parentId].push(nData);
 		});
 
-		layerNodes.forEach((nData, index) => {
-			const el = document.getElementById(`node-${nData.node.id}`);
-			if (!el) return;
+		Object.entries(groups).forEach(([pId, children]) => {
+			let px = centerX;
+			let py = centerY;
+			let pAngle = 0;
+			let isCenter = true;
 
-			el.classList.remove('hidden');
-
-			if (nData.isOutgoing) {
-				el.classList.add('target');
-			} else {
-				el.classList.add('source');
+			if (d > 1) {
+				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
+				if (pData && pData.x !== undefined && pData.y !== undefined) {
+					px = pData.x;
+					py = pData.y;
+					pAngle = pData.angle || 0;
+					isCenter = false;
+				}
 			}
 
-			if (nData.node.id === parentId) {
-				el.classList.add('parent');
-			}
+			// Flower layout: 360° for center, 140° outward fan for petals
+			const totalSpread = isCenter ? 2 * Math.PI : Math.PI * 0.8;
+			const startAngle = isCenter ? -Math.PI / 2 : pAngle - (totalSpread / 2);
 
-			const neighborMatches = checkTrait(nData.node.trait);
-			if (!neighborMatches) el.classList.add('ghosted');
+			// Required spacing decreases if there are many nodes, but let's keep it clean
+			const requiredArcLength = children.length * 140;
 
-			let angle;
-			if (d === 1) {
-				angle = (index / layerNodes.length) * 2 * Math.PI - (Math.PI / 2);
-				nData.angle = angle;
-			} else {
-				const
-					pNodeData = nodesByDepth[d - 1].find(pn => pn.node.id === nData.parentId),
-					pAngle = pNodeData && pNodeData.angle !== undefined ? pNodeData.angle : 0,
-					siblings = groups[nData.parentId],
-					sIdx = siblings.indexOf(nData),
-					angleSpread = Math.PI / Math.pow(1.5, d - 1);
-				if (siblings.length === 1) {
+			// Increase next circle radius: 1.0 (d=1), 1.4 (d=2), 1.8 (d=3)
+			const sizeMultiplier = 1.0 + (d - 1) * 0.4;
+			const dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
+
+			children.forEach((nData, index) => {
+				const el = document.getElementById(`node-${nData.node.id}`);
+				if (!el) return;
+
+				el.classList.remove('hidden');
+
+				if (nData.isOutgoing) {
+					el.classList.add('target');
+				} else {
+					el.classList.add('source');
+				}
+
+				if (nData.node.id === parentId) {
+					el.classList.add('parent');
+				}
+
+				const neighborMatches = checkTrait(nData.node.trait);
+				if (!neighborMatches) el.classList.add('ghosted');
+
+				let angle;
+				if (!isCenter && children.length === 1) {
 					angle = pAngle;
 				} else {
-					angle = pAngle - (angleSpread / 2) + (sIdx / (siblings.length - 1)) * angleSpread;
+					const divisor = isCenter ? children.length : Math.max(1, children.length - 1);
+					angle = startAngle + (index / divisor) * totalSpread;
 				}
+
 				nData.angle = angle;
-			}
 
-			let typeWeight = 1.0;
-			if (nData.edgeType === 'benefit') typeWeight = 1.4;
-			else if (nData.edgeType === 'consequence' || nData.edgeType === 'harm') typeWeight = 1.2;
-			else if (nData.edgeType === 'removed') typeWeight = 1.6;
-			const
-				radius = (baseRadius * d) * typeWeight,
-				nx = centerX + radius * Math.cos(angle),
-				ny = centerY + radius * Math.sin(angle);
+				const nx = px + dynamicRadius * Math.cos(angle);
+				const ny = py + dynamicRadius * Math.sin(angle);
 
-			el.style.left = `${nx}px`;
-			el.style.top = `${ny}px`;
+				// Save coordinates so the next depth children can fan out from this node
+				nData.x = nx;
+				nData.y = ny;
+
+				el.style.left = `${nx}px`;
+				el.style.top = `${ny}px`;
+			});
 		});
 	}
 
