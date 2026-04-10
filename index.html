@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Human Anatomy Database</title>
+<title>Human Sensory Atlas</title>
 <style>
 :root {
-	color-scheme: light;
+	color-scheme: dark;
+	accent-color: var(--url-color);
 	--bg-color: oklch(0.95 0 0);
 	--card-bg: oklch(1 0 0);
 	--card-border: oklch(0.8 0 0);
@@ -94,6 +95,7 @@
 	corner-shape: squircle;
 	text-wrap-style: pretty;
 }
+
 html {
 	font-size: clamp(.875rem, 1vw + 0.25rem, 1.125rem);
 }
@@ -103,15 +105,21 @@ body {
 	padding: 0;
 	background-color: var(--bg-color);
 	color: var(--text-main);
-	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	font-family:
+		system-ui,
+		sans-serif;
 	overflow: hidden;
 	user-select: none;
 	transition: background-color 0.3s, color 0.3s;
+
+	font-variation-settings: "GRAD" 100;
 }
+
 a {
 	color: var(--url-color);
 	text-decoration: none;
 	transition: color 0.3s;
+
 	&:hover {
 		color: var(--url-hover);
 		text-decoration: underline;
@@ -124,6 +132,16 @@ a {
 	height: 100svh;
 }
 
+#graph-container {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: 1;
+	overflow: hidden;
+}
+
 #lines-layer {
 	position: absolute;
 	top: 0;
@@ -132,6 +150,7 @@ a {
 	height: 100%;
 	z-index: 1;
 	pointer-events: none;
+	overflow: visible;
 }
 
 #nodes-layer {
@@ -143,12 +162,28 @@ a {
 	z-index: 2;
 }
 
+#nodes-zoom {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 0;
+	transform-origin: 0 0;
+	will-change: transform;
+}
+
+#lines-zoom {
+	transform-origin: 0 0;
+	will-change: transform;
+}
+
 .card {
 	position: absolute;
 	min-width: 10em;
 	max-width: 20em;
 	--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue));
 	background: var(--_back);
+
 	@supports (backdrop-filter: blur(0)) {
 		--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue) / 0.2);
 		backdrop-filter: blur(1em);
@@ -161,21 +196,41 @@ a {
 	cursor: grab;
 	translate: -50% -50%;
 	transform-origin: center;
-	transition:
-		scale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-		left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-		top 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-		box-shadow 0.3s ease,
-		filter 0.3s ease,
-		background-color 0.3s ease,
-		border-color 0.3s ease,
-		opacity 0.3s ease;
+	transition: scale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+	left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+	top 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
+	box-shadow 0.3s ease,
+	filter 0.3s ease,
+	background-color 0.3s ease,
+	border-color 0.3s ease,
+	opacity 0.3s ease;
 	text-align: center;
-	&:active { cursor: grabbing; }
-	&.hidden { opacity: 0; pointer-events: none; }
-	&.target { z-index: 2; scale: 1.0; }
-	&.source { z-index: 1; scale: 0.9; }
-	&.parent { z-index: 0; scale: 0.8; filter: saturate(0.5); }
+
+	&:active {
+		cursor: grabbing;
+	}
+
+	&.hidden {
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	&.target {
+		z-index: 2;
+		scale: 1.0;
+	}
+
+	&.source {
+		z-index: 1;
+		scale: 0.9;
+	}
+
+	&.parent {
+		z-index: 0;
+		scale: 0.8;
+		filter: saturate(0.5);
+	}
+
 	&:hover {
 		box-shadow: 0 1em 1em -.5em oklch(var(--shadow-lightness) var(--shadow-chroma) var(--_hue) / 0.8);
 		--text-lightness: var(--text-hover-lightness);
@@ -184,15 +239,37 @@ a {
 		scale: 1.05;
 	}
 
-	&.trait-male { --_text-hue: var(--hue-male); }
-	&.trait-female { --_text-hue: var(--hue-female); }
-	&.trait-shared { --_text-hue: var(--hue-shared); }
+	&.trait-male {
+		--_text-hue: var(--hue-male);
+	}
 
-	&.type-anatomy   { --_hue: var(--hue-anatomy); }
-	&.type-removed   { --_hue: var(--hue-removed); }
-	&.type-consequence { --_hue: var(--hue-consequence); }
-	&.type-benefit   { --_hue: var(--hue-benefit); }
-	&.type-harm      { --_hue: var(--hue-harm); }
+	&.trait-female {
+		--_text-hue: var(--hue-female);
+	}
+
+	&.trait-shared {
+		--_text-hue: var(--hue-shared);
+	}
+
+	&.type-anatomy {
+		--_hue: var(--hue-anatomy);
+	}
+
+	&.type-removed {
+		--_hue: var(--hue-removed);
+	}
+
+	&.type-consequence {
+		--_hue: var(--hue-consequence);
+	}
+
+	&.type-benefit {
+		--_hue: var(--hue-benefit);
+	}
+
+	&.type-harm {
+		--_hue: var(--hue-harm);
+	}
 
 	.card-icon {
 		position: absolute;
@@ -217,28 +294,41 @@ a {
 		transition: color 0.3s ease;
 		color: oklch(var(--text-lightness) var(--text-chroma) var(--_text-hue));
 	}
+
 	p {
 		margin: 0;
 		font-size: 0.95em;
 		color: var(--text-muted);
 	}
+
 	&.center-node {
 		min-width: 14em;
 		z-index: 100;
 		background-color: var(--center-bg);
 		box-shadow: 0 1em 2em -.5em oklch(var(--shadow-lightness) var(--shadow-chroma) var(--_hue) / 0.8);
+
 		@supports (backdrop-filter: blur(0)) {
 			background-color: var(--center-bg) with alpha(var(--center-bg) / 0.8);
 			backdrop-filter: blur(2em);
 		}
 	}
+
 	&.dragging {
 		transition: box-shadow 0.3s ease, filter 0.3s ease, background-color 0.3s ease !important;
 		z-index: 100 !important;
 	}
-	&.ghosted { filter: grayscale(80%); }
-	&.ghosted:hover { filter: grayscale(20%); }
-	&.center-node.ghosted { filter: grayscale(40%); }
+
+	&.ghosted {
+		filter: grayscale(80%);
+	}
+
+	&.ghosted:hover {
+		filter: grayscale(20%);
+	}
+
+	&.center-node.ghosted {
+		filter: grayscale(40%);
+	}
 }
 
 #top-bar {
@@ -246,11 +336,16 @@ a {
 	top: 1em;
 	left: 1em;
 	right: 1em;
-	height: 3em;
 	z-index: 200;
 	display: flex;
-	flex-direction: column;
-	align-items: stretch;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: 1em;
+	pointer-events: none;
+}
+
+#top-bar > * {
+	pointer-events: auto;
 }
 
 #breadcrumb-stack {
@@ -261,85 +356,140 @@ a {
 	display: flex;
 	flex-wrap: wrap;
 	flex-direction: row;
-	justify-content: flex-end;
+	justify-content: flex-start;
 	overflow: clip;
 	gap: .25em;
 	align-items: center;
-	flex: 1 1 100%;
+	flex: 1;
 	transition: background-color 0.3s;
 }
-.breadcrumb-item { cursor: pointer; color: var(--url-color); font-weight: 500; transition: color 0.2s; }
-.breadcrumb-item:hover { color: var(--url-hover); text-decoration: underline; }
-.breadcrumb-separator { color: var(--text-muted); font-size: 12px; margin: 0 4px; }
-.breadcrumb-current { color: var(--text-main); font-weight: bold; cursor: default; }
+
+.breadcrumb-item {
+	cursor: pointer;
+	color: var(--url-color);
+	font-weight: 500;
+	transition: color 0.2s;
+}
+
+.breadcrumb-item:hover {
+	color: var(--url-hover);
+	text-decoration: underline;
+}
+
+.breadcrumb-separator {
+	color: var(--text-muted);
+	font-size: 12px;
+	margin: 0 4px;
+}
+
+.breadcrumb-current {
+	color: var(--text-main);
+	font-weight: bold;
+	cursor: default;
+}
 
 #controls-container {
 	display: flex;
 	gap: 1em;
-	max-width: 20em;
-	align-self: flex-end;
-}
+	flex: 1;
+	justify-content: flex-end;
+	position: relative;
+	align-items: center;
 
-#category-filter {
-	padding: 12px 15px;
-	background: var(--ui-bg);
-	color: var(--text-main);
-	border: 1px solid var(--ui-border);
-	border-radius: .5em;
-	font-size: 14px;
-	box-shadow: 0 2px 10px var(--ui-shadow);
-	outline: none;
-	cursor: pointer;
-	transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-	width: 40%;
-}
-#category-filter:focus { border-color: var(--url-color); }
+	.select {
+		position: relative;
+		display: flex;
+	}
 
-#search-container { position: relative; flex-grow: 1; }
+	#depth-control, #trait-filter {
+		padding: 12px 15px;
+		background: var(--ui-bg);
+		color: var(--text-main);
+		border: 1px solid var(--ui-border);
+		border-radius: .5em;
+		font-size: 14px;
+		box-shadow: 0 2px 10px var(--ui-shadow);
+		outline: none;
+		cursor: pointer;
+		transition: border-color 0.3s, background-color 0.3s, color 0.3s;
 
-#search-input {
-	width: 100%;
-	padding: 12px 15px;
-	background: var(--ui-bg);
-	color: var(--text-main);
-	border: 1px solid var(--ui-border);
-	border-radius: .5em;
-	font-size: 14px;
-	box-sizing: border-box;
-	box-shadow: 0 2px 10px var(--ui-shadow);
-	outline: none;
-	transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-}
-#search-input::placeholder { color: var(--text-muted); }
-#search-input:focus { border-color: var(--url-color); }
+		&:focus {
+			border-color: var(--url-color);
+		}
+	}
 
-#search-results {
-	margin-top: .5em;
-	background: var(--ui-bg);
-	border-radius: .5em;
-	box-shadow: 0 4px 20px var(--ui-shadow);
-	max-height: 350px;
-	overflow-y: auto;
-	display: none;
-	border: 1px solid var(--ui-border);
-	position: absolute;
-	width: 100%;
+	#search-container {
+		position: relative;
+		flex-grow: 1;
+
+		#search-input {
+			width: 100%;
+			padding: 12px 15px;
+			background: var(--ui-bg);
+			color: var(--text-main);
+			border: 1px solid var(--ui-border);
+			border-radius: .5em;
+			font-size: 14px;
+			box-sizing: border-box;
+			box-shadow: 0 2px 10px var(--ui-shadow);
+			outline: none;
+			transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+
+			&::placeholder {
+				color: var(--text-muted);
+			}
+
+			&:focus {
+				border-color: var(--url-color);
+			}
+		}
+
+		#search-results {
+			margin-top: .5em;
+			background: var(--ui-bg);
+			border-radius: .5em;
+			box-shadow: 0 4px 20px var(--ui-shadow);
+			max-height: 350px;
+			overflow-y: auto;
+			display: none;
+			border: 1px solid var(--ui-border);
+			position: absolute;
+			width: 100%;
+
+			.search-result-item {
+				padding: 12px 15px;
+				cursor: pointer;
+				border-bottom: 1px solid var(--ui-border);
+				transition: background-color 0.2s;
+
+				&:last-child {
+					border-bottom: none;
+				}
+
+				&:hover {
+					background-color: var(--search-hover);
+				}
+
+				.search-result-title {
+					font-weight: 600;
+					color: var(--text-main);
+					font-size: 14px;
+					margin-bottom: 4px;
+				}
+
+				.search-result-meta {
+					font-size: 11px;
+					color: var(--text-muted);
+					text-transform: uppercase;
+					letter-spacing: 0.5px;
+				}
+			}
+		}
+	}
 }
-.search-result-item {
-	padding: 12px 15px;
-	cursor: pointer;
-	border-bottom: 1px solid var(--ui-border);
-	transition: background-color 0.2s;
-}
-.search-result-item:last-child { border-bottom: none; }
-.search-result-item:hover { background-color: var(--search-hover); }
-.search-result-title { font-weight: 600; color: var(--text-main); font-size: 14px; margin-bottom: 4px; }
-.search-result-meta { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
 
 #legend,
-footer,
-#controls-container,
-#breadcrumb-stack {
+footer {
 	position: absolute;
 	background: var(--ui-bg);
 	border-radius: .5em;
@@ -347,44 +497,164 @@ footer,
 	z-index: 200;
 }
 
-#legend, #category-filter, #search-input, #breadcrumb-stack {
+#controls-container,
+#breadcrumb-stack {
+	background: var(--ui-bg);
+	border-radius: .5em;
+	min-height: 2em;
+	z-index: 200;
+}
+
+#legend,
+#trait-filter,
+#search-input,
+#breadcrumb-stack,
+#node-description {
 	box-shadow: 0 0 .5em var(--ui-shadow);
 	border: .125em solid var(--ui-border);
 	background: var(--ui-bg);
+
 	@supports (backdrop-filter: blur(0)) {
 		background: var(--ui-bg) with alpha(var(--ui-bg) / 0.2);
 		backdrop-filter: blur(1em);
 	}
 }
 
-#legend { bottom: 1em; left: 1em; padding: 1em; }
-.legend-section-title { font-weight: bold; margin-bottom: .5em; color: var(--text-main); }
-.legend-divider { height: .1em; background: var(--ui-border); margin: .5em 0; }
-.legend-item { display: flex; align-items: center; margin-bottom: .5em; }
-.legend-item:last-child { margin-bottom: 0; }
-.legend-line { width: 3em; height: .2em; margin-right: 1em; }
-.legend-line.anatomy { background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy)); }
-.legend-line.removed { border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed)); height: 0; }
-.legend-line.consequence { background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence)); }
-.legend-line.benefit { border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit)); height: 0; }
-.legend-line.harm { border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm)); height: 0; }
+#node-description {
+	position: fixed;
+	top: 4.5em;
+	left: 1em;
+	width: 26em;
+	max-height: calc(100vh - 14em);
+	overflow-y: auto;
+	padding: 1.5em;
+	z-index: 200;
+	display: none;
+	border-radius: .5em;
+}
 
-.legend-text-icon { font-weight: bold; font-size: 14px; width: 3em; text-align: center; margin-right: 1em; }
-.legend-text-icon.male { color: var(--trait-male); }
-.legend-text-icon.female { color: var(--trait-female); }
-.legend-text-icon.shared { color: var(--trait-shared); }
+#node-description.visible {
+	display: block;
+}
+
+#node-description h2 {
+	margin: 0 0 0.5em 0;
+	font-size: 1.4em;
+	color: var(--text-main);
+}
+
+#node-description p {
+	margin: 0;
+	font-size: 0.95em;
+	color: var(--text-muted);
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+#legend {
+	bottom: 1em;
+	left: 1em;
+	padding: 1em;
+}
+
+.legend-section-title {
+	font-weight: bold;
+	margin-bottom: .5em;
+	color: var(--text-main);
+}
+
+.legend-divider {
+	height: .1em;
+	background: var(--ui-border);
+	margin: .5em 0;
+}
+
+.legend-item {
+	display: flex;
+	align-items: center;
+	margin-bottom: .5em;
+}
+
+.legend-item:last-child {
+	margin-bottom: 0;
+}
 
 .legend-line {
-	&.anatomy { --_hue: var(--hue-anatomy); }
-	&.removed { --_hue: var(--hue-removed); }
-	&.consequence { --_hue: var(--hue-consequence); }
-	&.benefit { --_hue: var(--hue-benefit); }
-	&.harm { --_hue: var(--hue-harm); }
+	width: 3em;
+	height: .2em;
+	margin-right: 1em;
+}
+
+.legend-line.anatomy {
+	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy));
+}
+
+.legend-line.removed {
+	border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed));
+	height: 0;
+}
+
+.legend-line.consequence {
+	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence));
+}
+
+.legend-line.benefit {
+	border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit));
+	height: 0;
+}
+
+.legend-line.harm {
+	border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm));
+	height: 0;
+}
+
+.legend-text-icon {
+	font-weight: bold;
+	font-size: 14px;
+	width: 3em;
+	text-align: center;
+	margin-right: 1em;
+}
+
+.legend-text-icon.male {
+	color: var(--trait-male);
+}
+
+.legend-text-icon.female {
+	color: var(--trait-female);
+}
+
+.legend-text-icon.shared {
+	color: var(--trait-shared);
+}
+
+.legend-line {
+	&.anatomy {
+		--_hue: var(--hue-anatomy);
+	}
+
+	&.removed {
+		--_hue: var(--hue-removed);
+	}
+
+	&.consequence {
+		--_hue: var(--hue-consequence);
+	}
+
+	&.benefit {
+		--_hue: var(--hue-benefit);
+	}
+
+	&.harm {
+		--_hue: var(--hue-harm);
+	}
+
 	line {
 		stroke: oklch(var(--text-lightness) var(--text-chroma) var(--_hue));
 		stroke-width: 3;
 	}
 }
+
 footer {
 	bottom: 1em;
 	right: 1em;
@@ -398,11 +668,26 @@ footer {
 }
 
 svg {
-	#arrow-anatomy { --_hue: var(--hue-anatomy); }
-	#arrow-removed { --_hue: var(--hue-removed); }
-	#arrow-consequence { --_hue: var(--hue-consequence); }
-	#arrow-benefit { --_hue: var(--hue-benefit); }
-	#arrow-harm { --_hue: var(--hue-harm); }
+	#arrow-anatomy {
+		--_hue: var(--hue-anatomy);
+	}
+
+	#arrow-removed {
+		--_hue: var(--hue-removed);
+	}
+
+	#arrow-consequence {
+		--_hue: var(--hue-consequence);
+	}
+
+	#arrow-benefit {
+		--_hue: var(--hue-benefit);
+	}
+
+	#arrow-harm {
+		--_hue: var(--hue-harm);
+	}
+
 	path:not(.edge-path) {
 		transition: fill 0.3s ease;
 		fill: oklch(var(--text-lightness) var(--text-chroma) var(--_hue));
@@ -416,16 +701,33 @@ svg {
 	}
 }
 
-#loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 18px; color: var(--text-muted); z-index: 100; }
+#loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	font-size: 18px;
+	color: var(--text-muted);
+	z-index: 100;
+}
 </style>
 </head>
-<body>
 
+<body>
 <template id="card-template">
 	<div class="card">
-		<svg class="card-icon" viewBox="0 0 24 24"><use href=""></use></svg>
+		<svg class="card-icon" viewBox="0 0 24 24">
+			<use href=""></use>
+		</svg>
 		<h3>Title</h3>
 		<p>Content goes here...</p>
+	</div>
+</template>
+
+<template id="search-result-template">
+	<div class="search-result-item">
+		<div class="search-result-title"></div>
+		<div class="search-result-meta"></div>
 	</div>
 </template>
 
@@ -435,113 +737,184 @@ svg {
 	<div id="top-bar">
 		<div id="breadcrumb-stack"></div>
 		<div id="controls-container">
-			<select id="category-filter">
-				<option value="all">All Categories</option>
-			</select>
-			<div id="search-container">
+			<div class="select">
+				<select id="depth-control" title="Set the number of connection layers to display">
+					<option value="1" selected>1</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+				</select>
+			</div>
+			<div class="select">
+				<select id="trait-filter" title="Filter connections by biological trait">
+					<option value="all">Any</option>
+					<option value="shared">Shared</option>
+					<option value="female">Female</option>
+					<option value="male">Male</option>
+				</select>
+			</div>
+			<div class="input" id="search-container" title="Search the database">
 				<input type="text" id="search-input" placeholder="Search ...">
 				<div id="search-results"></div>
 			</div>
 		</div>
 	</div>
 
-	<div id="legend">
-		<div class="legend-section-title">Connection Types</div>
-		<div class="legend-item"><div class="legend-line anatomy"></div> Anatomy / Default</div>
-		<div class="legend-item"><div class="legend-line removed"></div> Excised / Removed</div>
-		<div class="legend-item"><div class="legend-line consequence"></div> Adverse Consequence</div>
-		<div class="legend-item"><div class="legend-line benefit"></div> Claimed Benefit</div>
-		<div class="legend-item"><div class="legend-line harm"></div> Claimed Harm</div>
-		<div class="legend-divider"></div>
-		<div class="legend-section-title">Biological Traits</div>
-		<div class="legend-item"><div class="legend-text-icon male">Aa</div> Male</div>
-		<div class="legend-item"><div class="legend-text-icon female">Aa</div> Female</div>
-		<div class="legend-item"><div class="legend-text-icon shared">Aa</div> Shared</div>
+	<div id="node-description">
+		<h2 id="nd-title"></h2>
+		<p id="nd-content"></p>
 	</div>
 
-	<svg id="lines-layer">
-		<defs id="svg-defs">
-			<marker id="arrow-anatomy" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-				<path d="M 0 0 L 10 5 L 0 10 z" />
-			</marker>
-			<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-				<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
-			</marker>
-			<marker id="arrow-consequence" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-				<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
-			</marker>
-			<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-				<path d="M 0 0 L 10 5 L 0 10 z" />
-			</marker>
-			<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-				<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
-			</marker>
+	<div id="legend">
+		<div class="legend-section-title">Connection Types</div>
+		<div class="legend-item">
+			<div class="legend-line anatomy"></div> Anatomy / Default
+		</div>
+		<div class="legend-item">
+			<div class="legend-line removed"></div> Excised / Removed
+		</div>
+		<div class="legend-item">
+			<div class="legend-line consequence"></div> Adverse Consequence
+		</div>
+		<div class="legend-item">
+			<div class="legend-line benefit"></div> Claimed Benefit
+		</div>
+		<div class="legend-item">
+			<div class="legend-line harm"></div> Claimed Harm
+		</div>
+		<div class="legend-divider"></div>
+		<div class="legend-section-title">Biological Traits</div>
+		<div class="legend-item">
+			<div class="legend-text-icon male">Aa</div> Male
+		</div>
+		<div class="legend-item">
+			<div class="legend-text-icon female">Aa</div> Female
+		</div>
+		<div class="legend-item">
+			<div class="legend-text-icon shared">Aa</div> Shared
+		</div>
+	</div>
 
-			<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
-				<circle cx="5" cy="5" r="5" fill="context-stroke" />
-			</marker>
-			<marker id="end-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
-				<circle cx="5" cy="5" r="5" fill="context-stroke" />
-			</marker>
+	<div id="graph-container">
+		<svg id="lines-layer">
+			<defs id="svg-defs">
+				<marker id="arrow-anatomy" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z" />
+				</marker>
+				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
+				</marker>
+				<marker id="arrow-consequence" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6"
+					markerHeight="6" orient="auto">
+					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
+				</marker>
+				<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z" />
+				</marker>
+				<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
+				</marker>
 
-			<g id="icon-region" fill="currentColor">
-				<path d="M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M10.5,22V16H7.5V10A2,2 0 0,1 9.5,8H14.5A2,2 0 0,1 16.5,10V16H13.5V22H10.5Z" />
-			</g>
-			<g id="icon-organ" fill="currentColor">
-				<circle cx="15" cy="14" r="5" />
-				<circle cx="6" cy="16" r="2" />
-				<circle cx="8" cy="7" r="3" />
-			</g>
-			<g id="icon-sexual" fill="currentColor">
-				<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-			</g>
-			<g id="icon-surgery" fill="currentColor">
-				<path d="M21.5,5.5L18.5,2.5L14,2.5L7,11.5V14.5L2,19.5L4.5,22L9.5,17H12.5L21.5,10V5.5M12.9,9.4L11.5,8L15.4,3.5H17.2L20.5,6.8V8.6L12.9,9.4Z" />
-			</g>
-			<g id="icon-upgrade" fill="currentColor">
-				<path d="M12,4L4,12H9V20H15V12H20L12,4M13,18H11V12H7.83L12,7.83L16.17,12H13V18M4,2H20V4H4V2Z" />
-			</g>
-			<g id="icon-downgrade" fill="currentColor">
-				<path d="M12,20L20,12H15V4H9V12H4L12,20M11,6H13V12H16.17L12,16.17L7.83,12H11V6M4,22H20V20H4V22Z" />
-			</g>
-			<g id="icon-note">
-				<path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1Zm7 16H5V5h2v2h10V5h2v14Z" fill="currentColor" />
-			</g>
-		</defs>
-	</svg>
-	<div id="nodes-layer"></div>
-<footer>
-	<p>By <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></p>
-	<p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a> — share freely with attribution.</p>
-</footer>
+				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10"
+					orient="auto" markerUnits="userSpaceOnUse">
+					<circle cx="5" cy="5" r="5" fill="context-stroke" />
+				</marker>
+				<marker id="end-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10"
+					orient="auto" markerUnits="userSpaceOnUse">
+					<circle cx="5" cy="5" r="5" fill="context-stroke" />
+				</marker>
+
+				<g id="icon-region" fill="currentColor">
+					<path
+						d="M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M10.5,22V16H7.5V10A2,2 0 0,1 9.5,8H14.5A2,2 0 0,1 16.5,10V16H13.5V22H10.5Z" />
+				</g>
+				<g id="icon-organ" fill="currentColor">
+					<circle cx="15" cy="14" r="5" />
+					<circle cx="6" cy="16" r="2" />
+					<circle cx="8" cy="7" r="3" />
+				</g>
+				<g id="icon-sexual" fill="currentColor">
+					<path
+						d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+				</g>
+				<g id="icon-surgery" fill="currentColor">
+					<path
+						d="M21.5,5.5L18.5,2.5L14,2.5L7,11.5V14.5L2,19.5L4.5,22L9.5,17H12.5L21.5,10V5.5M12.9,9.4L11.5,8L15.4,3.5H17.2L20.5,6.8V8.6L12.9,9.4Z" />
+				</g>
+				<g id="icon-upgrade" fill="currentColor">
+					<path d="M12,4L4,12H9V20H15V12H20L12,4M13,18H11V12H7.83L12,7.83L16.17,12H13V18M4,2H20V4H4V2Z" />
+				</g>
+				<g id="icon-downgrade" fill="currentColor">
+					<path
+						d="M12,20L20,12H15V4H9V12H4L12,20M11,6H13V12H16.17L12,16.17L7.83,12H11V6M4,22H20V20H4V22Z" />
+				</g>
+				<g id="icon-note">
+					<path
+						d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1Zm7 16H5V5h2v2h10V5h2v14Z"
+						fill="currentColor" />
+				</g>
+			</defs>
+			<g id="lines-zoom"></g>
+		</svg>
+		<div id="nodes-layer">
+			<div id="nodes-zoom"></div>
+		</div>
+	</div>
+	<footer>
+		<p>Human Sensory Atlas v1.1 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></p>
+		<p>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</p>
+	</footer>
 </div>
-
 <script>
 let nodes = [],
 	edges = [],
+	descriptions = {},
 	currentCenterId = '',
-	currentCategoryFilter = 'all';
+	currentTraitFilter = 'all',
+	currentZoom = 1,
+	panX = 0,
+	panY = 0;
 
 const
+	graphContainer = document.getElementById('graph-container'),
 	nodesLayer = document.getElementById('nodes-layer'),
+	nodesZoom = document.getElementById('nodes-zoom'),
 	linesLayer = document.getElementById('lines-layer'),
+	linesZoom = document.getElementById('lines-zoom'),
 	defsHTML = document.getElementById('svg-defs').outerHTML,
 	stackContainer = document.getElementById('breadcrumb-stack'),
-	categoryFilterDropdown = document.getElementById('category-filter'),
+	nodeDescription = document.getElementById('node-description'),
+	ndTitle = document.getElementById('nd-title'),
+	ndContent = document.getElementById('nd-content'),
+	traitFilterDropdown = document.getElementById('trait-filter'),
+	depthDropdown = document.getElementById('depth-control'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
-	cardTemplate = document.getElementById('card-template');
+	cardTemplate = document.getElementById('card-template'),
+	searchResultTemplate = document.getElementById('search-result-template');
 
 const edgeStyles = {
-	'anatomy':		{ color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
-	'removed':		{ color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed))', width: '3', dash: '8, 4', marker: 'url(#arrow-removed)' },
-	'consequence':	{ color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence))', width: '3', dash: 'none', marker: 'url(#arrow-consequence)' },
-	'benefit':		{ color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit))', width: '3', dash: '4, 4', marker: 'url(#arrow-benefit)' },
-	'harm':			{ color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' }
+	'anatomy': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
+	'removed': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed))', width: '3', dash: '8, 4', marker: 'url(#arrow-removed)' },
+	'consequence': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence))', width: '3', dash: 'none', marker: 'url(#arrow-consequence)' },
+	'benefit': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit))', width: '3', dash: '4, 4', marker: 'url(#arrow-benefit)' },
+	'harm': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' }
 };
 
 let activeLineElements = [],
 	animationLoopRunning = false;
+
+const checkTrait = (t) => {
+	const tr = t || 'shared';
+	if (currentTraitFilter === 'all') return true;
+	if (currentTraitFilter === 'female') return tr === 'female' || tr === 'shared';
+	if (currentTraitFilter === 'male') return tr === 'male' || tr === 'shared';
+	if (currentTraitFilter === 'shared') return tr === 'shared';
+	return true;
+};
 
 async function loadGraphData() {
 	try {
@@ -551,15 +924,7 @@ async function loadGraphData() {
 
 		nodes = data.nodes;
 		edges = data.edges;
-
-		if (data.categories) {
-			data.categories.forEach(cat => {
-				const option = document.createElement('option');
-				option.value = cat;
-				option.textContent = cat.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-				categoryFilterDropdown.appendChild(option);
-			});
-		}
+		descriptions = data.descriptions || {};
 
 		document.getElementById('loading').style.display = 'none';
 		initGraph();
@@ -568,12 +933,16 @@ async function loadGraphData() {
 	}
 }
 
-categoryFilterDropdown.addEventListener('change', (e) => {
-	currentCategoryFilter = e.target.value;
+traitFilterDropdown.addEventListener('change', (e) => {
+	currentTraitFilter = e.target.value;
 	renderGraph(currentCenterId);
-	if(searchInput.value) {
+	if (searchInput.value) {
 		searchInput.dispatchEvent(new Event('input'));
 	}
+});
+
+depthDropdown.addEventListener('change', (e) => {
+	renderGraph(currentCenterId);
 });
 
 function getIdFromHash() {
@@ -585,15 +954,15 @@ function initGraph() {
 	currentCenterId = getIdFromHash();
 
 	nodes.forEach(node => {
-		const clone = cardTemplate.content.cloneNode(true);
-		const card = clone.querySelector('.card');
-		const titleEl = clone.querySelector('h3');
-		const contentEl = clone.querySelector('p');
-		const useEl = clone.querySelector('use');
-
-		const nodeType = node.type || 'anatomy';
-		const nodeTrait = node.trait || 'shared';
-		const nodeCategory = node.category || 'other';
+		const
+			clone = cardTemplate.content.cloneNode(true),
+			card = clone.querySelector('.card'),
+			titleEl = clone.querySelector('h3'),
+			contentEl = clone.querySelector('p'),
+			useEl = clone.querySelector('use'),
+			nodeType = node.type || 'anatomy',
+			nodeTrait = node.trait || 'shared',
+			nodeCategory = node.category || 'other';
 
 		card.className = `card hidden type-${nodeType} trait-${nodeTrait} cat-${nodeCategory}`;
 		card.id = `node-${node.id}`;
@@ -603,7 +972,7 @@ function initGraph() {
 		useEl.setAttribute('href', `#icon-${nodeCategory}`);
 
 		setupInteractions(card, node.id);
-		nodesLayer.appendChild(clone);
+		nodesZoom.append(clone);
 	});
 
 	renderGraph(currentCenterId);
@@ -624,30 +993,43 @@ searchInput.addEventListener('input', (e) => {
 	const matches = nodes.filter(n => {
 		const
 			matchesTerm = n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term) || (n.aka && n.aka.toLowerCase().includes(term)),
-			matchesFilter = currentCategoryFilter === 'all' || n.category === currentCategoryFilter;
+			matchesFilter = checkTrait(n.trait);
 		return matchesTerm && matchesFilter;
 	});
 
-	if (matches.length > 0) {
-		searchResults.innerHTML = matches.map(m => `
-			<div class="search-result-item" data-id="${m.id}">
-				<div class="search-result-title">${m.title}</div>
-				<div class="search-result-meta">${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}</div>
-			</div>
-		`).join('');
-		searchResults.style.display = 'block';
+	searchResults.replaceChildren();
 
-		document.querySelectorAll('.search-result-item').forEach(item => {
-			item.addEventListener('click', () => {
-				const id = item.getAttribute('data-id');
+	if (matches.length > 0) {
+		matches.forEach(m => {
+			const
+				clone = searchResultTemplate.content.cloneNode(true),
+				itemEl = clone.querySelector('.search-result-item');
+
+			itemEl.setAttribute('data-id', m.id);
+			clone.querySelector('.search-result-title').textContent = m.title;
+			clone.querySelector('.search-result-meta').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
+
+			itemEl.addEventListener('click', () => {
+				const id = itemEl.getAttribute('data-id');
 				history.pushState(null, null, '#' + id);
 				renderGraph(id);
 				searchInput.value = '';
 				searchResults.style.display = 'none';
 			});
+
+			searchResults.append(clone);
 		});
+		searchResults.style.display = 'block';
 	} else {
-		searchResults.innerHTML = '<div class="search-result-item">No results found for this category</div>';
+		const
+			clone = searchResultTemplate.content.cloneNode(true),
+			itemEl = clone.querySelector('.search-result-item');
+
+		clone.querySelector('.search-result-title').textContent = 'No results found for this trait';
+		clone.querySelector('.search-result-meta').textContent = '';
+		itemEl.style.cursor = 'default';
+
+		searchResults.append(clone);
 		searchResults.style.display = 'block';
 	}
 });
@@ -684,8 +1066,8 @@ function setupInteractions(card, id) {
 	function drag(e) {
 		if (!isDragging) return;
 		const
-			dx = e.clientX - startX,
-			dy = e.clientY - startY;
+			dx = (e.clientX - startX) / currentZoom,
+			dy = (e.clientY - startY) / currentZoom;
 
 		if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
 
@@ -700,8 +1082,10 @@ function setupInteractions(card, id) {
 		document.removeEventListener('mouseup', drop);
 		card.classList.remove('dragging');
 
-		if (!hasMoved && currentCenterId !== id) {
-			history.pushState(null, null, '#' + id);
+		if (!hasMoved) {
+			if (currentCenterId !== id) {
+				history.pushState(null, null, '#' + id);
+			}
 			renderGraph(id);
 		}
 	}
@@ -721,12 +1105,12 @@ function getBreadcrumbPath(targetId) {
 			const type = e.type || 'anatomy';
 			if (allowAllEdges || (type === 'anatomy' || type === 'benefit' || type === 'consequence' || type === 'harm')) {
 				if (!adjList[e.source]) adjList[e.source] = [];
-
 				const edgeTargetData = nodes.find(n => n.id === e.target);
 				if (!edgeTargetData) return;
 
-				let weight = 1;
+				if (!checkTrait(edgeTargetData.trait)) return;
 
+				let weight = 1;
 				if (targetTrait && edgeTargetData.trait !== targetTrait) {
 					weight += 10;
 					if (edgeTargetData.trait !== 'shared') weight += 50;
@@ -737,18 +1121,14 @@ function getBreadcrumbPath(targetId) {
 				if (edgeTargetData.category === 'other') {
 					weight += 20;
 				}
-
 				adjList[e.source].push({ node: e.target, weight: weight });
 			}
 		});
-
-		let distances = {};
-		let previous = {};
-		let unvisited = new Set(nodes.map(n => n.id));
-
+		let distances = {},
+			previous = {},
+			unvisited = new Set(nodes.map(n => n.id));
 		nodes.forEach(n => distances[n.id] = Infinity);
 		distances[rootId] = 0;
-
 		while (unvisited.size > 0) {
 			let currNode = null;
 			for (let id of unvisited) {
@@ -756,12 +1136,9 @@ function getBreadcrumbPath(targetId) {
 					currNode = id;
 				}
 			}
-
 			if (distances[currNode] === Infinity) break;
 			if (currNode === targetId) break;
-
 			unvisited.delete(currNode);
-
 			let neighborsList = adjList[currNode] || [];
 			for (let neighbor of neighborsList) {
 				if (unvisited.has(neighbor.node)) {
@@ -773,18 +1150,15 @@ function getBreadcrumbPath(targetId) {
 				}
 			}
 		}
-
 		if (distances[targetId] === Infinity) return null;
-
-		let path = [];
-		let curr = targetId;
+		let path = [],
+			curr = targetId;
 		while (curr) {
 			path.unshift(curr);
 			curr = previous[curr];
 		}
 		return path;
 	};
-
 	let path = findPath(false);
 	if (!path) path = findPath(true);
 	return path || [targetId];
@@ -792,16 +1166,16 @@ function getBreadcrumbPath(targetId) {
 
 function updateBreadcrumbs(centerId) {
 	const path = getBreadcrumbPath(centerId);
-	stackContainer.innerHTML = '';
+	stackContainer.replaceChildren();
 
 	path.forEach((nodeId, index) => {
 		const nodeData = nodes.find(n => n.id === nodeId);
 		if (!nodeData) return;
-
 		const
 			isLast = index === path.length - 1,
 			span = document.createElement('span');
-		span.innerText = nodeData.title;
+
+		span.textContent = nodeData.title;
 
 		if (isLast) {
 			span.className = 'breadcrumb-current';
@@ -812,14 +1186,12 @@ function updateBreadcrumbs(centerId) {
 				renderGraph(nodeId);
 			};
 		}
-
-		stackContainer.appendChild(span);
-
+		stackContainer.append(span);
 		if (!isLast) {
 			const separator = document.createElement('span');
 			separator.className = 'breadcrumb-separator';
-			separator.innerText = '>';
-			stackContainer.appendChild(separator);
+			separator.textContent = '>';
+			stackContainer.append(separator);
 		}
 	});
 }
@@ -828,33 +1200,67 @@ function renderGraph(centerId) {
 	currentCenterId = centerId;
 	const
 		centerX = window.innerWidth / 2,
-		centerY = window.innerHeight / 2;
+		centerY = window.innerHeight / 2,
+		path = getBreadcrumbPath(centerId),
+		parentId = path && path.length > 1 ? path[path.length - 2] : null,
+		centerNodeData = nodes.find(n => n.id === centerId);
 
 	updateBreadcrumbs(centerId);
 
-	const path = getBreadcrumbPath(centerId);
-	const parentId = path && path.length > 1 ? path[path.length - 2] : null;
-
-	const
-		centerNodeData = nodes.find(n => n.id === centerId),
-		connectedEdges = edges.filter(e => e.source === centerId || e.target === centerId);
-
-	let neighbors = connectedEdges.map(e => {
-		const neighborId = e.source === centerId ? e.target : e.source;
-		return {
-			node: nodes.find(n => n.id === neighborId),
-			isOutgoing: e.source === centerId,
-			edgeType: e.type || 'anatomy'
-		};
-	}).filter(item => item.node !== undefined);
-
-	if (parentId) {
-		const pIdx = neighbors.findIndex(item => item.node.id === parentId);
-		if (pIdx > 0) {
-			neighbors.unshift(neighbors.splice(pIdx, 1)[0]);
-		}
+	if (descriptions[centerId]) {
+		ndTitle.textContent = centerNodeData.title;
+		ndContent.textContent = descriptions[centerId];
+		nodeDescription.classList.add('visible');
+	} else {
+		nodeDescription.classList.remove('visible');
 	}
 
+	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1,
+		visitedNodes = new Set(),
+		visitedEdges = new Set();
+	visitedNodes.add(centerId);
+	let queue = [{ id: centerId, depth: 0 }],
+		nodesByDepth = Array.from({ length: currentDepthShown + 1 }, () => []),
+		edgesToRender = [];
+
+	while (queue.length > 0) {
+		let curr = queue.shift();
+		if (curr.depth >= currentDepthShown) continue;
+		const connected = edges.filter(e => e.source === curr.id || e.target === curr.id);
+		connected.forEach(e => {
+			const
+				neighborId = e.source === curr.id ? e.target : e.source,
+				neighborNode = nodes.find(n => n.id === neighborId);
+
+			// Skip processing this branch if the neighbor's trait doesn't match
+			if (neighborNode && !checkTrait(neighborNode.trait)) return;
+
+			if (!visitedEdges.has(e)) {
+				visitedEdges.add(e);
+				edgesToRender.push(e);
+			}
+
+			if (!visitedNodes.has(neighborId)) {
+				visitedNodes.add(neighborId);
+				if (neighborNode) {
+					queue.push({ id: neighborId, depth: curr.depth + 1 });
+					nodesByDepth[curr.depth + 1].push({
+						node: neighborNode,
+						depth: curr.depth + 1,
+						isOutgoing: e.source === curr.id,
+						edgeType: e.type || 'anatomy',
+						parentId: curr.id
+					});
+				}
+			}
+		});
+	}
+	if (parentId) {
+		const pIdx = nodesByDepth[1].findIndex(item => item.node.id === parentId);
+		if (pIdx > 0) {
+			nodesByDepth[1].unshift(nodesByDepth[1].splice(pIdx, 1)[0]);
+		}
+	}
 	document.querySelectorAll('.card').forEach(el => {
 		el.classList.add('hidden');
 		el.classList.remove('center-node');
@@ -864,54 +1270,113 @@ function renderGraph(centerId) {
 		el.classList.remove('target');
 	});
 
-	linesLayer.innerHTML = defsHTML;
+	linesZoom.replaceChildren();
 	activeLineElements = [];
-
 	const centerEl = document.getElementById(`node-${centerId}`);
-	if(!centerEl) return;
-
+	if (!centerEl) return;
 	centerEl.classList.remove('hidden');
 	centerEl.classList.add('center-node');
 
-	const centerMatches = currentCategoryFilter === 'all' || centerNodeData.category === currentCategoryFilter;
+	const centerMatches = checkTrait(centerNodeData.trait);
 	if (!centerMatches) centerEl.classList.add('ghosted');
 
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${centerY}px`;
 
-	const radius = Math.min(centerX, centerY) * 0.75;
+	const baseRadius = 400;
+	panX = centerX * (1 - currentZoom);
+	panY = centerY * (1 - currentZoom);
+	nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+	linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
 
-	neighbors.forEach((neighborData, index) => {
-		const el = document.getElementById(`node-${neighborData.node.id}`);
-		if (!el) return;
+	for (let d = 1; d <= currentDepthShown; d++) {
+		const layerNodes = nodesByDepth[d];
 
-		el.classList.remove('hidden');
+		layerNodes.sort((a, b) => {
+			if (a.node.id === parentId) return -1;
+			if (b.node.id === parentId) return 1;
 
-		if (neighborData.isOutgoing) {
-			el.classList.add('target');
-		} else {
-			el.classList.add('source');
-		}
+			const getW = (t) => {
+				if (!t || t === 'anatomy') return 1;
+				if (t === 'benefit') return 2;
+				if (t === 'consequence' || t === 'harm') return 3;
+				if (t === 'removed') return 4;
+				return 5;
+			};
+			return getW(a.edgeType) - getW(b.edgeType);
+		});
 
-		if (neighborData.node.id === parentId) {
-			el.classList.add('parent');
-		}
+		const groups = {};
+		layerNodes.forEach(nData => {
+			if (!groups[nData.parentId]) groups[nData.parentId] = [];
+			groups[nData.parentId].push(nData);
+		});
 
-		const neighborMatches = currentCategoryFilter === 'all' || neighborData.node.category === currentCategoryFilter;
-		if (!neighborMatches) el.classList.add('ghosted');
+		layerNodes.forEach((nData, index) => {
+			const el = document.getElementById(`node-${nData.node.id}`);
+			if (!el) return;
 
+			el.classList.remove('hidden');
+
+			if (nData.isOutgoing) {
+				el.classList.add('target');
+			} else {
+				el.classList.add('source');
+			}
+
+			if (nData.node.id === parentId) {
+				el.classList.add('parent');
+			}
+
+			const neighborMatches = checkTrait(nData.node.trait);
+			if (!neighborMatches) el.classList.add('ghosted');
+
+			let angle;
+			if (d === 1) {
+				angle = (index / layerNodes.length) * 2 * Math.PI - (Math.PI / 2);
+				nData.angle = angle;
+			} else {
+				const
+					pNodeData = nodesByDepth[d - 1].find(pn => pn.node.id === nData.parentId),
+					pAngle = pNodeData && pNodeData.angle !== undefined ? pNodeData.angle : 0,
+					siblings = groups[nData.parentId],
+					sIdx = siblings.indexOf(nData),
+					angleSpread = Math.PI / Math.pow(1.5, d - 1);
+				if (siblings.length === 1) {
+					angle = pAngle;
+				} else {
+					angle = pAngle - (angleSpread / 2) + (sIdx / (siblings.length - 1)) * angleSpread;
+				}
+				nData.angle = angle;
+			}
+
+			let typeWeight = 1.0;
+			if (nData.edgeType === 'benefit') typeWeight = 1.4;
+			else if (nData.edgeType === 'consequence' || nData.edgeType === 'harm') typeWeight = 1.2;
+			else if (nData.edgeType === 'removed') typeWeight = 1.6;
+			const
+				radius = (baseRadius * d) * typeWeight,
+				nx = centerX + radius * Math.cos(angle),
+				ny = centerY + radius * Math.sin(angle);
+
+			el.style.left = `${nx}px`;
+			el.style.top = `${ny}px`;
+		});
+	}
+
+	edgesToRender.forEach(e => {
 		const
-			angle = (index / neighbors.length) * 2 * Math.PI - (Math.PI / 2),
-			nx = centerX + radius * Math.cos(angle),
-			ny = centerY + radius * Math.sin(angle);
-
-		el.style.left = `${nx}px`;
-		el.style.top = `${ny}px`;
+			sourceEl = document.getElementById(`node-${e.source}`),
+			targetEl = document.getElementById(`node-${e.target}`);
+		if (!sourceEl || !targetEl) return;
+		if (sourceEl.classList.contains('hidden') || targetEl.classList.contains('hidden')) return;
 
 		const pathLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
 		pathLine.classList.add('edge-path');
 
-		const style = edgeStyles[neighborData.edgeType];
+		const
+			edgeType = e.type || 'anatomy',
+			style = edgeStyles[edgeType];
 
 		pathLine.setAttribute('stroke', style.color);
 		pathLine.style.color = style.color;
@@ -921,17 +1386,21 @@ function renderGraph(centerId) {
 		pathLine.setAttribute('marker-end', 'url(#end-marker)');
 		pathLine.setAttribute('fill', style.color);
 
-		if (!neighborMatches) pathLine.setAttribute('opacity', '0.25');
+		const
+			sourceNode = nodes.find(n => n.id === e.source) || {},
+			targetNode = nodes.find(n => n.id === e.target) || {},
+			sourceMatches = checkTrait(sourceNode.trait),
+			targetMatches = checkTrait(targetNode.trait);
 
+		if (!sourceMatches || !targetMatches) pathLine.setAttribute('opacity', '0.25');
 		if (style.dash !== 'none') pathLine.setAttribute('stroke-dasharray', style.dash);
 
-		linesLayer.appendChild(pathLine);
+		linesZoom.append(pathLine);
 
 		activeLineElements.push({
 			line: pathLine,
-			centerEl: centerEl,
-			neighborEl: el,
-			isOutgoing: neighborData.isOutgoing
+			sourceEl: sourceEl,
+			targetEl: targetEl
 		});
 	});
 }
@@ -939,20 +1408,10 @@ function renderGraph(centerId) {
 function updateLinesLoop() {
 	activeLineElements.forEach(item => {
 		const
-			centerRect = item.centerEl.getBoundingClientRect(),
-			neighborRect = item.neighborEl.getBoundingClientRect(),
-			cx = centerRect.left + centerRect.width / 2,
-			cy = centerRect.top + centerRect.height / 2,
-			nx = neighborRect.left + neighborRect.width / 2,
-			ny = neighborRect.top + neighborRect.height / 2;
-
-		let startX, startY, endX, endY;
-
-		if (item.isOutgoing) {
-			startX = cx; startY = cy; endX = nx; endY = ny;
-		} else {
-			startX = nx; startY = ny; endX = cx; endY = cy;
-		}
+			startX = parseFloat(item.sourceEl.style.left) || 0,
+			startY = parseFloat(item.sourceEl.style.top) || 0,
+			endX = parseFloat(item.targetEl.style.left) || 0,
+			endY = parseFloat(item.targetEl.style.top) || 0;
 
 		const
 			midX = (startX + endX) / 2,
@@ -965,13 +1424,65 @@ function updateLinesLoop() {
 }
 
 window.addEventListener('resize', () => {
-	if(nodes.length > 0) renderGraph(currentCenterId);
+	if (nodes.length > 0) renderGraph(currentCenterId);
 });
 
 window.addEventListener('hashchange', () => {
-	if(nodes.length > 0) {
+	if (nodes.length > 0) {
 		const newId = getIdFromHash();
 		if (newId !== currentCenterId) renderGraph(newId);
+	}
+});
+
+const appContainer = document.getElementById('app');
+
+appContainer.addEventListener('wheel', (e) => {
+	if (e.target.closest('#search-results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('footer')) return;
+	e.preventDefault();
+	const
+		min_zoom = 0.05, max_zoom = 10,
+		zoomDelta = e.deltaY > 0 ? 0.9 : 1.1,
+		newZoom = Math.min(Math.max(currentZoom * zoomDelta, min_zoom), max_zoom),
+		rect = appContainer.getBoundingClientRect(),
+		mouseX = e.clientX - rect.left,
+		mouseY = e.clientY - rect.top;
+
+	panX = mouseX - (mouseX - panX) * (newZoom / currentZoom);
+	panY = mouseY - (mouseY - panY) * (newZoom / currentZoom);
+	currentZoom = newZoom;
+
+	nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+	linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+}, { passive: false });
+
+let isGraphPanning = false,
+	startPanX, startPanY, initialPanX, initialPanY;
+
+appContainer.addEventListener('mousedown', (e) => {
+	if (e.button !== 0) return;
+	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+
+	isGraphPanning = true;
+	startPanX = e.clientX;
+	startPanY = e.clientY;
+	initialPanX = panX;
+	initialPanY = panY;
+	appContainer.style.cursor = 'grabbing';
+});
+
+document.addEventListener('mousemove', (e) => {
+	if (isGraphPanning) {
+		panX = initialPanX + (e.clientX - startPanX);
+		panY = initialPanY + (e.clientY - startPanY);
+		nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+		linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+	}
+});
+
+document.addEventListener('mouseup', () => {
+	if (isGraphPanning) {
+		isGraphPanning = false;
+		appContainer.style.cursor = '';
 	}
 });
 
