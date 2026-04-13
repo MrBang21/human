@@ -3,7 +3,8 @@
 	"descriptions": {
 		"prepuce": "The prepuce is a retractable, multi-layered fold of skin and mucous membrane that covers and protects the glans in both male and female genitalia. It contains a rich network of blood vessels, specialized nerve endings (including Meissner's corpuscles), and smooth muscle fibers, making it highly responsive to tactile stimulation and a key component of human sexual pleasure.",
 		"male_foreskin": "The foreskin, or prepuce, is a retractable double-layered fold of smooth muscle tissue, blood vessels, neurons, and mucosa that covers the glans penis in males.",
-		"female_clitoris": "The clitoris is a small, sensitive organ located at the anterior part of the vulva in females, primarily responsible for sexual pleasure.",
+		"female_clitoris": "The clitoris is a complex, largely internal erectile organ in females, primarily responsible for sexual pleasure. While only its highly sensitive glans is visible externally at the anterior vulva, its internal crura and vestibular bulbs extend deeply into the pelvis.",
+		"female_clitoral_glans": "The externally visible, highly sensitive tip of the clitoris. Protected by the clitoral hood, it is densely packed with thousands of sensory nerve endings and serves as the primary anatomical focus for female sexual arousal and orgasm.",
 		"female_clitoral_hood": "The clitoral hood is the mucocutaneous tissue that covers and protects the glans of the clitoris. As the biological equivalent of the male foreskin, it is rich in nerve endings and plays an integral role in female sexual arousal by stimulating the clitoris directly when it retracts and moves during sexual activity.",
 		"male_ridged_band": "The ridged band is a densely innervated circular band of mucous membrane at the mucocutaneous junction of the male foreskin. Packed with touch-sensitive receptors, it acts as a highly specialized erogenous zone contributing intensely to sexual arousal during retraction over the glans.",
 		"erogenous_zones": "Erogenous zones are areas of the human body that have heightened sensitivity, which when stimulated, create a sexual response or enhance sexual arousal. They often possess a high density of specialized nerve endings.",
@@ -25,7 +26,7 @@
 		"male_penis": "The principal male reproductive and intromittent organ. It is comprised of a root attached to the pelvic bone, a pendulous shaft containing three columns of erectile tissue (corpora cavernosa and corpus spongiosum), and the highly sensitive glans at the tip. During arousal, these tissues engorge with blood to produce an erection.",
 		"male_root": "The foundational base of the penis situated internally against the pelvic floor. It provides structural stability and anchors the erectile bodies (crura and bulb) to the pubic arch.",
 		"male_shaft": "The cylindrical main body of the penis, covered by loose, highly mobile skin that facilitates the gliding mechanism during intercourse. It houses the urethra and the main erectile columns.",
-		"male_glans": "The highly sensitive, acorn-shaped distal end of the penis. Covered by the prepuce in its intact state, the glans is packed with fine-touch sensory receptors (corpuscles) crucial for achieving ejaculation and maximum sexual pleasure.",
+		"male_glans": "The acorn-shaped distal end of the penis. Covered by the prepuce in its intact state, the glans is dominated by free nerve endings sensitive to deep pressure and temperature, playing a crucial role in the ejaculatory reflex.",
 		"male_corona": "The raised ridge situated at the back edge of the glans penis where it meets the shaft. The corona is exceptionally sensitive to localized friction and pressure during sexual intercourse.",
 		"male_scrotum": "A fibromuscular, pendulous sac located beneath the penis. Its primary function is to house, protect, and regulate the temperature of the testes. The extremely thin scrotal skin is richly innervated and highly responsive to light touch.",
 		"male_testes": "Also known as the testicles, these are the primary male reproductive glands located within the scrotum. They are responsible for the continuous production of sperm (spermatogenesis) and the synthesis of testosterone, and act as deep-pressure sensors during physical stimulation.",
@@ -39,7 +40,7 @@
 		"female_uterus": "The hollow, pear-shaped muscular organ where a fetus develops during pregnancy. During intense sexual arousal and orgasm, the uterus undergoes rhythmic contractions, contributing significantly to the physiological sensation of climax.",
 		"female_ovaries": "The pair of primary female reproductive glands responsible for producing ova (eggs) and synthesizing key hormones like estrogen and progesterone, dictating the menstrual cycle and overall biological sexual health.",
 		"female_vestibule": "The smoothly lined space enclosed by the labia minora that houses the urethral and vaginal openings. It contains the Bartholin's and Skene's glands (which provide natural lubrication) and is exceptionally sensitive to localized touch.",
-		"male_bulb_of_penis": "The enlarged proximal section of the corpus spongiosum at the base of the penis, situated deep in the perineum. It rhythmic compresses during ejaculation to expel semen out of the urethra.",
+		"male_bulb_of_penis": "The enlarged proximal section of the corpus spongiosum at the base of the penis, situated deep in the perineum. The surrounding bulbospongiosus muscle rhythmically compresses it during ejaculation to expel semen out of the urethra.",
 		"male_crura_of_penis": "The two internal, root-like extensions of the corpora cavernosa that anchor the penis firmly to the pubic bone arch. They play a critical structural role during a full erection.",
 		"sexual_pleasure": "A subjective, positive affective experience resulting from physical, psychological, or physiological stimulation of the body, particularly the erogenous zones and genitalia. It is the core sensation driving human sexual behavior, typically culminating in climax and orgasm.",
 		"female_sexual_pleasure": "The subjective experience of sexual arousal and gratification in females, driven by a complex interplay of physical stimulation (especially of the clitoris, vulva, and vagina), psychological factors, and hormonal fluctuations. It encompasses a wide spectrum of physical sensations and psychological intimacy.",
@@ -132,7 +133,7 @@
 		{ "id": "male_penis", "title": "Penis", "aka": "Phallus, cock", "content": "Primary male reproductive organ", "type": "anatomy", "category": "organ", "trait": "male" },
 		{ "id": "male_root", "title": "Penile Root", "content": "Base of the penis attached to the pelvic region", "type": "anatomy", "category": "organ", "trait": "male" },
 		{ "id": "male_shaft", "title": "Penile Shaft", "content": "Main body of the penis", "type": "anatomy", "category": "organ", "trait": "male" },
-		{ "id": "male_glans", "title": "Glans", "content": "Highly sensitive head of the penis", "type": "anatomy", "category": "organ", "trait": "male" },
+		{ "id": "male_glans", "title": "Glans", "content": "The acorn-shaped head of the penis, innervated primarily by deep-pressure and temperature receptors.", "type": "anatomy", "category": "organ", "trait": "male" },
 		{ "id": "male_corpora_cavernosa", "title": "Corpora Cavernosa", "content": "Two parallel columns of erectile tissue in the shaft", "type": "anatomy", "category": "organ", "trait": "male" },
 		{ "id": "male_corpus_spongiosum", "title": "Corpus Spongiosum", "content": "Lower column of erectile tissue containing the urethra", "type": "anatomy", "category": "organ", "trait": "male" },
 		{ "id": "male_bulb_of_penis", "title": "Bulb of Penis", "content": "Proximal expansion of the corpus spongiosum at the penile root", "type": "anatomy", "category": "organ", "trait": "male" },
@@ -174,7 +175,8 @@
 		{ "id": "female_posterior_fornix", "title": "Posterior Fornix", "content": "The deep recess behind the cervix, highly responsive to deep penetration", "type": "anatomy", "category": "organ", "trait": "female" },
 		{ "id": "female_bartholin_glands", "title": "Bartholin's Glands", "content": "Glands secreting mucus to lubricate the vestibule/vulva", "type": "anatomy", "category": "organ", "trait": "female" },
 		{ "id": "female_skenes_glands", "title": "Skene's Glands", "content": "Paraurethral glands homologous to the male prostate", "type": "anatomy", "category": "organ", "trait": "female" },
-		{ "id": "female_clitoris", "title": "Clitoris", "content": "Highly sensitive organ homologous to the glans penis", "type": "anatomy", "category": "sexual", "trait": "female" },
+		{ "id": "female_clitoris", "title": "Clitoris", "content": "Highly sensitive, complex erectile organ homologous to the male penis", "type": "anatomy", "category": "sexual", "trait": "female" },
+		{ "id": "female_clitoral_glans", "title": "Clitoral Glans", "content": "The highly sensitive, externally visible tip of the clitoris", "type": "anatomy", "category": "organ", "trait": "female" },
 		{ "id": "female_body_of_clitoris", "title": "Body of Clitoris", "content": "The internal cylindrical portion of the clitoris", "type": "anatomy", "category": "organ", "trait": "female" },
 		{ "id": "female_crura_of_clitoris", "title": "Crura of Clitoris", "content": "Internal extensions of the clitoris attached to the ischiopubic rami", "type": "anatomy", "category": "organ", "trait": "female" },
 		{ "id": "female_vestibular_bulbs", "title": "Vestibular Bulbs", "content": "Internal erectile tissue bulbs of the clitoris", "type": "anatomy", "category": "organ", "trait": "female" },
@@ -241,7 +243,7 @@
 
 		{ "id": "neurotransmitters", "title": "Oxytocin & Dopamine", "content": "Brain chemicals flooded during arousal and climax causing euphoria and bonding", "type": "anatomy", "category": "organ", "trait": "shared" },
 		{ "id": "immunological_defense", "title": "Immunological Defense", "content": "Mucosal immunity system protecting against pathogens", "type": "anatomy", "category": "organ", "trait": "shared" },
-		{ "id": "smegma", "title": "Smegma", "content": "Natural emollient and antibacterial lubricant produced in genital folds", "type": "anatomy", "category": "organ", "trait": "shared" },
+		{ "id": "smegma", "title": "Smegma", "content": "Natural emollient composed of exfoliated epithelial cells and sebum that lubricates and protects genital folds", "type": "anatomy", "category": "organ", "trait": "shared" },
 
 		{ "id": "female_orgasm", "title": "Female Orgasm", "content": "Full orgasm experience in biological females.", "type": "anatomy", "category": "sexual", "trait": "female" },
 		{ "id": "male_orgasm", "title": "Male Orgasm", "content": "Full orgasm experience in biological males.", "type": "anatomy", "category": "sexual", "trait": "male" },
@@ -358,7 +360,6 @@
 		{ "source": "mouth", "target": "lips" },
 
 		{ "source": "shoulders", "target": "arms" },
-		{ "source": "arms", "target": "upper_arm" },
 		{ "source": "upper_arm", "target": "elbow" },
 		{ "source": "elbow", "target": "forearm" },
 		{ "source": "forearm", "target": "wrist" },
@@ -540,7 +541,7 @@
 
 		{ "source": "female_clitoral_hood", "target": "smegma" },
 		{ "source": "female_clitoral_hood", "target": "intact_natural_lubrication", "type": "benefit" },
-		{ "source": "female_clitoral_hood", "target": "female_dorsal_nerve" },
+		{ "source": "female_clitoral_hood", "target": "female_clitoral_glans" },
 
 		{ "source": "female_uterus", "target": "female_cervix" },
 		{ "source": "female_cervix", "target": "female_vagina" },
@@ -551,11 +552,13 @@
 		{ "source": "female_vagina", "target": "female_g_spot" },
 		{ "source": "female_vagina", "target": "female_a_spot" },
 
+		{ "source": "female_clitoris", "target": "female_clitoral_glans" },
 		{ "source": "female_clitoris", "target": "female_vestibular_bulbs" },
 		{ "source": "female_clitoris", "target": "female_body_of_clitoris" },
 		{ "source": "female_clitoris", "target": "female_crura_of_clitoris" },
-		{ "source": "female_clitoris", "target": "female_dorsal_nerve" },
-		{ "source": "female_clitoris", "target": "intact_erogenous_sensitivity", "type": "benefit" },
+		
+		{ "source": "female_clitoral_glans", "target": "female_dorsal_nerve" },
+		{ "source": "female_clitoral_glans", "target": "intact_erogenous_sensitivity", "type": "benefit" },
 
 		{ "source": "erogenous_zones", "target": "neck" },
 		{ "source": "erogenous_zones", "target": "ears" },
@@ -566,7 +569,7 @@
 		{ "source": "erogenous_zones", "target": "areola" },
 		{ "source": "erogenous_zones", "target": "anus" },
 
-		{ "source": "female_erogenous_zones", "target": "female_clitoris" },
+		{ "source": "female_erogenous_zones", "target": "female_clitoral_glans" },
 		{ "source": "female_erogenous_zones", "target": "female_g_spot" },
 		{ "source": "female_erogenous_zones", "target": "female_a_spot" },
 
@@ -603,7 +606,7 @@
 		{ "source": "male_intact_glans_protection", "target": "male_sexual_pleasure" },
 		{ "source": "male_intact_friction_reduction", "target": "male_sexual_pleasure" },
 
-		{ "source": "female_clitoris", "target": "female_sexual_pleasure" },
+		{ "source": "female_clitoral_glans", "target": "female_sexual_pleasure" },
 		{ "source": "female_g_spot", "target": "female_sexual_pleasure" },
 		{ "source": "female_a_spot", "target": "female_sexual_pleasure" },
 		{ "source": "female_skenes_glands", "target": "female_sexual_pleasure" },
@@ -695,20 +698,20 @@
 		{ "source": "female_fgm_type_1a", "target": "female_clitoral_hood", "type": "removed" },
 
 		{ "source": "female_fgm_type_1b", "target": "female_clitoral_hood", "type": "removed" },
-		{ "source": "female_fgm_type_1b", "target": "female_clitoris", "type": "removed" },
+		{ "source": "female_fgm_type_1b", "target": "female_clitoral_glans", "type": "removed" },
 		{ "source": "female_fgm_type_1b", "target": "female_fgm_loss_sensitivity", "type": "consequence" },
 		{ "source": "female_fgm_type_1b", "target": "female_fgm_neuroma", "type": "consequence" },
 
 		{ "source": "female_fgm_type_2a", "target": "female_labia_minora", "type": "removed" },
 		{ "source": "female_fgm_type_2a", "target": "female_fgm_dyspareunia", "type": "consequence" },
 
-		{ "source": "female_fgm_type_2b", "target": "female_clitoris", "type": "removed" },
+		{ "source": "female_fgm_type_2b", "target": "female_clitoral_glans", "type": "removed" },
 		{ "source": "female_fgm_type_2b", "target": "female_labia_minora", "type": "removed" },
 		{ "source": "female_fgm_type_2b", "target": "female_fgm_loss_sensitivity", "type": "consequence" },
 		{ "source": "female_fgm_type_2b", "target": "female_fgm_neuroma", "type": "consequence" },
 		{ "source": "female_fgm_type_2b", "target": "female_fgm_dyspareunia", "type": "consequence" },
 
-		{ "source": "female_fgm_type_2c", "target": "female_clitoris", "type": "removed" },
+		{ "source": "female_fgm_type_2c", "target": "female_clitoral_glans", "type": "removed" },
 		{ "source": "female_fgm_type_2c", "target": "female_labia_minora", "type": "removed" },
 		{ "source": "female_fgm_type_2c", "target": "female_labia_majora", "type": "removed" },
 		{ "source": "female_fgm_type_2c", "target": "female_fgm_loss_sensitivity", "type": "consequence" },
