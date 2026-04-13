@@ -556,7 +556,7 @@
 		{ "source": "female_clitoris", "target": "female_vestibular_bulbs" },
 		{ "source": "female_clitoris", "target": "female_body_of_clitoris" },
 		{ "source": "female_clitoris", "target": "female_crura_of_clitoris" },
-		
+
 		{ "source": "female_clitoral_glans", "target": "female_dorsal_nerve" },
 		{ "source": "female_clitoral_glans", "target": "intact_erogenous_sensitivity", "type": "benefit" },
 
