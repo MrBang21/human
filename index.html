@@ -674,6 +674,10 @@ footer {
 	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-nerve));
 }
 
+.legend-line.sexual {
+	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-sexual));
+}
+
 .legend-line.removed {
 	border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed));
 	height: 0;
@@ -720,6 +724,14 @@ footer {
 .legend-line {
 	&.anatomy {
 		--_hue: var(--hue-anatomy);
+	}
+
+	&.nerve {
+		--_hue: var(--hue-nerve);
+	}
+
+	&.sexual {
+		--_hue: var(--hue-sexual);
 	}
 
 	&.removed {
