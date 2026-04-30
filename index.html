@@ -168,19 +168,15 @@ a {
 #app {
 	position: relative;
 	width: 100svw;
-	height: calc(100svh - 1rem);
+	height: 100svh;
 }
 
-#graph-container {
-	position: absolute;
-	inset: 0;
-	z-index: 1;
-	overflow: hidden;
-}
+#graph-container,
 #lines-layer,
 #nodes-layer {
-	position: absolute;
+	position: fixed;
 	inset: 0;
+	z-index: 0;
 }
 #lines-layer {
 	z-index: 1;
@@ -193,11 +189,7 @@ a {
 }
 
 #nodes-zoom {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 0;
-	height: 0;
+	position: fixed;
 	transform-origin: 0 0;
 	will-change: transform;
 }
@@ -208,7 +200,7 @@ a {
 }
 
 .card {
-	position: absolute;
+	position: fixed;
 	min-width: 10em;
 	max-width: 20em;
 	--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue));
@@ -492,7 +484,7 @@ select, input {
 			border: 1px solid var(--ui-border);
 			border-radius: 1em;
 			corner-shape: squircle;
-			position: absolute;
+			position: fixed;
 			width: 100%;
 			list-style: none;
 			padding: 0;
@@ -545,7 +537,7 @@ select, input {
 
 #legend,
 footer {
-	position: absolute;
+	position: fixed;
 	background: var(--ui-bg);
 	border-radius: .5em;
 	min-height: 2em;
@@ -633,8 +625,7 @@ footer {
 }
 
 #legend {
-	bottom: 1em;
-	left: 1em;
+	inset: auto auto 1em 1em;
 	padding: 1em;
 }
 
@@ -761,8 +752,7 @@ footer {
 }
 
 footer {
-	bottom: 1em;
-	right: 1em;
+	inset: auto 1em 1em auto;
 	padding: .5em 1em;
 	font-size: 12px;
 	color: var(--text-muted);
@@ -818,7 +808,7 @@ svg {
 }
 
 #loading {
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
