@@ -15,7 +15,7 @@
 		"female_genital_cutting": "Female Genital Mutilation or Cutting (FGM/C) comprises all procedures that involve partial or total removal of the external female genitalia, or other injury to the female genital organs for non-medical reasons. This deeply alters female anatomy by amputating vital erogenous structures, such as the clitoral glans or prepuce, resulting in profound physiological and psychological trauma, loss of sexual function, and chronic pain syndromes.",
 		"female_fgm_type_1": "Type 1 FGM (Clitoridectomy) involves the partial or total removal of the clitoral glans (the external, highly sensitive part of the clitoris) and/or the prepuce (clitoral hood). Because the clitoris is the primary center for female sexual pleasure, this amputation severely diminishes or destroys the anatomical capability for orgasm and natural sexual response.",
 		"male_intact_glans_protection": "In its natural, intact state, the foreskin acts as a protective sheath that covers the glans penis and the inner mucosa. This creates a moist, enclosed internal environment that prevents keratinization (callousing) of the soft glans tissue, maintaining its shiny appearance and preserving its delicate sensitivity to fine touch.",
-		"male_intact_friction_reduction": "The intact foreskin functions as a natural mechanical bearing during intercourse. Because the dual-layered prepuce glides freely over the smooth glans and penile shaft, it drastically reduces friction, eliminating the need for artificial lubrication and protecting the partner's internal mucosal walls from abrasion.",
+		"male_intact_gliding_mechanism": "The intact human penis features a highly specialized gliding mechanism, the biologically normal standard for human intercourse. The mobile prepuce (foreskin) rolls smoothly over the glans and penile shaft, acting as a natural mechanical bearing. This elegantly facilitates pleasurable, effortless movement, stimulates intrinsic erogenous receptors, and protects the partner's delicate internal mucosal walls from chafing and abrasion—all without requiring artificial lubrication.",
 		"male_circumcision_complications": "Surgical complications from male circumcision including infection, bleeding, and improper healing.",
 		"female_genital_cutting_complications": "Immediate and long-term health consequences of female genital mutilation/cutting such as severe pain, infection, and infertility.",
 		"male_gliding_mechanism": "The natural movement of the foreskin during sexual activity facilitating smooth penetration.",
@@ -23,6 +23,7 @@
 		"female_breasts": "The female breasts are complex glandular organs overlaying the pectoral muscles. While visually prominent, their primary biological function is lactation, facilitated by a network of lobules and lactiferous ducts. The breast tissue is also highly innervated, particularly around the areola and nipple, making it a critical erogenous zone responsive to tactile and thermal stimulation.",
 		"nipples": "The central protuberance of the breast containing the openings of the lactiferous ducts. Nipples are intensely concentrated with sensory nerve endings, rendering them highly sensitive to touch and a primary center for sexual arousal and biological feedback.",
 		"areola": "The specialized, pigmented skin surrounding the nipple. It contains sensory nerve fibers and sebaceous glands (Montgomery glands) that secrete lubricating and protective fluids. The areolar area is a prominent erogenous zone.",
+		"pudendal_nerve": "The major somatic nerve of the perineum, it emerges from the sacral plexus and carries sensory, motor, and autonomic fibers to the genital region. It innervates the clitoris, penis, perineum, and external anal sphincter, heavily mediating the tactile sensory aspect of sexual pleasure.",
 		"male_penis": "The principal male reproductive and intromittent organ. It is comprised of a root attached to the pelvic bone, a pendulous shaft containing three columns of erectile tissue (corpora cavernosa and corpus spongiosum), and the highly sensitive glans at the tip. During arousal, these tissues engorge with blood to produce an erection.",
 		"male_root": "The foundational base of the penis situated internally against the pelvic floor. It provides structural stability and anchors the erectile bodies (crura and bulb) to the pubic arch.",
 		"male_shaft": "The cylindrical main body of the penis, covered by loose, highly mobile skin that facilitates the gliding mechanism during intercourse. It houses the urethra and the main erectile columns.",
@@ -51,6 +52,30 @@
 		"orgasm": "The sudden, involuntary physiological discharge of accumulated sexual tension following climax. It is characterized by rhythmic, involuntary muscular contractions in the pelvic region, intense subjective pleasure, and a subsequent physiological state of relaxation (resolution).",
 		"female_orgasm": "The reflex physiological release of sexual tension in females following climax. It is characterized by rhythmic contractions of the pelvic floor muscles, vagina, and uterus, occurring at approximately 0.8-second intervals. It typically lacks a necessary refractory period, allowing for multiple consecutive orgasms in some individuals.",
 		"male_orgasm": "The reflex physiological release of sexual tension in males following climax, overwhelmingly accompanied by ejaculation. It involves rhythmic contractions of the pelvic floor muscles, prostate gland, and seminal vesicles to expel semen, followed immediately by a prolactin-driven refractory period where further orgasm is temporarily impossible."
+	},
+	"sources": {
+		"male_foreskin": [
+			{"url": "https://www.youtube.com/watch?v=IpBTp45bfxs", "title": "Not So Vestigial: The Anatomy and Functions of Male Foreskin by Stephanie Welch BA, MA, LMT"}
+		],
+		"male_circumcision": [
+			{"url": "https://www.youtube.com/watch?v=HUdNTT7ny-8", "title": "Circumcision The Whole Story"}
+		],
+		"female_clitoris": [
+			{"url": "https://pubmed.ncbi.nlm.nih.gov/9643100/", "title": "Anatomy of the clitoris: revision and clarifications - PubMed"},
+			{"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6436622/", "title": "Detailed anatomy of the female pudendal nerve - PMC"}
+		],
+		"female_g_spot": [
+			{"url": "https://pubmed.ncbi.nlm.nih.gov/11794464/", "title": "The G-spot: a modern gynecologic myth or a clinical entity? - PubMed"}
+		],
+		"male_prostate": [
+			{"url": "https://www.kenhub.com/en/library/anatomy/the-prostate-gland", "title": "Prostate gland: Anatomy, function and clinical relations - Kenhub"}
+		],
+		"pudendal_nerve": [
+			{"url": "https://www.kenhub.com/en/library/anatomy/pudendal-nerve", "title": "Pudendal nerve: Anatomy and clinical notes - Kenhub"}
+		],
+		"meissner_corpuscles": [
+			{"url": "https://www.ncbi.nlm.nih.gov/books/NBK535384/", "title": "Anatomy, Skin, Meissner Corpuscle - StatPearls - NCBI Bookshelf"}
+		]
 	},
 	"nodes": [
 		{ "id": "human", "title": "Human", "content": "Homo sapiens", "type": "anatomy", "category": "region", "trait": "shared" },
@@ -221,7 +246,7 @@
 		{ "id": "female_fgm_obstetric", "title": "Obstetric Complications", "content": "Significantly increased risk of severe tearing, prolonged labor, hemorrhage, and neonatal complications.", "type": "consequence", "category": "downgrade", "trait": "female" },
 
 		{ "id": "male_intact_glans_protection", "title": "Glans Protection", "content": "Maintains the glans as an internal, moist mucosal organ, preventing keratinization.", "type": "anatomy", "category": "note", "trait": "male" },
-		{ "id": "male_intact_friction_reduction", "title": "Friction Reduction", "content": "The natural gliding mechanism reduces friction and chafing during intercourse.", "type": "anatomy", "category": "note", "trait": "male" },
+		{ "id": "male_intact_gliding_mechanism", "title": "Natural Gliding Mechanism", "content": "The biologically intended structural design where the mobile foreskin acts as a natural mechanical bearing. This facilitates effortless, pleasurable movement, protects partners from abrasion, and enhances erogenous sensitivity.", "type": "anatomy", "category": "note", "trait": "male" },
 		{ "id": "intact_erogenous_sensitivity", "title": "Preserved Sensitivity", "content": "Maintenance of the full complement of specialized mechanoreceptors.", "type": "anatomy", "category": "note", "trait": "shared" },
 		{ "id": "intact_natural_lubrication", "title": "Natural Lubrication", "content": "Production of natural emollients that keep the genital structures moisturized.", "type": "anatomy", "category": "note", "trait": "shared" },
 		{ "id": "female_intact_obstetric_safety", "title": "Obstetric Safety", "content": "Intact, elastic vulvar and perineal tissues can stretch naturally during childbirth.", "type": "anatomy", "category": "note", "trait": "female" },
@@ -282,6 +307,8 @@
 		{ "id": "female_ejaculate", "title": "Female Ejaculate", "content": "Fluid expelled from the Skene's glands during sexual climax in some females", "type": "anatomy", "category": "organ", "trait": "female" },
 
 		{ "id": "skin_mucosa", "title": "Skin and Mucosa", "content": "Outer protective layer and inner moist linings; sensitivity varies dramatically between keratinized and mucosal tissue", "type": "anatomy", "category": "organ", "trait": "shared" },
+
+		{ "id": "pudendal_nerve", "title": "Pudendal Nerve", "content": "Major somatic nerve of the perineum carrying sensory and motor fibers to genital region", "type": "anatomy", "category": "organ", "trait": "shared" },
 
 		{ "id": "endocrine_system", "title": "Endocrine System", "content": "Hormones (testosterone, estrogen, progesterone, oxytocin) that regulate libido, arousal, and orgasm", "type": "anatomy", "category": "organ", "trait": "shared" },
 
@@ -514,7 +541,7 @@
 		{ "source": "smegma", "target": "immunological_defense" },
 
 		{ "source": "male_foreskin", "target": "male_intact_glans_protection", "type": "benefit" },
-		{ "source": "male_foreskin", "target": "male_intact_friction_reduction", "type": "benefit" },
+		{ "source": "male_foreskin", "target": "male_intact_gliding_mechanism", "type": "benefit" },
 		{ "source": "male_foreskin", "target": "intact_erogenous_sensitivity", "type": "benefit" },
 		{ "source": "male_foreskin", "target": "intact_natural_lubrication", "type": "benefit" },
 		{ "source": "male_foreskin", "target": "male_circumcision", "type": "harm" },
@@ -604,7 +631,7 @@
 		{ "source": "male_glans", "target": "male_sexual_pleasure" },
 		{ "source": "male_ridged_band", "target": "male_sexual_pleasure" },
 		{ "source": "male_intact_glans_protection", "target": "male_sexual_pleasure" },
-		{ "source": "male_intact_friction_reduction", "target": "male_sexual_pleasure" },
+		{ "source": "male_intact_gliding_mechanism", "target": "male_sexual_pleasure" },
 
 		{ "source": "female_clitoral_glans", "target": "female_sexual_pleasure" },
 		{ "source": "female_g_spot", "target": "female_sexual_pleasure" },
@@ -735,6 +762,8 @@
 		{ "source": "female_fgm_urinary_menstrual", "target": "female_sexual_pleasure", "type": "consequence" },
 		{ "source": "female_fgm_neuroma", "target": "female_sexual_pleasure", "type": "consequence" },
 
+		{ "source": "male_circumcision", "target": "male_circumcision_complications", "type": "consequence" },
+		{ "source": "female_genital_cutting", "target": "female_genital_cutting_complications", "type": "consequence" },
 		{ "source": "brain", "target": "sexual_pleasure" },
 		{ "source": "male_dorsal_nerve", "target": "pudendal_nerve" },
 		{ "source": "female_dorsal_nerve", "target": "pudendal_nerve" },
@@ -746,6 +775,8 @@
 		{ "source": "male_penis", "target": "male_penile_erection" },
 		{ "source": "female_clitoris", "target": "female_clitoral_erection" },
 		{ "source": "climax", "target": "sexual_response_cycle" },
+		{ "source": "sexual_response_cycle", "target": "plateau_phase" },
+		{ "source": "plateau_phase", "target": "myotonia" },
 		{ "source": "male_orgasm", "target": "male_refractory_period_length" },
 		{ "source": "female_orgasm", "target": "female_refractory_period" },
 		{ "source": "male_cowpers_glands", "target": "male_pre_ejaculate" },
