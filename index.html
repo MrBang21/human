@@ -4,6 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Human Sensory Atlas</title>
+<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "Dataset",
+	"name": "Human Sensory Atlas",
+	"description": "An interactive mapping of human biological anatomy, focused on the nervous system, erogenous zones, and the physiological effects of genital variations.",
+	"about": [
+		{
+			"@type": "AnatomicalStructure",
+			"name": "Human Genitalia"
+		},
+		{
+			"@type": "AnatomicalStructure",
+			"name": "Nervous System"
+		}
+	],
+	"creator": {
+		"@type": "Organization",
+		"name": "Standpoint"
+	},
+	"isAccessibleForFree": true,
+	"inLanguage": "en"
+}
+</script>
 <style>
 :root {
 	color-scheme: light;
@@ -447,9 +471,11 @@ select, input {
 			corner-shape: squircle;
 			position: absolute;
 			width: 100%;
+			list-style: none;
+			padding: 0;
+			margin: 0;
 
-			.search-result-item {
-				padding: 1em;
+			li {
 				cursor: pointer;
 				border-bottom: 1px solid var(--ui-border);
 				transition: background-color 0.2s;
@@ -462,13 +488,28 @@ select, input {
 					background-color: var(--search-hover);
 				}
 
-				.search-result-title {
+				a {
+					display: block;
+					padding: 1em;
+					text-decoration: none;
+					color: inherit;
+				}
+
+				.card {
+					all: revert;
+					display: block !important;
+					font-family: inherit;
+				}
+
+				.name {
 					font-weight: 600;
 					color: var(--text-main);
 					margin-bottom: 4px;
+					margin-top: 0;
+					font-size: 1.1em;
 				}
 
-				.search-result-meta {
+				.desc {
 					font-size: 11px;
 					color: var(--text-muted);
 					text-transform: uppercase;
@@ -538,6 +579,33 @@ footer {
 	color: var(--text-muted);
 	line-height: 1.5;
 	white-space: pre-wrap;
+}
+
+#nd-links {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+#nd-links:not(:empty)::before {
+	content: "Sources:";
+	display: block;
+	font-weight: bold;
+	font-size: 1.1em;
+	margin-top: 1em;
+	margin-bottom: 0.5em;
+	color: var(--text-main);
+}
+#nd-links li {
+	margin-bottom: 0.25em;
+	overflow: clip;
+}
+#nd-links li a {
+	display: block;
+	font-size: 0.9em;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 #legend {
@@ -712,10 +780,20 @@ svg {
 </template>
 
 <template id="search-result-template">
-	<div class="search-result-item">
-		<div class="search-result-title"></div>
-		<div class="search-result-meta"></div>
-	</div>
+	<li>
+		<a href="" target="_blank" rel="noopener">
+			<div class="card">
+				<h3 class="name"></h3>
+				<div class="desc"></div>
+			</div>
+		</a>
+	</li>
+</template>
+
+<template id="description-source-template">
+	<li>
+		<a href="" target="_blank" rel="noopener"></a>
+	</li>
 </template>
 
 <div id="app">
@@ -741,7 +819,7 @@ svg {
 			</div>
 			<div class="input" id="search-container" title="Search the database">
 				<input type="text" id="search-input" placeholder="Search ...">
-				<div id="search-results"></div>
+				<ul id="search-results"></ul>
 			</div>
 		</div>
 	</div>
@@ -749,6 +827,7 @@ svg {
 	<div id="node-description">
 		<h2 id="nd-title"></h2>
 		<p id="nd-content"></p>
+		<ul id="nd-links"></ul>
 	</div>
 
 	<div id="legend">
@@ -851,7 +930,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.3 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.4 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </div>
@@ -859,6 +938,7 @@ svg {
 let nodes = [],
 	edges = [],
 	descriptions = {},
+	sources = {},
 	currentCenterId = '',
 	currentTraitFilter = 'all',
 	currentZoom = 1,
@@ -876,12 +956,14 @@ const
 	nodeDescription = document.getElementById('node-description'),
 	ndTitle = document.getElementById('nd-title'),
 	ndContent = document.getElementById('nd-content'),
+	ndLinks = document.getElementById('nd-links'),
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	depthDropdown = document.getElementById('depth-control'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
 	cardTemplate = document.getElementById('card-template'),
-	searchResultTemplate = document.getElementById('search-result-template');
+	searchResultTemplate = document.getElementById('search-result-template'),
+	descriptionSourceTemplate = document.getElementById('description-source-template');
 
 const edgeStyles = {
 	'anatomy': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
@@ -912,6 +994,7 @@ async function loadGraphData() {
 		nodes = data.nodes;
 		edges = data.edges;
 		descriptions = data.descriptions || {};
+		sources = data.sources || {};
 
 		document.getElementById('loading').style.display = 'none';
 		initGraph();
@@ -1012,13 +1095,14 @@ searchInput.addEventListener('input', (e) => {
 		matches.forEach(m => {
 			const
 				clone = searchResultTemplate.content.cloneNode(true),
-				itemEl = clone.querySelector('.search-result-item');
+				itemEl = clone.querySelector('li');
 
 			itemEl.setAttribute('data-id', m.id);
-			clone.querySelector('.search-result-title').textContent = m.title;
-			clone.querySelector('.search-result-meta').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
+			clone.querySelector('.name').textContent = m.title;
+			clone.querySelector('.desc').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
 
-			itemEl.addEventListener('click', () => {
+			itemEl.addEventListener('click', (ev) => {
+				ev.preventDefault();
 				const id = itemEl.getAttribute('data-id');
 				updateUrlState(id);
 				renderGraph(id);
@@ -1032,10 +1116,10 @@ searchInput.addEventListener('input', (e) => {
 	} else {
 		const
 			clone = searchResultTemplate.content.cloneNode(true),
-			itemEl = clone.querySelector('.search-result-item');
+			itemEl = clone.querySelector('li');
 
-		clone.querySelector('.search-result-title').textContent = 'No results found for this trait';
-		clone.querySelector('.search-result-meta').textContent = '';
+		clone.querySelector('.name').textContent = 'No results found for this trait';
+		clone.querySelector('.desc').textContent = '';
 		itemEl.style.cursor = 'default';
 
 		searchResults.append(clone);
@@ -1218,8 +1302,21 @@ function renderGraph(centerId) {
 	updateBreadcrumbs(centerId);
 
 	if (descriptions[centerId]) {
-		ndTitle.textContent = centerNodeData.title;
+		ndTitle.textContent = centerNodeData?.title || centerId;
 		ndContent.textContent = descriptions[centerId];
+
+		ndLinks.replaceChildren();
+		if (sources[centerId]) {
+			sources[centerId].forEach(source => {
+				const clone = descriptionSourceTemplate.content.cloneNode(true),
+					linkEl = clone.querySelector('a');
+
+				linkEl.href = source.url;
+				linkEl.textContent = source.title;
+				ndLinks.append(clone);
+			});
+		}
+
 		nodeDescription.classList.add('visible');
 	} else {
 		nodeDescription.classList.remove('visible');
