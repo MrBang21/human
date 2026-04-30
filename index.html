@@ -4,6 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Human Sensory Atlas</title>
+<meta name="twitter:title" content="Human Sensory Atlas" />
+<meta name="twitter:description" content="An interactive mapping of human biological anatomy, focused on the nervous system, erogenous zones, and the physiological effects of genital variations." />
+<meta name="twitter:image" content="https://mrbang21.github.io/human/preview.jpg" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta property="og:title" content="Human Sensory Atlas" />
+<meta property="og:description" content="An interactive mapping of human biological anatomy, focused on the nervous system, erogenous zones, and the physiological effects of genital variations." />
+<meta property="og:image" content="https://mrbang21.github.io/human/preview.jpg" />
+<meta property="og:image:width" content="1000" />
+<meta property="og:image:height" content="1000" />
+<meta property="og:url" content="https://mrbang21.github.io/human/" />
+<meta property="og:type" content="website" />
 <script type="application/ld+json">
 {
 	"@context": "https://schema.org",
@@ -21,8 +32,8 @@
 		}
 	],
 	"creator": {
-		"@type": "Organization",
-		"name": "Standpoint"
+		"@type": "Person",
+		"name": "MrBang21"
 	},
 	"isAccessibleForFree": true,
 	"inLanguage": "en"
@@ -61,11 +72,15 @@
 	--hue-male: 240;
 	--hue-shared: 140;
 
+	--hue-root: 140;
 	--hue-anatomy: 200;
+	--hue-nerve: 260;
+	--hue-sexual: 320;
 	--hue-removed: 20;
 	--hue-consequence: 60;
 	--hue-benefit: 160;
 	--hue-harm: 20;
+	--hue-energetic: 340;
 	--hue-url: 240;
 
 	--trait-male: oklch(var(--text-lightness) var(--text-chroma) var(--hue-male));
@@ -258,33 +273,40 @@ a {
 	&.trait-male {
 		--_text-hue: var(--hue-male);
 	}
-
 	&.trait-female {
 		--_text-hue: var(--hue-female);
 	}
-
 	&.trait-shared {
 		--_text-hue: var(--hue-shared);
 	}
 
+
+	&.type-root {
+		--_hue: var(--hue-root);
+	}
 	&.type-anatomy {
 		--_hue: var(--hue-anatomy);
 	}
-
+	&.type-nerve {
+		--_hue: var(--hue-nerve);
+	}
+	&.type-sexual {
+		--_hue: var(--hue-sexual);
+	}
 	&.type-removed {
 		--_hue: var(--hue-removed);
 	}
-
 	&.type-consequence {
 		--_hue: var(--hue-consequence);
 	}
-
 	&.type-benefit {
 		--_hue: var(--hue-benefit);
 	}
-
 	&.type-harm {
 		--_hue: var(--hue-harm);
+	}
+	&.type-energetic {
+		--_hue: var(--hue-energetic);
 	}
 
 	.card-icon {
@@ -420,7 +442,8 @@ select, input {
 		display: flex;
 	}
 
-	#depth-control, #trait-filter {
+	#depth-control, #trait-filter, #type-filter {
+		appearance: base-select;
 		padding: 1em;
 		background: var(--ui-bg);
 		color: var(--text-main);
@@ -538,6 +561,7 @@ footer {
 
 #legend,
 #trait-filter,
+#type-filter,
 #search-input,
 #breadcrumb-stack,
 #node-description {
@@ -646,6 +670,10 @@ footer {
 	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy));
 }
 
+.legend-line.nerve {
+	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-nerve));
+}
+
 .legend-line.removed {
 	border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed));
 	height: 0;
@@ -662,6 +690,11 @@ footer {
 
 .legend-line.harm {
 	border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm));
+	height: 0;
+}
+
+.legend-line.energetic {
+	border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-energetic));
 	height: 0;
 }
 
@@ -705,6 +738,10 @@ footer {
 		--_hue: var(--hue-harm);
 	}
 
+	&.energetic {
+		--_hue: var(--hue-energetic);
+	}
+
 	line {
 		stroke: oklch(var(--text-lightness) var(--text-chroma) var(--_hue));
 		stroke-width: 3;
@@ -727,6 +764,14 @@ svg {
 		--_hue: var(--hue-anatomy);
 	}
 
+	#arrow-nerve {
+		--_hue: var(--hue-nerve);
+	}
+
+	#arrow-sexual {
+		--_hue: var(--hue-sexual);
+	}
+
 	#arrow-removed {
 		--_hue: var(--hue-removed);
 	}
@@ -741,6 +786,10 @@ svg {
 
 	#arrow-harm {
 		--_hue: var(--hue-harm);
+	}
+
+	#arrow-energetic {
+		--_hue: var(--hue-energetic);
 	}
 
 	path:not(.edge-path) {
@@ -796,6 +845,12 @@ svg {
 	</li>
 </template>
 
+<tempplate id="option-template">
+	<option value=""></option>
+</tempplate>
+
+
+
 <div id="app">
 	<div id="loading">Loading database...</div>
 
@@ -803,7 +858,17 @@ svg {
 		<div id="breadcrumb-stack"></div>
 		<div id="controls-container">
 			<div class="select">
+				<select id="type-filter" title="Filter by biological or energetic domain">
+					<button>
+						<selectedcontent></selectedcontent>
+					</button>
+				</select>
+			</div>
+			<div class="select">
 				<select id="depth-control" title="Set the number of connection layers to display">
+					<button>
+						<selectedcontent></selectedcontent>
+					</button>
 					<option value="1">1</option>
 					<option value="2" selected>2</option>
 					<option value="3">3</option>
@@ -811,10 +876,9 @@ svg {
 			</div>
 			<div class="select">
 				<select id="trait-filter" title="Filter connections by biological trait">
-					<option value="all">Any</option>
-					<option value="shared">Shared</option>
-					<option value="female">Female</option>
-					<option value="male">Male</option>
+					<button>
+						<selectedcontent></selectedcontent>
+					</button>
 				</select>
 			</div>
 			<div class="input" id="search-container" title="Search the database">
@@ -836,6 +900,12 @@ svg {
 			<div class="legend-line anatomy"></div> Default Anatomy
 		</div>
 		<div class="legend-item">
+			<div class="legend-line nerve"></div> Neuronal / Nerve
+		</div>
+		<div class="legend-item">
+			<div class="legend-line sexual"></div> Sexual / Erogenous
+		</div>
+		<div class="legend-item">
 			<div class="legend-line removed"></div> Excised / Removed
 		</div>
 		<div class="legend-item">
@@ -846,6 +916,9 @@ svg {
 		</div>
 		<div class="legend-item">
 			<div class="legend-line harm"></div> Direct Harm
+		</div>
+		<div class="legend-item">
+			<div class="legend-line energetic"></div> Energetic
 		</div>
 		<div class="legend-divider"></div>
 		<div class="legend-section-title">Biological Traits</div>
@@ -867,6 +940,10 @@ svg {
 					orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
+				<marker id="arrow-nerve" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z" />
+				</marker>
 				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
 					orient="auto">
 					<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
@@ -882,6 +959,10 @@ svg {
 				<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
 					orient="auto">
 					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
+				</marker>
+				<marker id="arrow-energetic" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
 
 				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10"
@@ -930,7 +1011,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.4 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.5 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </div>
@@ -939,8 +1020,10 @@ let nodes = [],
 	edges = [],
 	descriptions = {},
 	sources = {},
+	filters = {},
 	currentCenterId = '',
 	currentTraitFilter = 'all',
+	currentTypeFilter = 'all',
 	currentZoom = 1,
 	panX = 0,
 	panY = 0;
@@ -958,6 +1041,7 @@ const
 	ndContent = document.getElementById('nd-content'),
 	ndLinks = document.getElementById('nd-links'),
 	traitFilterDropdown = document.getElementById('trait-filter'),
+	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
@@ -966,11 +1050,15 @@ const
 	descriptionSourceTemplate = document.getElementById('description-source-template');
 
 const edgeStyles = {
+	'root': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '3', dash: 'none', marker: 'url(#arrow-anatomy)' },
 	'anatomy': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
+	'nerve': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-nerve))', width: '2.5', dash: 'none', marker: 'url(#arrow-nerve)' },
+	'sexual': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-sexual))', width: '2.5', dash: 'none', marker: 'url(#arrow-sexual)' },
 	'removed': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed))', width: '3', dash: '8, 4', marker: 'url(#arrow-removed)' },
 	'consequence': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence))', width: '3', dash: 'none', marker: 'url(#arrow-consequence)' },
 	'benefit': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit))', width: '3', dash: '4, 4', marker: 'url(#arrow-benefit)' },
-	'harm': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' }
+	'harm': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' },
+	'energetic': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-energetic))', width: '2', dash: '6, 6', marker: 'url(#arrow-energetic)' }
 };
 
 let activeLineElements = [],
@@ -979,9 +1067,28 @@ let activeLineElements = [],
 const checkTrait = (t) => {
 	const tr = t || 'shared';
 	if (currentTraitFilter === 'all') return true;
-	if (currentTraitFilter === 'female') return tr === 'female' || tr === 'shared';
-	if (currentTraitFilter === 'male') return tr === 'male' || tr === 'shared';
-	if (currentTraitFilter === 'shared') return tr === 'shared';
+
+	if (filters && filters.traits) {
+		const traitFilter = filters.traits.find(p => p.name.toLowerCase() === currentTraitFilter.toLowerCase());
+		if (traitFilter && traitFilter.items) {
+			return traitFilter.items.includes(tr);
+		}
+	}
+
+	return true;
+};
+
+const checkTypeFilter = (type) => {
+	const ty = type || 'anatomy';
+	if (currentTypeFilter === 'all') return true;
+
+	if (filters && filters.types) {
+		const perspective = filters.types.find(p => p.name.toLowerCase() === currentTypeFilter.toLowerCase());
+		if (perspective && perspective.items) {
+			return perspective.items.includes(ty);
+		}
+	}
+
 	return true;
 };
 
@@ -995,6 +1102,30 @@ async function loadGraphData() {
 		edges = data.edges;
 		descriptions = data.descriptions || {};
 		sources = data.sources || {};
+		filters = data.filters || {};
+
+		if (filters.types) {
+			typeFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
+			filters.types.forEach(p => {
+				const opt = document.createElement('option');
+				opt.value = p.name.toLowerCase();
+				opt.textContent = p.name;
+				if (p.title) opt.title = p.title;
+				typeFilterDropdown.appendChild(opt);
+			});
+			typeFilterDropdown.value = currentTypeFilter;
+		}
+
+		if (filters.traits) {
+			traitFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
+			filters.traits.forEach(t => {
+				const opt = document.createElement('option');
+				opt.value = t.name.toLowerCase();
+				opt.textContent = t.name;
+				traitFilterDropdown.appendChild(opt);
+			});
+			traitFilterDropdown.value = currentTraitFilter;
+		}
 
 		document.getElementById('loading').style.display = 'none';
 		initGraph();
@@ -1008,11 +1139,22 @@ function updateUrlState(id) {
 	url.hash = id;
 	url.searchParams.set('depth', depthDropdown.value);
 	url.searchParams.set('trait', currentTraitFilter);
+	url.searchParams.set('perspective', currentTypeFilter);
 	history.pushState(null, null, url.toString());
 }
 
 traitFilterDropdown.addEventListener('change', (e) => {
 	currentTraitFilter = e.target.value;
+	updateUrlState(currentCenterId);
+	renderGraph(currentCenterId);
+	if (searchInput.value) {
+		searchInput.dispatchEvent(new Event('input'));
+	}
+	e.target.blur();
+});
+
+typeFilterDropdown.addEventListener('change', (e) => {
+	currentTypeFilter = e.target.value;
 	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	if (searchInput.value) {
@@ -1041,6 +1183,24 @@ function initGraph() {
 	if (initialTrait) {
 		traitFilterDropdown.value = initialTrait;
 		currentTraitFilter = initialTrait;
+	} else if (filters && filters.traits) {
+		const defaultTrait = filters.traits.find(t => t.default);
+		if (defaultTrait) {
+			currentTraitFilter = defaultTrait.name.toLowerCase();
+			traitFilterDropdown.value = currentTraitFilter;
+		}
+	}
+
+	const initialType = url.searchParams.get('perspective');
+	if (initialType) {
+		typeFilterDropdown.value = initialType;
+		currentTypeFilter = initialType;
+	} else if (filters && filters.types) {
+		const defaultType = filters.types.find(t => t.default);
+		if (defaultType) {
+			currentTypeFilter = defaultType.name.toLowerCase();
+			typeFilterDropdown.value = currentTypeFilter;
+		}
 	}
 
 	currentCenterId = getIdFromHash();
@@ -1085,7 +1245,7 @@ searchInput.addEventListener('input', (e) => {
 	const matches = nodes.filter(n => {
 		const
 			matchesTerm = n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term) || (n.aka && n.aka.toLowerCase().includes(term)),
-			matchesFilter = checkTrait(n.trait);
+			matchesFilter = checkTrait(n.trait) && checkTypeFilter(n.type);
 		return matchesTerm && matchesFilter;
 	});
 
@@ -1201,7 +1361,7 @@ function getBreadcrumbPath(targetId) {
 				const edgeTargetData = nodes.find(n => n.id === e.target);
 				if (!edgeTargetData) return;
 
-				if (!checkTrait(edgeTargetData.trait)) return;
+				if (!checkTrait(edgeTargetData.trait) || !checkTypeFilter(edgeTargetData.type)) return;
 
 				let weight = 1;
 				if (targetTrait && edgeTargetData.trait !== targetTrait) {
@@ -1339,8 +1499,8 @@ function renderGraph(centerId) {
 				neighborId = e.source === curr.id ? e.target : e.source,
 				neighborNode = nodes.find(n => n.id === neighborId);
 
-			// Skip processing this branch if the neighbor's trait doesn't match
-			if (neighborNode && !checkTrait(neighborNode.trait)) return;
+			// Skip processing this branch if the neighbor's trait/perspective doesn't match
+			if (neighborNode && (!checkTrait(neighborNode.trait) || !checkTypeFilter(neighborNode.type))) return;
 
 			if (!visitedEdges.has(e)) {
 				visitedEdges.add(e);
@@ -1513,8 +1673,8 @@ function renderGraph(centerId) {
 		const
 			sourceNode = nodes.find(n => n.id === e.source) || {},
 			targetNode = nodes.find(n => n.id === e.target) || {},
-			sourceMatches = checkTrait(sourceNode.trait),
-			targetMatches = checkTrait(targetNode.trait);
+			sourceMatches = checkTrait(sourceNode.trait) && checkTypeFilter(sourceNode.type),
+			targetMatches = checkTrait(targetNode.trait) && checkTypeFilter(targetNode.type);
 
 		if (!sourceMatches || !targetMatches) pathLine.setAttribute('opacity', '0.25');
 		if (style.dash !== 'none') pathLine.setAttribute('stroke-dasharray', style.dash);
