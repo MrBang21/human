@@ -199,36 +199,26 @@
 		],
 		"female_clitoris": [
 			{
-				"url": "https://pubmed.ncbi.nlm.nih.gov/9643100/",
-				"title": "Anatomy of the clitoris: revision and clarifications - PubMed"
-			},
-			{
-				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6436622/",
-				"title": "Detailed anatomy of the female pudendal nerve - PMC"
+				"url": "https://pubmed.ncbi.nlm.nih.gov/21941661/",
+				"title": "Anatomy of the Clitoris: Revision and Clarifications about the Anatomical Terms for the Clitoris Proposed (without Scientific Bases) by Helen O'Connell, Emmanuele Jannini, and Odile Buisson"
 			}
 		],
 		"female_g_spot": [
 			{
-				"url": "https://pubmed.ncbi.nlm.nih.gov/11794464/",
-				"title": "The G-spot: a modern gynecologic myth or a clinical entity? - PubMed"
+				"url": "https://pubmed.ncbi.nlm.nih.gov/25740385/",
+				"title": "Clinical anatomy of the G-spot"
 			}
 		],
 		"male_prostate": [
 			{
 				"url": "https://www.kenhub.com/en/library/anatomy/the-prostate-gland",
-				"title": "Prostate gland: Anatomy, function and clinical relations - Kenhub"
+				"title": "Prostate gland: Anatomy, function and clinical relations"
 			}
 		],
 		"pudendal_nerve": [
 			{
 				"url": "https://www.kenhub.com/en/library/anatomy/pudendal-nerve",
-				"title": "Pudendal nerve: Anatomy and clinical notes - Kenhub"
-			}
-		],
-		"meissner_corpuscles": [
-			{
-				"url": "https://www.ncbi.nlm.nih.gov/books/NBK535384/",
-				"title": "Anatomy, Skin, Meissner Corpuscle - StatPearls - NCBI Bookshelf"
+				"title": "Pudendal nerve: Anatomy and clinical notes"
 			}
 		]
 	},
