@@ -164,7 +164,7 @@ a {
 		text-decoration: underline;
 	}
 }
-
+body,
 #app {
 	position: fixed;
 	inset: 0;
@@ -850,13 +850,11 @@ svg {
 	</li>
 </template>
 
-<tempplate id="option-template">
+<template id="option-template">
 	<option value=""></option>
-</tempplate>
+</template>
 
-
-
-<div id="app">
+<main id="app">
 	<div id="loading">Loading database...</div>
 
 	<div id="top-bar">
@@ -1019,7 +1017,7 @@ svg {
 		<div>Human Sensory Atlas v1.5 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
-</div>
+</main>
 <script>
 let nodes = [],
 	edges = [],
