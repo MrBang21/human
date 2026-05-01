@@ -74,7 +74,10 @@
 				"name": "Sexual / Erogenous",
 				"items": [
 					"root",
-					"sexual"
+					"sexual",
+					"consequence",
+					"removed",
+					"harm"
 				]
 			}
 		],
@@ -134,7 +137,17 @@
 		"female_fgm_type_1": "Type 1 FGM (Clitoridectomy) involves the partial or total removal of the clitoral glans (the external, highly sensitive part of the clitoris) and/or the prepuce (clitoral hood). Because the clitoris is the primary center for female sexual pleasure, this amputation severely diminishes or destroys the anatomical capability for orgasm and natural sexual response.",
 		"male_intact_glans_protection": "In its natural, intact state, the foreskin acts as a protective sheath that covers the glans penis and the inner mucosa. This creates a moist, enclosed internal environment that prevents keratinization (callousing) of the soft glans tissue, maintaining its shiny appearance and preserving its delicate sensitivity to fine touch.",
 		"male_intact_gliding_mechanism": "The intact human penis features a highly specialized gliding mechanism, the biologically normal standard for human intercourse. The mobile prepuce (foreskin) rolls smoothly over the glans and penile shaft, acting as a natural mechanical bearing. This elegantly facilitates pleasurable, effortless movement, stimulates intrinsic erogenous receptors, and protects the partner's delicate internal mucosal walls from chafing and abrasion - all without requiring artificial lubrication.",
-		"male_circumcision_complications": "Surgical complications from male circumcision including infection, bleeding, and improper healing.",
+		"male_circumcision_complications": "Adverse outcomes of male circumcision can include acute pain, bleeding/hemorrhage, infection (including sepsis), poor wound healing, excessive skin removal, adhesions/skin bridges, buried or trapped penis, urethral injury and meatal stenosis, scarring and cosmetic deformity, neuroma/chronic pain, and the need for revision surgery. Severe surgical errors (i.e., botched circumcisions) can involve partial or total injury to the glans/penis. Rarely, complications can be fatal, typically via uncontrolled bleeding, overwhelming infection, or anesthesia-related events.",
+		"male_circ_botched": "A botched circumcision refers to a circumcision complicated by significant surgical error or poor technique. Outcomes can include excessive tissue removal, severe scarring or deformity, adhesions/skin bridges, glans injury, urethral injury, and the need for revision or reconstructive surgery.",
+		"male_circ_hemorrhage": "Bleeding after circumcision can range from mild oozing to hemorrhage requiring urgent medical intervention. Infants have small blood volumes, making significant bleeding particularly dangerous.",
+		"male_circ_infection_sepsis": "Circumcision wounds can become infected; in severe cases infection can spread systemically (sepsis).",
+		"male_circ_glans_injury": "Injury to the glans can occur during circumcision (e.g., laceration, crushing, ischemic injury). Severity ranges from minor trauma to catastrophic damage in rare cases.",
+		"male_circ_revision_surgery": "Some circumcision outcomes require revision procedures (e.g., for adhesions/skin bridges, trapped/buried penis, or cosmetic/functional issues).",
+		"male_circ_adhesions": "Post-circumcision adhesions can form between the penile shaft skin and the glans, potentially causing discomfort, hygiene issues, or the need for separation/revision.",
+		"male_circ_buried_penis": "A buried or trapped penis can occur when penile skin and surrounding tissue heal in a way that obscures the shaft, sometimes requiring medical or surgical correction.",
+		"male_circ_infant": "Circumcision performed in infancy or the newborn period. Considerations include the inability to consent, pain and physiologic stress responses, and vulnerability to complications like bleeding or infection.",
+		"male_circ_infant_pain_stress": "Neonatal circumcision can cause acute pain and stress responses (e.g., elevated heart rate and cortisol). Pain control practices vary and may be incomplete.",
+		"male_circ_infant_feeding_disruption": "Some infants may experience short-term irritability or feeding disruption following painful procedures, including circumcision.",
 		"female_genital_cutting_complications": "Immediate and long-term health consequences of female genital mutilation/cutting such as severe pain, infection, and infertility.",
 		"male_gliding_mechanism": "The natural movement of the foreskin during sexual activity facilitating smooth penetration.",
 		"male_circ_keratinization": "The process by which the glans penis becomes less sensitive due to constant exposure after circumcision.",
@@ -1139,7 +1152,7 @@
 		{
 			"id": "male_circumcision",
 			"title": "Male Circumcision",
-			"content": "Surgical excision of the male foreskin",
+			"content": "Surgical excision of the male foreskin (prepuce), altering genital tissue and mechanics and carrying risks of complications.",
 			"type": "consequence",
 			"category": "surgery",
 			"trait": "male"
@@ -1212,6 +1225,86 @@
 			"id": "male_circ_neuroma",
 			"title": "Penile Neuroma",
 			"content": "Trapped ball of severed dorsal nerve endings embedded in scar tissue",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_botched",
+			"title": "Botched Circumcision",
+			"content": "Significant surgical error or poor outcome (deformity, injury, or need for reconstruction/revision)",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_hemorrhage",
+			"title": "Hemorrhage",
+			"content": "Potential for severe bleeding; particularly dangerous in infants",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_infection_sepsis",
+			"title": "Infection / Sepsis",
+			"content": "Wound infection can occur; severe cases can progress to systemic infection",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_glans_injury",
+			"title": "Glans Injury",
+			"content": "Injury to the glans (from minor trauma to severe damage in rare cases)",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_revision_surgery",
+			"title": "Revision Surgery",
+			"content": "Some outcomes require corrective or revision procedures",
+			"type": "consequence",
+			"category": "surgery",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_adhesions",
+			"title": "Adhesions",
+			"content": "Shaft skin may adhere to the glans after circumcision",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_buried_penis",
+			"title": "Buried / Trapped Penis",
+			"content": "Healing patterns can obscure the shaft, sometimes requiring correction",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_infant",
+			"title": "Infant / Neonatal Circumcision",
+			"content": "Circumcision performed in infancy, involving pain/stress and vulnerability to complications",
+			"type": "consequence",
+			"category": "surgery",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_infant_pain_stress",
+			"title": "Infant Pain / Stress Response",
+			"content": "Acute pain and physiologic stress responses can occur; analgesia may be incomplete",
+			"type": "consequence",
+			"category": "downgrade",
+			"trait": "male"
+		},
+		{
+			"id": "male_circ_infant_feeding_disruption",
+			"title": "Feeding Disruption",
+			"content": "Some infants may have short-term irritability or feeding disruption after painful procedures",
 			"type": "consequence",
 			"category": "downgrade",
 			"trait": "male"
@@ -1955,7 +2048,7 @@
 		{
 			"id": "male_circumcision_complications",
 			"title": "Circumcision Complications",
-			"content": "Potential adverse outcomes such as bleeding, infection, and surgical errors",
+			"content": "Potential adverse outcomes include acute pain, bleeding/hemorrhage, infection (including sepsis), poor healing, scarring/deformity, adhesions/skin bridges, meatal stenosis/urethral injury, neuroma/chronic pain, and revision surgery. Botched procedures can cause severe injury to the glans/penis; rarely, complications can result in death.",
 			"type": "consequence",
 			"category": "surgery",
 			"trait": "male"
@@ -3305,6 +3398,16 @@
 		},
 		{
 			"source": "female_erogenous_zones",
+			"target": "female_clitoral_hood",
+			"type": "sexual"
+		},
+		{
+			"source": "female_erogenous_zones",
+			"target": "female_labia_minora",
+			"type": "sexual"
+		},
+		{
+			"source": "female_erogenous_zones",
 			"target": "female_g_spot",
 			"type": "sexual"
 		},
@@ -3321,6 +3424,16 @@
 		{
 			"source": "male_erogenous_zones",
 			"target": "male_foreskin",
+			"type": "sexual"
+		},
+		{
+			"source": "male_erogenous_zones",
+			"target": "male_frenulum",
+			"type": "sexual"
+		},
+		{
+			"source": "male_erogenous_zones",
+			"target": "male_inner_mucosa",
 			"type": "sexual"
 		},
 		{
@@ -3685,6 +3798,61 @@
 		},
 		{
 			"source": "male_circumcision",
+			"target": "male_circ_botched",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_hemorrhage",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_infection_sepsis",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_glans_injury",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_revision_surgery",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_adhesions",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_buried_penis",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_circ_infant",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circ_infant",
+			"target": "male_circ_infant_pain_stress",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circ_infant",
+			"target": "male_circ_infant_feeding_disruption",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circ_infant_pain_stress",
+			"target": "psychological_trauma",
+			"type": "consequence"
+		},
+		{
+			"source": "male_circumcision",
 			"target": "psychological_trauma",
 			"type": "consequence"
 		},
@@ -3711,6 +3879,16 @@
 		{
 			"source": "male_circumcision",
 			"target": "ruffini_endings",
+			"type": "removed"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_foreskin",
+			"type": "removed"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_outer_skin",
 			"type": "removed"
 		},
 		{
