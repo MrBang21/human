@@ -43,6 +43,7 @@
 :root {
 	color-scheme: light;
 	accent-color: var(--url-color);
+	--mobile-bar-height: 3.25em;
 	--bg-color: oklch(0.95 0 0);
 	--card-bg: oklch(1 0 0);
 	--card-border: oklch(0.8 0 0);
@@ -181,6 +182,10 @@ body,
 	inset: 0;
 	z-index: 0;
 }
+#graph-container {
+	/* Enable custom pan/zoom gestures on touch devices */
+	touch-action: none;
+}
 #lines-layer {
 	z-index: 1;
 	pointer-events: none;
@@ -206,6 +211,8 @@ body,
 	position: fixed;
 	min-width: 10em;
 	max-width: 20em;
+	/* Prevent the browser from hijacking touch drags */
+	touch-action: none;
 	--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue));
 	background: var(--_back);
 
@@ -536,6 +543,37 @@ select, input {
 			}
 		}
 	}
+
+	.toggle {
+		display: flex;
+		align-items: center;
+		height: 2.5em;
+		background: var(--ui-bg);
+		border: 1px solid var(--ui-border);
+		border-radius: .5em;
+		padding: 0 .5em;
+		transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+	}
+
+	.toggle:focus-within {
+		border-color: var(--url-color);
+	}
+
+	.toggle label {
+		display: flex;
+		align-items: center;
+		gap: .5em;
+		cursor: pointer;
+		color: var(--text-muted);
+		white-space: nowrap;
+	}
+
+	.toggle input[type="checkbox"] {
+		margin: 0;
+		padding: 0;
+		width: 1.1em;
+		height: 1.1em;
+	}
 }
 
 #legend,
@@ -585,6 +623,11 @@ footer {
 #node-description.visible {
 	display: block;
 }
+
+#mobile-bar {
+	display: none;
+}
+
 
 #node-description h2 {
 	margin: 0 0 0.5em 0;
@@ -819,6 +862,130 @@ svg {
 	color: var(--text-muted);
 	z-index: 100;
 }
+
+
+@media (max-width: 700px) {
+	#mobile-bar {
+		position: fixed;
+		inset: auto .5em calc(.5em + env(safe-area-inset-bottom)) .5em;
+		height: var(--mobile-bar-height);
+		z-index: 300;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: .5em;
+		padding: 0 .5em;
+		border: .125em solid var(--ui-border);
+		border-radius: 1em;
+		corner-shape: squircle;
+		background: var(--ui-bg);
+
+		@supports (backdrop-filter: blur(0)) {
+			background: var(--ui-bg) with alpha(var(--ui-bg) / 0.2);
+			backdrop-filter: blur(1em);
+		}
+	}
+
+	#mobile-bar button {
+		appearance: none;
+		border: 1px solid var(--ui-border);
+		background: transparent;
+		color: var(--text-main);
+		border-radius: .75em;
+		padding: .5em .75em;
+		font: inherit;
+		line-height: 1;
+		min-width: 0;
+		flex: 1 1 0;
+		cursor: pointer;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+	}
+
+	#mobile-bar button[aria-pressed="true"] {
+		border-color: var(--url-color);
+		color: var(--url-color);
+		background: var(--search-hover);
+	}
+
+	#mobile-bar button:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+
+	#top-bar {
+		inset: .5em .5em auto .5em;
+		flex-direction: column;
+		align-items: stretch;
+		gap: .5em;
+	}
+
+	#breadcrumb-stack {
+		width: 100%;
+		justify-content: flex-start;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	#controls-container {
+		display: none;
+		justify-content: flex-start;
+		flex-wrap: wrap;
+		gap: .5em;
+	}
+
+	body.mobile-panel-search #controls-container,
+	body.mobile-panel-filters #controls-container {
+		display: flex;
+	}
+
+	body.mobile-panel-search #controls-container > :not(#search-container) {
+		display: none;
+	}
+
+	body.mobile-panel-filters #search-container {
+		display: none;
+	}
+
+	#node-description {
+		left: .5em;
+		right: .5em;
+		width: auto;
+		top: 3.25em;
+		max-height: 40svh;
+		display: none;
+	}
+
+	/* Override desktop auto-open behavior on mobile.
+	   Even if JS marks the node as `visible`, only the Info tab should reveal it. */
+	#node-description.visible {
+		display: none;
+	}
+
+	body.mobile-panel-info #node-description {
+		display: block;
+	}
+
+	body.mobile-panel-info #node-description.visible {
+		display: block;
+	}
+
+	#legend {
+		display: none;
+		inset: auto auto 4.5em .5em;
+		max-width: calc(100svw - 1em);
+		max-height: 30svh;
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	body.mobile-panel-legend #legend {
+		display: block;
+	}
+
+}
 </style>
 </head>
 
@@ -884,6 +1051,12 @@ svg {
 					</button>
 				</select>
 			</div>
+			<div class="toggle" title="Cluster nodes by type • category • trait">
+				<label for="grid-layout">
+					<input type="checkbox" id="grid-layout">
+					<span>Cluster</span>
+				</label>
+			</div>
 			<div class="input" id="search-container" title="Search the database">
 				<input type="text" id="search-input" placeholder="Search ...">
 				<ul id="search-results"></ul>
@@ -891,7 +1064,7 @@ svg {
 		</div>
 	</div>
 
-	<div id="node-description">
+	<div id="node-description" aria-live="polite">
 		<h2 id="nd-title"></h2>
 		<p id="nd-content"></p>
 		<ul id="nd-links"></ul>
@@ -934,6 +1107,13 @@ svg {
 		<div class="legend-item">
 			<div class="legend-text-icon shared">Aa</div> Shared
 		</div>
+	</div>
+
+	<div id="mobile-bar" aria-label="Mobile controls">
+		<button type="button" data-panel="search" aria-pressed="false">Search</button>
+		<button type="button" data-panel="filters" aria-pressed="false">Filters</button>
+		<button type="button" data-panel="legend" aria-pressed="false">Legend</button>
+		<button type="button" data-panel="info" aria-pressed="false">Info</button>
 	</div>
 
 	<div id="graph-container">
@@ -1014,7 +1194,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.5 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.6 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1027,6 +1207,7 @@ let nodes = [],
 	currentCenterId = '',
 	currentTraitFilter = 'all',
 	currentTypeFilter = 'all',
+	gridLayoutEnabled = false,
 	currentZoom = 1,
 	panX = 0,
 	panY = 0;
@@ -1046,11 +1227,90 @@ const
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
+	gridLayoutCheckbox = document.getElementById('grid-layout'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
 	cardTemplate = document.getElementById('card-template'),
 	searchResultTemplate = document.getElementById('search-result-template'),
 	descriptionSourceTemplate = document.getElementById('description-source-template');
+
+const mobileBar = document.getElementById('mobile-bar');
+const mobilePanels = ['search', 'filters', 'legend', 'info'];
+let activeMobilePanel = null;
+
+function clearMobilePanels() {
+	mobilePanels.forEach(p => document.body.classList.remove(`mobile-panel-${p}`));
+	activeMobilePanel = null;
+}
+
+function updateMobileBarUI() {
+	if (!mobileBar) return;
+
+	mobileBar.querySelectorAll('button[data-panel]').forEach(btn => {
+		const panel = btn.getAttribute('data-panel');
+		btn.setAttribute('aria-pressed', panel === activeMobilePanel ? 'true' : 'false');
+	});
+}
+
+function setMobilePanel(panel) {
+	if (!mobileBar) return;
+
+	if (!panel || panel === activeMobilePanel) {
+		clearMobilePanels();
+		updateMobileBarUI();
+		return;
+	}
+
+	if (!mobilePanels.includes(panel)) return;
+
+	// Ensure only one panel is open at a time (mobile tab bar behavior).
+	clearMobilePanels();
+	document.body.classList.add(`mobile-panel-${panel}`);
+	activeMobilePanel = panel;
+	updateMobileBarUI();
+
+	if (panel === 'search') {
+		requestAnimationFrame(() => searchInput?.focus());
+	}
+}
+
+if (mobileBar) {
+	mobileBar.addEventListener('click', (e) => {
+		const btn = e.target.closest('button[data-panel]');
+		if (!btn) return;
+		setMobilePanel(btn.getAttribute('data-panel'));
+	});
+	updateMobileBarUI();
+}
+
+// Cluster/grid layout tuning (all units are in `em`).
+// Vertical spacing tends to matter more than horizontal in this view,
+// so adjust `gapYEm` / `rowGapYEm` first when tuning.
+const clusterParentTopEm = 7;
+const clusterParentSelectedGapEm = 2.75;
+
+const clusterLayout = {
+	paddingXEm: 2,
+	gapXEm: 1.5,
+	gapYEm: 2.0,
+	groupGapXEm: 1.0,
+	rowGapYEm: 3.5,
+	groupsStartGapYEm: 0.0,
+	labelToBlockGapEm: 7.0,
+	maxColsInGroup: 10
+};
+
+// Normal (non-cluster) layout tuning.
+// Uses a flower/radial fan-out where the center uses 360° and outer layers use a partial arc.
+const normalLayout = {
+	baseRadiusPx: 400,
+	requiredArcPerChildPx: 100,
+	depthRadiusMultiplierStart: 1.0,
+	depthRadiusMultiplierStep: 0.4,
+	centerTotalSpreadRad: 2 * Math.PI,
+	centerStartAngleRad: -Math.PI / 2,
+	petalTotalSpreadRad: Math.PI * 0.8
+};
 
 const edgeStyles = {
 	'root': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '3', dash: 'none', marker: 'url(#arrow-anatomy)' },
@@ -1143,6 +1403,7 @@ function updateUrlState(id) {
 	url.searchParams.set('depth', depthDropdown.value);
 	url.searchParams.set('trait', currentTraitFilter);
 	url.searchParams.set('perspective', currentTypeFilter);
+	url.searchParams.set('cluster', gridLayoutEnabled ? '1' : '0');
 	history.pushState(null, null, url.toString());
 }
 
@@ -1172,6 +1433,211 @@ depthDropdown.addEventListener('change', (e) => {
 	e.target.blur();
 });
 
+gridLayoutCheckbox.addEventListener('change', (e) => {
+	gridLayoutEnabled = !!e.target.checked;
+	updateUrlState(currentCenterId);
+	renderGraph(currentCenterId);
+	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
+	e.target.blur();
+});
+
+const getCompositeGroupKey = (node) => {
+	const type = node?.type ?? 'unknown_type';
+	const category = node?.category ?? 'unknown_category';
+	const trait = node?.trait ?? 'unknown_trait';
+	return `${type}|${category}|${trait}`;
+};
+
+const layoutGridByCompositeGroup = ({
+	centerId,
+	centerNodeData,
+	parentId,
+	nodesByDepth,
+	centerEl,
+	emSize,
+	anchorY,
+	parentAnchorY
+}) => {
+	// Remove prior group labels
+	document.querySelectorAll('.group-label').forEach(el => el.remove());
+
+	const paddingX = clusterLayout.paddingXEm * emSize;
+	const gapX = clusterLayout.gapXEm * emSize;
+	const gapY = clusterLayout.gapYEm * emSize;
+	const groupGapX = clusterLayout.groupGapXEm * emSize;
+	const rowGapY = clusterLayout.rowGapYEm * emSize;
+	// Group labels are intentionally disabled; keep blocks tight.
+	const labelToBlockGap = clusterLayout.labelToBlockGapEm * emSize;
+
+	const sizeSample = centerEl || document.querySelector('.card');
+	// IMPORTANT: nodes are rendered inside a scaled container (`currentZoom`).
+	// Use offsetWidth/offsetHeight so spacing is never derived from zoomed sizes.
+	const measuredW = sizeSample?.offsetWidth || 0;
+	const measuredH = sizeSample?.offsetHeight || 0;
+	const cardW = measuredW || (18 * emSize);
+	const cardH = measuredH || (7.5 * emSize);
+
+	const metaById = new Map();
+	for (let d = 1; d < nodesByDepth.length; d++) {
+		nodesByDepth[d].forEach(nData => {
+			if (!metaById.has(nData.node.id)) metaById.set(nData.node.id, nData);
+		});
+	}
+
+	// Pull parent out to render standalone above center
+	const parentMeta = parentId ? metaById.get(parentId) : null;
+	if (parentId) metaById.delete(parentId);
+
+	const groupMap = new Map();
+	metaById.forEach((meta) => {
+		const item = { node: meta.node, meta };
+		const key = getCompositeGroupKey(item.node);
+		if (!groupMap.has(key)) groupMap.set(key, []);
+		groupMap.get(key).push(item);
+	});
+
+	// Smallest first so biggest ends up at bottom
+	const groupEntries = Array.from(groupMap.entries()).sort((a, b) => {
+		const d = a[1].length - b[1].length;
+		return d !== 0 ? d : a[0].localeCompare(b[0]);
+	});
+
+	const centerX = window.innerWidth / 2;
+	const centerY = anchorY ?? ((window.innerHeight / 2) + (3 * emSize));
+
+	// Selected node stays centered in the viewport
+	centerEl.style.left = `${centerX}px`;
+	centerEl.style.top = `${centerY}px`;
+
+	// Parent node alone above the selected node
+	if (parentMeta) {
+		const parentEl = document.getElementById(`node-${parentId}`);
+		if (parentEl) {
+			parentEl.classList.remove('hidden');
+			parentEl.classList.remove('center-node');
+			parentEl.classList.add('parent');
+			if (!checkTrait(parentMeta.node.trait)) parentEl.classList.add('ghosted');
+			parentEl.style.left = `${centerX}px`;
+			const fallbackParentY = centerY - (cardH + (1.75 * emSize));
+			parentEl.style.top = `${parentAnchorY ?? fallbackParentY}px`;
+		}
+	}
+
+	const maxColsInGroup = clusterLayout.maxColsInGroup;
+	const groupsStartGapY = clusterLayout.groupsStartGapYEm * emSize;
+	let yCursor = centerY + (cardH / 2) + groupsStartGapY;
+
+	let rowX = paddingX;
+	let rowY = yCursor;
+	let rowMaxH = 0;
+	let rowHasItems = false;
+	let rowBlocks = [];
+
+	const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+	const shiftElementsX = (elements, deltaX) => {
+		if (!deltaX) return;
+		elements.forEach((el) => {
+			if (!el) return;
+			const currentLeft = parseFloat(el.style.left);
+			if (!Number.isFinite(currentLeft)) return;
+			el.style.left = `${currentLeft + deltaX}px`;
+		});
+	};
+
+	const flushRow = () => {
+		if (!rowHasItems) return;
+
+		// Center the packed row of small groups as a whole.
+		if (rowBlocks.length) {
+			const rowLeft = Math.min(...rowBlocks.map(b => b.left));
+			const rowRight = Math.max(...rowBlocks.map(b => b.left + b.width));
+			const rowWidth = Math.max(0, rowRight - rowLeft);
+			const minLeft = paddingX;
+			const maxLeft = Math.max(minLeft, (window.innerWidth - paddingX) - rowWidth);
+			const targetLeft = clamp(centerX - (rowWidth / 2), minLeft, maxLeft);
+			const deltaX = targetLeft - rowLeft;
+			const rowEls = rowBlocks.reduce((acc, b) => acc.concat(b.elements), []);
+			shiftElementsX(rowEls, deltaX);
+		}
+		rowBlocks = [];
+
+		yCursor = rowY + rowMaxH + rowGapY;
+		rowY = yCursor;
+		rowX = paddingX;
+		rowMaxH = 0;
+		rowHasItems = false;
+	};
+
+	groupEntries.forEach(([key, items]) => {
+		const count = items.length;
+		const cols = Math.max(1, Math.min(maxColsInGroup, count));
+		const rows = Math.ceil(count / cols);
+
+		const blockW = (cols * cardW) + ((cols - 1) * gapX);
+		const blockH = (rows * cardH) + ((rows - 1) * gapY);
+		const totalH = labelToBlockGap + blockH;
+		const isSmallGroup = count < 4;
+
+		let blockLeft;
+		let blockTop;
+		let rowBlockEls = [];
+
+		if (isSmallGroup) {
+			// Pack small groups on the same line, with extra spacing between them.
+			const maxX = window.innerWidth - paddingX;
+			if (rowHasItems && (rowX + blockW > maxX)) {
+				flushRow();
+			}
+			rowHasItems = true;
+			blockLeft = rowX;
+			blockTop = rowY + labelToBlockGap;
+			rowX = rowX + blockW + groupGapX;
+			rowMaxH = Math.max(rowMaxH, totalH);
+		} else {
+			// Large groups get their own centered row.
+			flushRow();
+			blockLeft = centerX - (blockW / 2);
+			blockTop = yCursor + labelToBlockGap;
+			yCursor = blockTop + blockH + rowGapY;
+			rowY = yCursor;
+			rowX = paddingX;
+			rowMaxH = 0;
+			rowHasItems = false;
+		}
+
+		items.forEach((item, idx) => {
+			const nodeId = item.node.id;
+			const el = document.getElementById(`node-${nodeId}`);
+			if (!el) return;
+
+			el.classList.remove('hidden');
+			el.classList.remove('center-node');
+
+			if (item.meta?.isOutgoing) {
+				el.classList.add('target');
+			} else {
+				el.classList.add('source');
+			}
+
+			if (!checkTrait(item.node.trait)) el.classList.add('ghosted');
+
+			const row = Math.floor(idx / cols);
+			const col = idx % cols;
+			const x = blockLeft + (col * (cardW + gapX)) + (cardW / 2);
+			const y = blockTop + (row * (cardH + gapY)) + (cardH / 2);
+			el.style.left = `${x}px`;
+			el.style.top = `${y}px`;
+			rowBlockEls.push(el);
+		});
+
+		if (isSmallGroup) {
+			rowBlocks.push({ left: blockLeft, width: blockW, elements: rowBlockEls });
+		}
+	});
+
+	flushRow();
+};
+
 function getIdFromHash() {
 	const hash = window.location.hash.substring(1);
 	return nodes.some(n => n.id === hash) ? hash : 'human';
@@ -1181,6 +1647,13 @@ function initGraph() {
 	const url = new URL(window.location);
 	const initialDepth = url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
+
+	const initialCluster = url.searchParams.get('cluster');
+	if (initialCluster != null) {
+		const enabled = (initialCluster === '1' || initialCluster.toLowerCase() === 'true');
+		gridLayoutEnabled = enabled;
+		gridLayoutCheckbox.checked = enabled;
+	}
 
 	const initialTrait = url.searchParams.get('trait');
 	if (initialTrait) {
@@ -1302,40 +1775,31 @@ function setupInteractions(card, id) {
 		startX, startY,
 		initialLeft, initialTop;
 
-	card.addEventListener('mousedown', (e) => {
-		if (e.button !== 0) return;
-		e.preventDefault();
-
+	const startDrag = (clientX, clientY) => {
 		isDragging = true;
 		hasMoved = false;
-		startX = e.clientX;
-		startY = e.clientY;
-
+		startX = clientX;
+		startY = clientY;
 		card.classList.add('dragging');
 		initialLeft = parseFloat(card.style.left) || 0;
 		initialTop = parseFloat(card.style.top) || 0;
+	};
 
-		document.addEventListener('mousemove', drag);
-		document.addEventListener('mouseup', drop);
-	});
-
-	function drag(e) {
+	const updateDrag = (clientX, clientY) => {
 		if (!isDragging) return;
 		const
-			dx = (e.clientX - startX) / currentZoom,
-			dy = (e.clientY - startY) / currentZoom;
+			dx = (clientX - startX) / currentZoom,
+			dy = (clientY - startY) / currentZoom;
 
 		if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
 
 		card.style.left = `${initialLeft + dx}px`;
 		card.style.top = `${initialTop + dy}px`;
-	}
+	};
 
-	function drop(e) {
+	const endDrag = () => {
 		if (!isDragging) return;
 		isDragging = false;
-		document.removeEventListener('mousemove', drag);
-		document.removeEventListener('mouseup', drop);
 		card.classList.remove('dragging');
 
 		if (!hasMoved) {
@@ -1344,7 +1808,57 @@ function setupInteractions(card, id) {
 			}
 			renderGraph(id);
 		}
+	};
+
+	card.addEventListener('mousedown', (e) => {
+		if (e.button !== 0) return;
+		e.preventDefault();
+
+		startDrag(e.clientX, e.clientY);
+
+		document.addEventListener('mousemove', drag);
+		document.addEventListener('mouseup', drop);
+	});
+
+	function drag(e) {
+		updateDrag(e.clientX, e.clientY);
 	}
+
+	function drop(e) {
+		if (!isDragging) return;
+		document.removeEventListener('mousemove', drag);
+		document.removeEventListener('mouseup', drop);
+		endDrag();
+	}
+
+	// Touch / mobile support (Pointer Events)
+	card.addEventListener('pointerdown', (e) => {
+		if (e.pointerType !== 'touch') return;
+		// If a pinch gesture is active, let the graph handle it.
+		if (window.__isTouchPinching) return;
+		e.preventDefault();
+		try {
+			card.setPointerCapture(e.pointerId);
+		} catch (err) {
+			// Ignore (e.g. synthetic events or unsupported pointer capture)
+		}
+		startDrag(e.clientX, e.clientY);
+	});
+
+	card.addEventListener('pointermove', (e) => {
+		if (e.pointerType !== 'touch') return;
+		updateDrag(e.clientX, e.clientY);
+	});
+
+	card.addEventListener('pointerup', (e) => {
+		if (e.pointerType !== 'touch') return;
+		endDrag();
+	});
+
+	card.addEventListener('pointercancel', (e) => {
+		if (e.pointerType !== 'touch') return;
+		endDrag();
+	});
 }
 
 function getBreadcrumbPath(targetId) {
@@ -1357,28 +1871,43 @@ function getBreadcrumbPath(targetId) {
 
 	const findPath = (allowAllEdges) => {
 		let adjList = {};
+		const defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']);
+		const isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t || 'anatomy');
+		const isAllowedNode = (id, nodeData) => {
+			if (!nodeData) return false;
+			if (id === targetId) return true;
+			return checkTrait(nodeData.trait) && checkTypeFilter(nodeData.type);
+		};
+		const weightFor = (neighborData) => {
+			let weight = 1;
+			if (targetTrait && neighborData.trait !== targetTrait) {
+				weight += 10;
+				if (neighborData.trait !== 'shared') weight += 50;
+			}
+			if (neighborData.category !== 'anatomy' && neighborData.category !== 'structure') {
+				weight += 20;
+			}
+			if (neighborData.category === 'other') {
+				weight += 20;
+			}
+			return weight;
+		};
+		const addEdge = (fromId, toId, toData) => {
+			if (!adjList[fromId]) adjList[fromId] = [];
+			adjList[fromId].push({ node: toId, weight: weightFor(toData) });
+		};
+
 		edges.forEach(e => {
 			const type = e.type || 'anatomy';
-			if (allowAllEdges || (type === 'anatomy' || type === 'benefit' || type === 'consequence' || type === 'harm')) {
-				if (!adjList[e.source]) adjList[e.source] = [];
-				const edgeTargetData = nodes.find(n => n.id === e.target);
-				if (!edgeTargetData) return;
+			if (!isAllowedEdgeType(type)) return;
 
-				if (!checkTrait(edgeTargetData.trait) || !checkTypeFilter(edgeTargetData.type)) return;
+			const sourceData = nodes.find(n => n.id === e.source);
+			const targetData = nodes.find(n => n.id === e.target);
+			if (!sourceData || !targetData) return;
 
-				let weight = 1;
-				if (targetTrait && edgeTargetData.trait !== targetTrait) {
-					weight += 10;
-					if (edgeTargetData.trait !== 'shared') weight += 50;
-				}
-				if (edgeTargetData.category !== 'anatomy' && edgeTargetData.category !== 'structure') {
-					weight += 20;
-				}
-				if (edgeTargetData.category === 'other') {
-					weight += 20;
-				}
-				adjList[e.source].push({ node: e.target, weight: weight });
-			}
+			// Allow traversal source->target and target->source (breadcrumb can follow either direction).
+			if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
+			if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
 		});
 		let distances = {},
 			previous = {},
@@ -1454,6 +1983,7 @@ function updateBreadcrumbs(centerId) {
 
 function renderGraph(centerId) {
 	currentCenterId = centerId;
+	gridLayoutEnabled = !!gridLayoutCheckbox?.checked;
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
@@ -1464,22 +1994,22 @@ function renderGraph(centerId) {
 
 	updateBreadcrumbs(centerId);
 
+	// Always update the node-description content to avoid stale text when switching nodes.
+	ndTitle.textContent = centerNodeData?.title || centerId;
+	ndContent.textContent = descriptions[centerId] || '';
+	ndLinks.replaceChildren();
+	if (sources[centerId]) {
+		sources[centerId].forEach(source => {
+			const clone = descriptionSourceTemplate.content.cloneNode(true),
+				linkEl = clone.querySelector('a');
+
+			linkEl.href = source.url;
+			linkEl.textContent = source.title;
+			ndLinks.append(clone);
+		});
+	}
+
 	if (descriptions[centerId]) {
-		ndTitle.textContent = centerNodeData?.title || centerId;
-		ndContent.textContent = descriptions[centerId];
-
-		ndLinks.replaceChildren();
-		if (sources[centerId]) {
-			sources[centerId].forEach(source => {
-				const clone = descriptionSourceTemplate.content.cloneNode(true),
-					linkEl = clone.querySelector('a');
-
-				linkEl.href = source.url;
-				linkEl.textContent = source.title;
-				ndLinks.append(clone);
-			});
-		}
-
 		nodeDescription.classList.add('visible');
 	} else {
 		nodeDescription.classList.remove('visible');
@@ -1539,6 +2069,7 @@ function renderGraph(centerId) {
 		el.classList.remove('source');
 		el.classList.remove('target');
 	});
+	document.querySelectorAll('.group-label').forEach(el => el.remove());
 
 	linesZoom.replaceChildren();
 	activeLineElements = [];
@@ -1550,14 +2081,36 @@ function renderGraph(centerId) {
 	const centerMatches = checkTrait(centerNodeData.trait);
 	if (!centerMatches) centerEl.classList.add('ghosted');
 
-	centerEl.style.left = `${centerX}px`;
-	centerEl.style.top = `${centerY}px`;
+	let renderCenterY = centerY;
+	let renderParentY = null;
+	if (gridLayoutEnabled) {
+		const centerH = centerEl.offsetHeight || (7.5 * emSize);
+		renderParentY = (clusterParentTopEm * emSize) + (centerH / 2);
+		renderCenterY = renderParentY + centerH + (clusterParentSelectedGapEm * emSize);
+	}
 
-	const baseRadius = 400;
+	centerEl.style.left = `${centerX}px`;
+	centerEl.style.top = `${renderCenterY}px`;
+
 	panX = centerX * (1 - currentZoom);
-	panY = centerY * (1 - currentZoom);
+	const panAnchorY = (gridLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
+	panY = panAnchorY * (1 - currentZoom);
 	nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
 	linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+
+	if (gridLayoutEnabled) {
+		layoutGridByCompositeGroup({
+			centerId,
+			centerNodeData,
+			parentId,
+			nodesByDepth,
+			centerEl,
+			emSize,
+			anchorY: renderCenterY,
+			parentAnchorY: renderParentY
+		});
+	} else {
+		const baseRadius = normalLayout.baseRadiusPx;
 
 	for (let d = 1; d <= currentDepthShown; d++) {
 		const layerNodes = nodesByDepth[d];
@@ -1598,15 +2151,15 @@ function renderGraph(centerId) {
 				}
 			}
 
-			// Flower layout: 360° for center, 140° outward fan for petals
-			const totalSpread = isCenter ? 2 * Math.PI : Math.PI * 0.8;
-			const startAngle = isCenter ? -Math.PI / 2 : pAngle - (totalSpread / 2);
+			// Flower layout: 360° for center, partial outward fan for petals
+			const totalSpread = isCenter ? normalLayout.centerTotalSpreadRad : normalLayout.petalTotalSpreadRad;
+			const startAngle = isCenter ? normalLayout.centerStartAngleRad : pAngle - (totalSpread / 2);
 
-			// Required spacing decreases if there are many nodes, but let's keep it clean
-			const requiredArcLength = children.length * 140;
+			// Required spacing decreases if there are many nodes, but keep it readable
+			const requiredArcLength = children.length * normalLayout.requiredArcPerChildPx;
 
 			// Increase next circle radius: 1.0 (d=1), 1.4 (d=2), 1.8 (d=3)
-			const sizeMultiplier = 1.0 + (d - 1) * 0.4;
+			const sizeMultiplier = normalLayout.depthRadiusMultiplierStart + (d - 1) * normalLayout.depthRadiusMultiplierStep;
 			const dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
 
 			children.forEach((nData, index) => {
@@ -1649,6 +2202,7 @@ function renderGraph(centerId) {
 				el.style.top = `${ny}px`;
 			});
 		});
+	}
 	}
 
 	edgesToRender.forEach(e => {
@@ -1729,23 +2283,32 @@ window.addEventListener('hashchange', () => {
 
 const appContainer = document.getElementById('app');
 
-appContainer.addEventListener('wheel', (e) => {
-	if (e.target.closest('#search-results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('footer')) return;
-	e.preventDefault();
-	const
-		min_zoom = 0.05, max_zoom = 10,
-		zoomDelta = e.deltaY > 0 ? 0.9 : 1.1,
-		newZoom = Math.min(Math.max(currentZoom * zoomDelta, min_zoom), max_zoom),
-		rect = appContainer.getBoundingClientRect(),
-		mouseX = e.clientX - rect.left,
-		mouseY = e.clientY - rect.top;
-
-	panX = mouseX - (mouseX - panX) * (newZoom / currentZoom);
-	panY = mouseY - (mouseY - panY) * (newZoom / currentZoom);
-	currentZoom = newZoom;
-
+const applyPanZoomTransform = () => {
 	nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
 	linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+};
+
+const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
+const minZoom = 0.05;
+const maxZoom = 10;
+
+const setZoomAt = (newZoom, clientX, clientY) => {
+	const z = clamp(newZoom, minZoom, maxZoom);
+	const rect = appContainer.getBoundingClientRect();
+	const anchorX = clientX - rect.left;
+	const anchorY = clientY - rect.top;
+
+	panX = anchorX - (anchorX - panX) * (z / currentZoom);
+	panY = anchorY - (anchorY - panY) * (z / currentZoom);
+	currentZoom = z;
+	applyPanZoomTransform();
+};
+
+appContainer.addEventListener('wheel', (e) => {
+	if (e.target.closest('#search-results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
+	e.preventDefault();
+	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
+	setZoomAt(currentZoom * zoomDelta, e.clientX, e.clientY);
 }, { passive: false });
 
 let isGraphPanning = false,
@@ -1753,7 +2316,7 @@ let isGraphPanning = false,
 
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
-	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 
 	isGraphPanning = true;
 	startPanX = e.clientX;
@@ -1767,8 +2330,7 @@ document.addEventListener('mousemove', (e) => {
 	if (isGraphPanning) {
 		panX = initialPanX + (e.clientX - startPanX);
 		panY = initialPanY + (e.clientY - startPanY);
-		nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
-		linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+		applyPanZoomTransform();
 	}
 });
 
@@ -1778,6 +2340,208 @@ document.addEventListener('mouseup', () => {
 		appContainer.style.cursor = '';
 	}
 });
+
+// Mobile gestures: one-finger pan + two-finger pinch zoom (graph only)
+// Expose a small flag so card interactions can yield to pinch gestures.
+window.__isTouchPinching = false;
+
+const touchPointers = new Map();
+let touchPanStartX = 0,
+	touchPanStartY = 0,
+	touchInitialPanX = 0,
+	touchInitialPanY = 0,
+	touchIsPanning = false,
+	touchPinchStartDist = 0,
+	touchPinchStartZoom = 1,
+	touchPinchStartPanX = 0,
+	touchPinchStartPanY = 0;
+
+const getTwoPointers = () => {
+	const pts = Array.from(touchPointers.values());
+	return pts.length >= 2 ? [pts[0], pts[1]] : null;
+};
+
+const dist2 = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
+
+graphContainer.addEventListener('pointerdown', (e) => {
+	if (e.pointerType !== 'touch') return;
+	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+	e.preventDefault();
+	try {
+		graphContainer.setPointerCapture(e.pointerId);
+	} catch (err) {
+		// Ignore (e.g. synthetic events or unsupported pointer capture)
+	}
+	touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+	if (touchPointers.size === 1) {
+		window.__isTouchPinching = false;
+		touchIsPanning = true;
+		touchPanStartX = e.clientX;
+		touchPanStartY = e.clientY;
+		touchInitialPanX = panX;
+		touchInitialPanY = panY;
+	} else if (touchPointers.size === 2) {
+		window.__isTouchPinching = true;
+		touchIsPanning = false;
+		const pair = getTwoPointers();
+		if (!pair) return;
+		touchPinchStartDist = Math.max(1, dist2(pair[0], pair[1]));
+		touchPinchStartZoom = currentZoom;
+		touchPinchStartPanX = panX;
+		touchPinchStartPanY = panY;
+	}
+});
+
+graphContainer.addEventListener('pointermove', (e) => {
+	if (e.pointerType !== 'touch') return;
+	if (!touchPointers.has(e.pointerId)) return;
+	e.preventDefault();
+	touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+	if (window.__isTouchPinching && touchPointers.size >= 2) {
+		const pair = getTwoPointers();
+		if (!pair) return;
+		const d = Math.max(1, dist2(pair[0], pair[1]));
+		const ratio = d / touchPinchStartDist;
+		const newZoom = clamp(touchPinchStartZoom * ratio, minZoom, maxZoom);
+		const midClientX = (pair[0].x + pair[1].x) / 2;
+		const midClientY = (pair[0].y + pair[1].y) / 2;
+		// Anchor zoom at the pinch midpoint using the same math as wheel zoom.
+		const rect = appContainer.getBoundingClientRect();
+		const anchorX = midClientX - rect.left;
+		const anchorY = midClientY - rect.top;
+
+		panX = anchorX - (anchorX - touchPinchStartPanX) * (newZoom / touchPinchStartZoom);
+		panY = anchorY - (anchorY - touchPinchStartPanY) * (newZoom / touchPinchStartZoom);
+		currentZoom = newZoom;
+		applyPanZoomTransform();
+		return;
+	}
+
+	if (touchIsPanning && touchPointers.size === 1) {
+		panX = touchInitialPanX + (e.clientX - touchPanStartX);
+		panY = touchInitialPanY + (e.clientY - touchPanStartY);
+		applyPanZoomTransform();
+	}
+});
+
+const endTouchPointer = (pointerId) => {
+	touchPointers.delete(pointerId);
+	if (touchPointers.size < 2) {
+		window.__isTouchPinching = false;
+		touchPinchStartDist = 0;
+	}
+	if (touchPointers.size === 0) {
+		touchIsPanning = false;
+	}
+};
+
+graphContainer.addEventListener('pointerup', (e) => {
+	if (e.pointerType !== 'touch') return;
+	e.preventDefault();
+	endTouchPointer(e.pointerId);
+});
+
+graphContainer.addEventListener('pointercancel', (e) => {
+	if (e.pointerType !== 'touch') return;
+	e.preventDefault();
+	endTouchPointer(e.pointerId);
+});
+
+// TouchEvent fallback (not all mobile browsers fully support Pointer Events + touch-action)
+// Only register this fallback if Pointer Events are not available.
+if (!('PointerEvent' in window)) {
+	let touchFallbackIsPanning = false;
+	let touchFallbackStartX = 0,
+		touchFallbackStartY = 0,
+		touchFallbackInitialPanX = 0,
+		touchFallbackInitialPanY = 0,
+		touchFallbackPinchStartDist = 0,
+		touchFallbackPinchStartZoom = 1,
+		touchFallbackPinchStartPanX = 0,
+		touchFallbackPinchStartPanY = 0;
+
+	const getTouchPair = (touches) => {
+		if (!touches || touches.length < 2) return null;
+		return [touches[0], touches[1]];
+	};
+
+	graphContainer.addEventListener('touchstart', (e) => {
+		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+		if (!e.touches || e.touches.length === 0) return;
+		e.preventDefault();
+
+		if (e.touches.length === 1) {
+			window.__isTouchPinching = false;
+			touchFallbackIsPanning = true;
+			touchFallbackStartX = e.touches[0].clientX;
+			touchFallbackStartY = e.touches[0].clientY;
+			touchFallbackInitialPanX = panX;
+			touchFallbackInitialPanY = panY;
+			return;
+		}
+
+		if (e.touches.length >= 2) {
+			window.__isTouchPinching = true;
+			touchFallbackIsPanning = false;
+			const pair = getTouchPair(e.touches);
+			if (!pair) return;
+			touchFallbackPinchStartDist = Math.max(1, dist2({ x: pair[0].clientX, y: pair[0].clientY }, { x: pair[1].clientX, y: pair[1].clientY }));
+			touchFallbackPinchStartZoom = currentZoom;
+			touchFallbackPinchStartPanX = panX;
+			touchFallbackPinchStartPanY = panY;
+		}
+	}, { passive: false });
+
+	graphContainer.addEventListener('touchmove', (e) => {
+		if (!e.touches || e.touches.length === 0) return;
+		e.preventDefault();
+
+		if (window.__isTouchPinching && e.touches.length >= 2) {
+			const pair = getTouchPair(e.touches);
+			if (!pair) return;
+			const a = { x: pair[0].clientX, y: pair[0].clientY };
+			const b = { x: pair[1].clientX, y: pair[1].clientY };
+			const d = Math.max(1, dist2(a, b));
+			const ratio = d / Math.max(1, touchFallbackPinchStartDist);
+			const newZoom = clamp(touchFallbackPinchStartZoom * ratio, minZoom, maxZoom);
+			const midClientX = (a.x + b.x) / 2;
+			const midClientY = (a.y + b.y) / 2;
+			const rect = appContainer.getBoundingClientRect();
+			const anchorX = midClientX - rect.left;
+			const anchorY = midClientY - rect.top;
+
+			panX = anchorX - (anchorX - touchFallbackPinchStartPanX) * (newZoom / touchFallbackPinchStartZoom);
+			panY = anchorY - (anchorY - touchFallbackPinchStartPanY) * (newZoom / touchFallbackPinchStartZoom);
+			currentZoom = newZoom;
+			applyPanZoomTransform();
+			return;
+		}
+
+		if (touchFallbackIsPanning && e.touches.length === 1) {
+			panX = touchFallbackInitialPanX + (e.touches[0].clientX - touchFallbackStartX);
+			panY = touchFallbackInitialPanY + (e.touches[0].clientY - touchFallbackStartY);
+			applyPanZoomTransform();
+		}
+	}, { passive: false });
+
+	graphContainer.addEventListener('touchend', (e) => {
+		e.preventDefault();
+		if (!e.touches || e.touches.length < 2) {
+			window.__isTouchPinching = false;
+		}
+		if (!e.touches || e.touches.length === 0) {
+			touchFallbackIsPanning = false;
+		}
+	}, { passive: false });
+
+	graphContainer.addEventListener('touchcancel', (e) => {
+		e.preventDefault();
+		window.__isTouchPinching = false;
+		touchFallbackIsPanning = false;
+	}, { passive: false });
+}
 
 loadGraphData();
 </script>
