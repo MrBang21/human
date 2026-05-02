@@ -44,6 +44,7 @@
 	color-scheme: light;
 	accent-color: var(--url-color);
 	--mobile-bar-height: 3.25em;
+	--vv-bottom-offset: 0px;
 	--bg-color: oklch(0.95 0 0);
 	--card-bg: oklch(1 0 0);
 	--card-border: oklch(0.8 0 0);
@@ -859,6 +860,14 @@ svg {
 	}
 }
 
+/* Markers (especially marker-mid) can shimmer on Android during transforms.
+   Hide them while actively interacting to reduce flicker. */
+body.is-interacting path.edge-path {
+	marker-start: none;
+	marker-mid: none;
+	marker-end: none;
+}
+
 #loading {
 	position: fixed;
 	top: 50%;
@@ -875,8 +884,9 @@ svg {
 		position: fixed;
 		left: .5em;
 		right: .5em;
-		bottom: .5em;
-		height: var(--mobile-bar-height);
+		bottom: calc(.5em + var(--vv-bottom-offset));
+		min-height: var(--mobile-bar-height);
+		height: auto;
 		z-index: 300;
 		display: flex;
 		align-items: center;
@@ -1820,6 +1830,9 @@ function setupInteractions(card, id) {
 		initialLeft, initialTop,
 		moveThresholdPx = 3;
 
+	const dpr = window.devicePixelRatio || 1;
+	const roundPx = (v) => Math.round(v * dpr) / dpr;
+
 	const startDrag = (clientX, clientY, pointerType = 'mouse') => {
 		isDragging = true;
 		hasMoved = false;
@@ -1830,6 +1843,7 @@ function setupInteractions(card, id) {
 		card.classList.add('dragging');
 		initialLeft = parseFloat(card.style.left) || 0;
 		initialTop = parseFloat(card.style.top) || 0;
+		beginInteraction();
 		startLinesLoop();
 	};
 
@@ -1844,8 +1858,8 @@ function setupInteractions(card, id) {
 			hasMoved = true;
 		}
 
-		card.style.left = `${initialLeft + dx}px`;
-		card.style.top = `${initialTop + dy}px`;
+		card.style.left = `${roundPx(initialLeft + dx)}px`;
+		card.style.top = `${roundPx(initialTop + dy)}px`;
 	};
 
 	const endDrag = () => {
@@ -1854,6 +1868,7 @@ function setupInteractions(card, id) {
 		card.classList.remove('dragging');
 		stopLinesLoop();
 		updateLinesOnce();
+		endInteraction();
 
 		if (!hasMoved) {
 			if (currentCenterId !== id) {
@@ -2338,6 +2353,37 @@ const requestPanZoomUpdate = () => {
 	});
 };
 
+let interactionDepth = 0;
+const beginInteraction = () => {
+	interactionDepth++;
+	document.body.classList.add('is-interacting');
+};
+
+const endInteraction = () => {
+	interactionDepth = Math.max(0, interactionDepth - 1);
+	if (interactionDepth === 0) document.body.classList.remove('is-interacting');
+};
+
+const updateVisualViewportBottomOffset = () => {
+	// On Android Chrome, the visual viewport can be shorter than window.innerHeight
+	// due to browser UI. Move the bottom bar up by the overlap.
+	const vv = window.visualViewport;
+	if (!vv) {
+		document.documentElement.style.setProperty('--vv-bottom-offset', '0px');
+		return;
+	}
+	const visualBottom = vv.offsetTop + vv.height;
+	const overlap = Math.max(0, window.innerHeight - visualBottom);
+	document.documentElement.style.setProperty('--vv-bottom-offset', `${overlap}px`);
+};
+
+if (window.visualViewport) {
+	window.visualViewport.addEventListener('resize', updateVisualViewportBottomOffset);
+	window.visualViewport.addEventListener('scroll', updateVisualViewportBottomOffset);
+}
+window.addEventListener('resize', updateVisualViewportBottomOffset);
+updateVisualViewportBottomOffset();
+
 const applyPanZoomTransform = () => {
 	const dpr = window.devicePixelRatio || 1;
 	const roundPx = (v) => Math.round(v * dpr) / dpr;
@@ -2368,6 +2414,9 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 appContainer.addEventListener('wheel', (e) => {
 	if (e.target.closest('#search-results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
 	e.preventDefault();
+	beginInteraction();
+	clearTimeout(window.__wheelInteractionTimeout);
+	window.__wheelInteractionTimeout = setTimeout(() => endInteraction(), 150);
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
 	setZoomAt(currentZoom * zoomDelta, e.clientX, e.clientY);
 }, { passive: false });
@@ -2380,6 +2429,7 @@ appContainer.addEventListener('mousedown', (e) => {
 	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 
 	isGraphPanning = true;
+	beginInteraction();
 	startPanX = e.clientX;
 	startPanY = e.clientY;
 	initialPanX = panX;
@@ -2399,6 +2449,7 @@ document.addEventListener('mouseup', () => {
 	if (isGraphPanning) {
 		isGraphPanning = false;
 		appContainer.style.cursor = '';
+		endInteraction();
 	}
 });
 
@@ -2429,6 +2480,7 @@ graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.target.closest('.card')) return;
 	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 	e.preventDefault();
+	beginInteraction();
 	try {
 		graphContainer.setPointerCapture(e.pointerId);
 	} catch (err) {
@@ -2497,6 +2549,7 @@ const endTouchPointer = (pointerId) => {
 	}
 	if (touchPointers.size === 0) {
 		touchIsPanning = false;
+		endInteraction();
 	}
 };
 
@@ -2535,6 +2588,7 @@ if (!('PointerEvent' in window)) {
 		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 		if (!e.touches || e.touches.length === 0) return;
 		e.preventDefault();
+		beginInteraction();
 
 		if (e.touches.length === 1) {
 			window.__isTouchPinching = false;
@@ -2597,6 +2651,7 @@ if (!('PointerEvent' in window)) {
 		}
 		if (!e.touches || e.touches.length === 0) {
 			touchFallbackIsPanning = false;
+			endInteraction();
 		}
 	}, { passive: false });
 
@@ -2604,6 +2659,7 @@ if (!('PointerEvent' in window)) {
 		e.preventDefault();
 		window.__isTouchPinching = false;
 		touchFallbackIsPanning = false;
+		endInteraction();
 	}, { passive: false });
 }
 
