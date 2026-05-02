@@ -1805,13 +1805,16 @@ function setupInteractions(card, id) {
 	let isDragging = false,
 		hasMoved = false,
 		startX, startY,
-		initialLeft, initialTop;
+		initialLeft, initialTop,
+		moveThresholdPx = 3;
 
-	const startDrag = (clientX, clientY) => {
+	const startDrag = (clientX, clientY, pointerType = 'mouse') => {
 		isDragging = true;
 		hasMoved = false;
 		startX = clientX;
 		startY = clientY;
+		// Touch screens report tiny jitter; use a larger threshold so taps still select.
+		moveThresholdPx = (pointerType === 'touch') ? 10 : 3;
 		card.classList.add('dragging');
 		initialLeft = parseFloat(card.style.left) || 0;
 		initialTop = parseFloat(card.style.top) || 0;
@@ -1824,7 +1827,10 @@ function setupInteractions(card, id) {
 			dx = (clientX - startX) / currentZoom,
 			dy = (clientY - startY) / currentZoom;
 
-		if (Math.abs(dx) > 3 || Math.abs(dy) > 3) hasMoved = true;
+		// Decide tap vs drag using raw pointer movement (zoom-independent).
+		if (Math.abs(clientX - startX) > moveThresholdPx || Math.abs(clientY - startY) > moveThresholdPx) {
+			hasMoved = true;
+		}
 
 		card.style.left = `${initialLeft + dx}px`;
 		card.style.top = `${initialTop + dy}px`;
@@ -1849,7 +1855,7 @@ function setupInteractions(card, id) {
 		if (e.button !== 0) return;
 		e.preventDefault();
 
-		startDrag(e.clientX, e.clientY);
+		startDrag(e.clientX, e.clientY, 'mouse');
 
 		document.addEventListener('mousemove', drag);
 		document.addEventListener('mouseup', drop);
@@ -1877,7 +1883,7 @@ function setupInteractions(card, id) {
 		} catch (err) {
 			// Ignore (e.g. synthetic events or unsupported pointer capture)
 		}
-		startDrag(e.clientX, e.clientY);
+		startDrag(e.clientX, e.clientY, 'touch');
 	});
 
 	card.addEventListener('pointermove', (e) => {
@@ -1887,11 +1893,21 @@ function setupInteractions(card, id) {
 
 	card.addEventListener('pointerup', (e) => {
 		if (e.pointerType !== 'touch') return;
+		try {
+			card.releasePointerCapture(e.pointerId);
+		} catch (err) {
+			// Ignore
+		}
 		endDrag();
 	});
 
 	card.addEventListener('pointercancel', (e) => {
 		if (e.pointerType !== 'touch') return;
+		try {
+			card.releasePointerCapture(e.pointerId);
+		} catch (err) {
+			// Ignore
+		}
 		endDrag();
 	});
 }
@@ -2383,6 +2399,7 @@ const dist2 = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
 
 graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.pointerType !== 'touch') return;
+	if (e.target.closest('.card')) return;
 	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 	e.preventDefault();
 	try {
@@ -2486,6 +2503,7 @@ if (!('PointerEvent' in window)) {
 	};
 
 	graphContainer.addEventListener('touchstart', (e) => {
+		if (e.target.closest('.card')) return;
 		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 		if (!e.touches || e.touches.length === 0) return;
 		e.preventDefault();
