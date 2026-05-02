@@ -204,7 +204,6 @@ body,
 
 #lines-zoom {
 	transform-origin: 0 0;
-	will-change: transform;
 }
 
 .card {
@@ -849,6 +848,10 @@ svg {
 		stroke-width: 3;
 		color: #f0f;
 		fill: currentColor;
+		vector-effect: non-scaling-stroke;
+		shape-rendering: geometricPrecision;
+		stroke-linecap: round;
+		stroke-linejoin: round;
 		transition: stroke-opacity 0.3s, opacity 0.3s, stroke 0.3s ease, stroke-width 0.3s ease;
 	}
 }
@@ -2147,7 +2150,7 @@ function renderGraph(centerId) {
 	const panAnchorY = (gridLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
 	panY = panAnchorY * (1 - currentZoom);
 	nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
-	linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+	linesZoom.setAttribute('transform', `translate(${panX} ${panY}) scale(${currentZoom})`);
 
 	if (gridLayoutEnabled) {
 		layoutGridByCompositeGroup({
@@ -2319,7 +2322,7 @@ const appContainer = document.getElementById('app');
 
 const applyPanZoomTransform = () => {
 	nodesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
-	linesZoom.style.transform = `translate(${panX}px, ${panY}px) scale(${currentZoom})`;
+	linesZoom.setAttribute('transform', `translate(${panX} ${panY}) scale(${currentZoom})`);
 };
 
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
