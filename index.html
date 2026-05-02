@@ -876,13 +876,13 @@ svg {
 		left: .5em;
 		right: .5em;
 		bottom: .5em;
-		min-height: var(--mobile-bar-height);
+		height: var(--mobile-bar-height);
 		z-index: 300;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: .5em;
-		padding: .5em;
+		padding: 0 .5em;
 		border: .125em solid var(--ui-border);
 		border-radius: 1em;
 		corner-shape: squircle;
@@ -893,9 +893,6 @@ svg {
 			backdrop-filter: blur(1em);
 		}
 
-		/* If the browser exposes a safe-area inset, pad inside the bar
-		   (do not move the bar itself, which can cause off-screen issues). */
-		padding-bottom: calc(.5em + env(safe-area-inset-bottom, 0px));
 	}
 
 	#mobile-bar button {
@@ -1350,8 +1347,8 @@ function updateLinesOnce() {
 			startY = roundPx(parseFloat(item.sourceEl.style.top) || 0),
 			endX = roundPx(parseFloat(item.targetEl.style.left) || 0),
 			endY = roundPx(parseFloat(item.targetEl.style.top) || 0),
-			midX = (startX + endX) / 2,
-			midY = (startY + endY) / 2;
+			midX = roundPx((startX + endX) / 2),
+			midY = roundPx((startY + endY) / 2);
 
 		item.line.setAttribute('d', `M ${startX} ${startY} L ${midX} ${midY} L ${endX} ${endY}`);
 	});
@@ -2331,13 +2328,22 @@ window.addEventListener('hashchange', () => {
 
 const appContainer = document.getElementById('app');
 
+let panZoomRafPending = false;
+const requestPanZoomUpdate = () => {
+	if (panZoomRafPending) return;
+	panZoomRafPending = true;
+	requestAnimationFrame(() => {
+		panZoomRafPending = false;
+		applyPanZoomTransform();
+	});
+};
+
 const applyPanZoomTransform = () => {
 	const dpr = window.devicePixelRatio || 1;
 	const roundPx = (v) => Math.round(v * dpr) / dpr;
-	const roundScale = (v) => Math.round(v * 1000) / 1000;
 	const tx = roundPx(panX);
 	const ty = roundPx(panY);
-	const z = roundScale(currentZoom);
+	const z = currentZoom;
 
 	nodesZoom.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
 	linesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
@@ -2356,7 +2362,7 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 	panX = anchorX - (anchorX - panX) * (z / currentZoom);
 	panY = anchorY - (anchorY - panY) * (z / currentZoom);
 	currentZoom = z;
-	applyPanZoomTransform();
+	requestPanZoomUpdate();
 };
 
 appContainer.addEventListener('wheel', (e) => {
@@ -2385,7 +2391,7 @@ document.addEventListener('mousemove', (e) => {
 	if (isGraphPanning) {
 		panX = initialPanX + (e.clientX - startPanX);
 		panY = initialPanY + (e.clientY - startPanY);
-		applyPanZoomTransform();
+		requestPanZoomUpdate();
 	}
 });
 
@@ -2471,14 +2477,15 @@ graphContainer.addEventListener('pointermove', (e) => {
 		panX = anchorX - (anchorX - touchPinchStartPanX) * (newZoom / touchPinchStartZoom);
 		panY = anchorY - (anchorY - touchPinchStartPanY) * (newZoom / touchPinchStartZoom);
 		currentZoom = newZoom;
-		applyPanZoomTransform();
+		requestPanZoomUpdate();
 		return;
 	}
 
 	if (touchIsPanning && touchPointers.size === 1) {
 		panX = touchInitialPanX + (e.clientX - touchPanStartX);
 		panY = touchInitialPanY + (e.clientY - touchPanStartY);
-		applyPanZoomTransform();
+		requestPanZoomUpdate();
+		return;
 	}
 });
 
@@ -2572,14 +2579,14 @@ if (!('PointerEvent' in window)) {
 			panX = anchorX - (anchorX - touchFallbackPinchStartPanX) * (newZoom / touchFallbackPinchStartZoom);
 			panY = anchorY - (anchorY - touchFallbackPinchStartPanY) * (newZoom / touchFallbackPinchStartZoom);
 			currentZoom = newZoom;
-			applyPanZoomTransform();
+			requestPanZoomUpdate();
 			return;
 		}
 
 		if (touchFallbackIsPanning && e.touches.length === 1) {
 			panX = touchFallbackInitialPanX + (e.touches[0].clientX - touchFallbackStartX);
 			panY = touchFallbackInitialPanY + (e.touches[0].clientY - touchFallbackStartY);
-			applyPanZoomTransform();
+			requestPanZoomUpdate();
 		}
 	}, { passive: false });
 
