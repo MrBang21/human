@@ -170,7 +170,7 @@ body,
 	position: fixed;
 	inset: 0;
 	z-index: 0;
-	overflow: clip;
+	overflow: hidden;
 	width: 100svw;
 	height: 100svh;
 }
@@ -851,7 +851,7 @@ svg {
 		stroke-width: 3;
 		color: #f0f;
 		fill: currentColor;
-		vector-effect: non-scaling-stroke;
+		/* Allow stroke + markers to scale with zoom */
 		shape-rendering: geometricPrecision;
 		stroke-linecap: round;
 		stroke-linejoin: round;
@@ -873,14 +873,16 @@ svg {
 @media (max-width: 700px) {
 	#mobile-bar {
 		position: fixed;
-		inset: auto .5em calc(.5em + env(safe-area-inset-bottom)) .5em;
-		height: var(--mobile-bar-height);
+		left: .5em;
+		right: .5em;
+		bottom: .5em;
+		min-height: var(--mobile-bar-height);
 		z-index: 300;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: .5em;
-		padding: 0 .5em;
+		padding: .5em;
 		border: .125em solid var(--ui-border);
 		border-radius: 1em;
 		corner-shape: squircle;
@@ -890,6 +892,10 @@ svg {
 			background: var(--ui-bg) with alpha(var(--ui-bg) / 0.2);
 			backdrop-filter: blur(1em);
 		}
+
+		/* If the browser exposes a safe-area inset, pad inside the bar
+		   (do not move the bar itself, which can cause off-screen issues). */
+		padding-bottom: calc(.5em + env(safe-area-inset-bottom, 0px));
 	}
 
 	#mobile-bar button {
@@ -980,7 +986,7 @@ svg {
 
 	#legend {
 		display: none;
-		inset: auto auto 4.5em .5em;
+		inset: auto auto calc(var(--mobile-bar-height) + 1.25em) .5em;
 		max-width: calc(100svw - 1em);
 		max-height: 30svh;
 		overflow: auto;
@@ -1335,12 +1341,15 @@ let activeLineElements = [],
 	linesLoopScheduled = false;
 
 function updateLinesOnce() {
+	const dpr = window.devicePixelRatio || 1;
+	const roundPx = (v) => Math.round(v * dpr) / dpr;
+
 	activeLineElements.forEach(item => {
 		const
-			startX = parseFloat(item.sourceEl.style.left) || 0,
-			startY = parseFloat(item.sourceEl.style.top) || 0,
-			endX = parseFloat(item.targetEl.style.left) || 0,
-			endY = parseFloat(item.targetEl.style.top) || 0,
+			startX = roundPx(parseFloat(item.sourceEl.style.left) || 0),
+			startY = roundPx(parseFloat(item.sourceEl.style.top) || 0),
+			endX = roundPx(parseFloat(item.targetEl.style.left) || 0),
+			endY = roundPx(parseFloat(item.targetEl.style.top) || 0),
 			midX = (startX + endX) / 2,
 			midY = (startY + endY) / 2;
 
