@@ -1325,7 +1325,43 @@ const edgeStyles = {
 };
 
 let activeLineElements = [],
+	animationLoopRunning = false,
+	linesLoopScheduled = false;
+
+function updateLinesOnce() {
+	activeLineElements.forEach(item => {
+		const
+			startX = parseFloat(item.sourceEl.style.left) || 0,
+			startY = parseFloat(item.sourceEl.style.top) || 0,
+			endX = parseFloat(item.targetEl.style.left) || 0,
+			endY = parseFloat(item.targetEl.style.top) || 0,
+			midX = (startX + endX) / 2,
+			midY = (startY + endY) / 2;
+
+		item.line.setAttribute('d', `M ${startX} ${startY} L ${midX} ${midY} L ${endX} ${endY}`);
+	});
+}
+
+function updateLinesLoop() {
+	linesLoopScheduled = false;
+	updateLinesOnce();
+	if (!animationLoopRunning) return;
+	linesLoopScheduled = true;
+	requestAnimationFrame(updateLinesLoop);
+}
+
+function startLinesLoop() {
+	if (animationLoopRunning) return;
+	animationLoopRunning = true;
+	if (!linesLoopScheduled) {
+		linesLoopScheduled = true;
+		requestAnimationFrame(updateLinesLoop);
+	}
+}
+
+function stopLinesLoop() {
 	animationLoopRunning = false;
+}
 
 const checkTrait = (t) => {
 	const tr = t || 'shared';
@@ -1704,11 +1740,7 @@ function initGraph() {
 	});
 
 	renderGraph(currentCenterId);
-
-	if (!animationLoopRunning) {
-		animationLoopRunning = true;
-		requestAnimationFrame(updateLinesLoop);
-	}
+	updateLinesOnce();
 }
 
 searchInput.addEventListener('input', (e) => {
@@ -1783,6 +1815,7 @@ function setupInteractions(card, id) {
 		card.classList.add('dragging');
 		initialLeft = parseFloat(card.style.left) || 0;
 		initialTop = parseFloat(card.style.top) || 0;
+		startLinesLoop();
 	};
 
 	const updateDrag = (clientX, clientY) => {
@@ -1801,6 +1834,8 @@ function setupInteractions(card, id) {
 		if (!isDragging) return;
 		isDragging = false;
 		card.classList.remove('dragging');
+		stopLinesLoop();
+		updateLinesOnce();
 
 		if (!hasMoved) {
 			if (currentCenterId !== id) {
@@ -2244,24 +2279,7 @@ function renderGraph(centerId) {
 			targetEl: targetEl
 		});
 	});
-}
-
-function updateLinesLoop() {
-	activeLineElements.forEach(item => {
-		const
-			startX = parseFloat(item.sourceEl.style.left) || 0,
-			startY = parseFloat(item.sourceEl.style.top) || 0,
-			endX = parseFloat(item.targetEl.style.left) || 0,
-			endY = parseFloat(item.targetEl.style.top) || 0;
-
-		const
-			midX = (startX + endX) / 2,
-			midY = (startY + endY) / 2;
-
-		item.line.setAttribute('d', `M ${startX} ${startY} L ${midX} ${midY} L ${endX} ${endY}`);
-	});
-
-	requestAnimationFrame(updateLinesLoop);
+	updateLinesOnce();
 }
 
 let resizeTimeout;
