@@ -434,6 +434,16 @@ select, input {
 	outline: none;
 	padding: .5em;
 	font-size: 1em;
+	background: var(--ui-bg);
+
+	@supports (backdrop-filter: blur(0)) {
+		--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue) / 0.2);
+		background: var(--_back);
+		backdrop-filter: blur(1em);
+		option {
+			background: var(--ui-bg);
+		}
+	}
 }
 
 #controls-container {
@@ -451,7 +461,6 @@ select, input {
 
 	#depth-control, #trait-filter, #type-filter {
 		appearance: base-select;
-		background: var(--ui-bg);
 		color: var(--text-main);
 		border: 1px solid var(--ui-border);
 		border-radius: .5em;
@@ -461,6 +470,10 @@ select, input {
 		&:focus {
 			border-color: var(--url-color);
 		}
+		option {
+			padding: .5em;
+			background: var(--ui-bg);
+		}
 	}
 
 	#search-container {
@@ -469,7 +482,6 @@ select, input {
 
 		#search-input {
 			width: 100%;
-			background: var(--ui-bg);
 			color: var(--text-main);
 			border: 1px solid var(--ui-border);
 			border-radius: .5em;
@@ -489,6 +501,10 @@ select, input {
 		#search-results {
 			margin-top: .5em;
 			background: var(--ui-bg);
+			@supports (backdrop-filter: blur(0)) {
+				background: var(--_back);
+				backdrop-filter: blur(1em);
+			}
 			border-radius: .5em;
 			box-shadow: 0 4px 20px var(--ui-shadow);
 			max-height: 350px;
@@ -498,7 +514,6 @@ select, input {
 			border-radius: 1em;
 			corner-shape: squircle;
 			position: fixed;
-			width: 100%;
 			list-style: none;
 			padding: 0;
 			margin: 0;
@@ -556,6 +571,10 @@ select, input {
 		border-radius: .5em;
 		padding: 0 .5em;
 		transition: border-color 0.3s, background-color 0.3s, color 0.3s;
+		@supports (backdrop-filter: blur(0)) {
+			background: var(--_back);
+			backdrop-filter: blur(1em);
+		}
 	}
 
 	.toggle:focus-within {
