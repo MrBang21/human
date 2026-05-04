@@ -851,21 +851,13 @@ svg {
 	path.edge-path {
 		stroke-width: 3;
 		color: #f0f;
-		fill: currentColor;
+		fill: none;
 		/* Allow stroke + markers to scale with zoom */
 		shape-rendering: geometricPrecision;
 		stroke-linecap: round;
 		stroke-linejoin: round;
 		transition: stroke-opacity 0.3s, opacity 0.3s, stroke 0.3s ease, stroke-width 0.3s ease;
 	}
-}
-
-/* Markers (especially marker-mid) can shimmer on Android during transforms.
-   Hide them while actively interacting to reduce flicker. */
-body.is-interacting path.edge-path {
-	marker-start: none;
-	marker-mid: none;
-	marker-end: none;
 }
 
 #loading {
@@ -1146,6 +1138,17 @@ body.is-interacting path.edge-path {
 					orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
+				<marker id="arrow-sexual" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
+					orient="auto">
+					<path d="M 10,5
+						C 9.8,5 8.2,5 6.0,7.8
+						2.2,12.9 -2.8,7.8
+						2.0,5
+						-2.8,2.2 2.2,-2.9
+						6.0,2.2 8.2,5 9.8,5
+						10,5
+						Z" />
+				</marker>
 				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
 					orient="auto">
 					<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
@@ -1226,7 +1229,7 @@ let nodes = [],
 	currentCenterId = '',
 	currentTraitFilter = 'all',
 	currentTypeFilter = 'all',
-	gridLayoutEnabled = false,
+	clusterLayoutEnabled = false,
 	currentZoom = 1,
 	panX = 0,
 	panY = 0;
@@ -1246,15 +1249,16 @@ const
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
-	gridLayoutCheckbox = document.getElementById('grid-layout'),
+	clusterLayoutCheckbox = document.getElementById('grid-layout'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
 	cardTemplate = document.getElementById('card-template'),
 	searchResultTemplate = document.getElementById('search-result-template'),
 	descriptionSourceTemplate = document.getElementById('description-source-template');
 
-const mobileBar = document.getElementById('mobile-bar');
-const mobilePanels = ['search', 'filters', 'legend', 'info'];
+const
+	mobileBar = document.getElementById('mobile-bar'),
+	mobilePanels = ['search', 'filters', 'legend', 'info'];
 let activeMobilePanel = null;
 
 function clearMobilePanels() {
@@ -1305,8 +1309,9 @@ if (mobileBar) {
 // Cluster/grid layout tuning (all units are in `em`).
 // Vertical spacing tends to matter more than horizontal in this view,
 // so adjust `gapYEm` / `rowGapYEm` first when tuning.
-const clusterParentTopEm = 7;
-const clusterParentSelectedGapEm = 2.75;
+const
+	clusterParentTopEm = 7,
+	clusterParentSelectedGapEm = 2.75;
 
 const clusterLayout = {
 	paddingXEm: 2,
@@ -1319,9 +1324,9 @@ const clusterLayout = {
 	maxColsInGroup: 10
 };
 
-// Normal (non-cluster) layout tuning.
+// Petal (non-cluster) layout tuning.
 // Uses a flower/radial fan-out where the center uses 360° and outer layers use a partial arc.
-const normalLayout = {
+const petalLayout = {
 	baseRadiusPx: 400,
 	requiredArcPerChildPx: 100,
 	depthRadiusMultiplierStart: 1.0,
@@ -1347,20 +1352,102 @@ let activeLineElements = [],
 	animationLoopRunning = false,
 	linesLoopScheduled = false;
 
+
+function splitCubic(x0, y0, x1, y1, x2, y2, x3, y3) {
+	const t = 0.5;
+
+	// First level
+	const x01 = x0 + (x1 - x0) * t;
+	const y01 = y0 + (y1 - y0) * t;
+
+	const x12 = x1 + (x2 - x1) * t;
+	const y12 = y1 + (y2 - y1) * t;
+
+	const x23 = x2 + (x3 - x2) * t;
+	const y23 = y2 + (y3 - y2) * t;
+
+	// Second level
+	const x012 = x01 + (x12 - x01) * t;
+	const y012 = y01 + (y12 - y01) * t;
+
+	const x123 = x12 + (x23 - x12) * t;
+	const y123 = y12 + (y23 - y12) * t;
+
+	// Split point
+	const xm = x012 + (x123 - x012) * t;
+	const ym = y012 + (y123 - y012) * t;
+
+	return {
+		mid: { x: xm, y: ym },
+		left:  { c1: { x: x01,  y: y01  }, c2: { x: x012, y: y012 } },
+		right: { c1: { x: x123, y: y123 }, c2: { x: x23,  y: y23  } }
+	};
+}
+
+const hasReverse = activeLineElements.some(other =>
+	other.sourceEl === item.targetEl &&
+	other.targetEl === item.sourceEl
+);
+
 function updateLinesOnce() {
 	const dpr = window.devicePixelRatio || 1;
-	const roundPx = (v) => Math.round(v * dpr) / dpr;
+	const round = v => Math.round(v * dpr) / dpr;
 
 	activeLineElements.forEach(item => {
-		const
-			startX = roundPx(parseFloat(item.sourceEl.style.left) || 0),
-			startY = roundPx(parseFloat(item.sourceEl.style.top) || 0),
-			endX = roundPx(parseFloat(item.targetEl.style.left) || 0),
-			endY = roundPx(parseFloat(item.targetEl.style.top) || 0),
-			midX = roundPx((startX + endX) / 2),
-			midY = roundPx((startY + endY) / 2);
+		const sx = round(parseFloat(item.sourceEl.style.left) || 0);
+		const sy = round(parseFloat(item.sourceEl.style.top) || 0);
+		const ex = round(parseFloat(item.targetEl.style.left) || 0);
+		const ey = round(parseFloat(item.targetEl.style.top) || 0);
 
-		item.line.setAttribute('d', `M ${startX} ${startY} L ${midX} ${midY} L ${endX} ${endY}`);
+		// Direction + perpendicular
+		const dx = ex - sx;
+		const dy = ey - sy;
+		const len = Math.hypot(dx, dy) || 1;
+		const px = -dy / len;
+		const py = dx / len;
+
+		// Curve strength
+		// let k = Math.min(120, -dx * 0.2); // dx * 0.2;
+		const lengthFactor = 1 / (1 + len * 0.01); // shrinks as len grows
+		let k = -dx * lengthFactor;
+		const hasReverse = activeLineElements.some(other =>
+			other !== item &&
+			other.sourceEl === item.targetEl &&
+			other.targetEl === item.sourceEl
+		);
+		if (hasReverse) {
+			const srcId = item.sourceEl.id || '';
+			const tarId = item.targetEl.id || '';
+			// Stable ordering: only flip one direction
+			if (srcId < tarId) {
+				k = -k;
+				console.warn('Flipping direction for', item.sourceEl.id, '<->', item.targetEl.id, k);
+			}
+		}
+		else {
+			// No reverse edge, but still want some curve for long edges to reduce overlap with nodes.
+			// k = k * 6.7;
+		}
+
+		// Cubic control points
+		const c1x = sx + dx * 0.25 + px * k;
+		const c1y = sy + dy * 0.25 + py * k;
+
+		const c2x = sx + dx * 0.75 + px * k;
+		const c2y = sy + dy * 0.75 + py * k;
+
+		// Split cubic at t = 0.5
+		const { mid, left, right } = splitCubic(
+			sx, sy, c1x, c1y, c2x, c2y, ex, ey
+		);
+
+		// Build path
+		item.line.setAttribute(
+			'd',
+			`M ${sx} ${sy}
+			C ${left.c1.x} ${left.c1.y}, ${left.c2.x} ${left.c2.y}, ${mid.x} ${mid.y}
+			C ${right.c1.x} ${right.c1.y}, ${right.c2.x} ${right.c2.y}, ${ex} ${ey}`
+		);
 	});
 }
 
@@ -1461,7 +1548,7 @@ function updateUrlState(id) {
 	url.searchParams.set('depth', depthDropdown.value);
 	url.searchParams.set('trait', currentTraitFilter);
 	url.searchParams.set('perspective', currentTypeFilter);
-	url.searchParams.set('cluster', gridLayoutEnabled ? '1' : '0');
+	url.searchParams.set('cluster', clusterLayoutEnabled ? '1' : '0');
 	history.pushState(null, null, url.toString());
 }
 
@@ -1491,8 +1578,8 @@ depthDropdown.addEventListener('change', (e) => {
 	e.target.blur();
 });
 
-gridLayoutCheckbox.addEventListener('change', (e) => {
-	gridLayoutEnabled = !!e.target.checked;
+clusterLayoutCheckbox.addEventListener('change', (e) => {
+	clusterLayoutEnabled = !!e.target.checked;
 	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
@@ -1500,13 +1587,13 @@ gridLayoutCheckbox.addEventListener('change', (e) => {
 });
 
 const getCompositeGroupKey = (node) => {
-	const type = node?.type ?? 'unknown_type';
-	const category = node?.category ?? 'unknown_category';
-	const trait = node?.trait ?? 'unknown_trait';
+	const type = node?.type ?? 'unknown_type',
+		category = node?.category ?? 'unknown_category',
+		trait = node?.trait ?? 'unknown_trait';
 	return `${type}|${category}|${trait}`;
 };
 
-const layoutGridByCompositeGroup = ({
+const layoutClusterByCompositeGroup = ({
 	centerId,
 	centerNodeData,
 	parentId,
@@ -1518,24 +1605,19 @@ const layoutGridByCompositeGroup = ({
 }) => {
 	// Remove prior group labels
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
-
-	const paddingX = clusterLayout.paddingXEm * emSize;
-	const gapX = clusterLayout.gapXEm * emSize;
-	const gapY = clusterLayout.gapYEm * emSize;
-	const groupGapX = clusterLayout.groupGapXEm * emSize;
-	const rowGapY = clusterLayout.rowGapYEm * emSize;
-	// Group labels are intentionally disabled; keep blocks tight.
-	const labelToBlockGap = clusterLayout.labelToBlockGapEm * emSize;
-
-	const sizeSample = centerEl || document.querySelector('.card');
-	// IMPORTANT: nodes are rendered inside a scaled container (`currentZoom`).
-	// Use offsetWidth/offsetHeight so spacing is never derived from zoomed sizes.
-	const measuredW = sizeSample?.offsetWidth || 0;
-	const measuredH = sizeSample?.offsetHeight || 0;
-	const cardW = measuredW || (18 * emSize);
-	const cardH = measuredH || (7.5 * emSize);
-
-	const metaById = new Map();
+	const
+		paddingX = clusterLayout.paddingXEm * emSize,
+		gapX = clusterLayout.gapXEm * emSize,
+		gapY = clusterLayout.gapYEm * emSize,
+		groupGapX = clusterLayout.groupGapXEm * emSize,
+		rowGapY = clusterLayout.rowGapYEm * emSize,
+		labelToBlockGap = clusterLayout.labelToBlockGapEm * emSize,
+		sizeSample = centerEl || document.querySelector('.card'),
+		measuredW = sizeSample?.offsetWidth || 0,
+		measuredH = sizeSample?.offsetHeight || 0,
+		cardW = measuredW || (18 * emSize),
+		cardH = measuredH || (7.5 * emSize),
+		metaById = new Map();
 	for (let d = 1; d < nodesByDepth.length; d++) {
 		nodesByDepth[d].forEach(nData => {
 			if (!metaById.has(nData.node.id)) metaById.set(nData.node.id, nData);
@@ -1548,8 +1630,9 @@ const layoutGridByCompositeGroup = ({
 
 	const groupMap = new Map();
 	metaById.forEach((meta) => {
-		const item = { node: meta.node, meta };
-		const key = getCompositeGroupKey(item.node);
+		const
+			item = { node: meta.node, meta },
+			key = getCompositeGroupKey(item.node);
 		if (!groupMap.has(key)) groupMap.set(key, []);
 		groupMap.get(key).push(item);
 	});
@@ -1560,8 +1643,9 @@ const layoutGridByCompositeGroup = ({
 		return d !== 0 ? d : a[0].localeCompare(b[0]);
 	});
 
-	const centerX = window.innerWidth / 2;
-	const centerY = anchorY ?? ((window.innerHeight / 2) + (3 * emSize));
+	const
+		centerX = window.innerWidth / 2,
+		centerY = anchorY ?? ((window.innerHeight / 2) + (3 * emSize));
 
 	// Selected node stays centered in the viewport
 	centerEl.style.left = `${centerX}px`;
@@ -1581,15 +1665,15 @@ const layoutGridByCompositeGroup = ({
 		}
 	}
 
-	const maxColsInGroup = clusterLayout.maxColsInGroup;
-	const groupsStartGapY = clusterLayout.groupsStartGapYEm * emSize;
-	let yCursor = centerY + (cardH / 2) + groupsStartGapY;
-
-	let rowX = paddingX;
-	let rowY = yCursor;
-	let rowMaxH = 0;
-	let rowHasItems = false;
-	let rowBlocks = [];
+	const
+		maxColsInGroup = clusterLayout.maxColsInGroup,
+		groupsStartGapY = clusterLayout.groupsStartGapYEm * emSize;
+	let yCursor = centerY + (cardH / 2) + groupsStartGapY,
+		rowX = paddingX,
+		rowY = yCursor,
+		rowMaxH = 0,
+		rowHasItems = false,
+		rowBlocks = [];
 
 	const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 	const shiftElementsX = (elements, deltaX) => {
@@ -1607,14 +1691,15 @@ const layoutGridByCompositeGroup = ({
 
 		// Center the packed row of small groups as a whole.
 		if (rowBlocks.length) {
-			const rowLeft = Math.min(...rowBlocks.map(b => b.left));
-			const rowRight = Math.max(...rowBlocks.map(b => b.left + b.width));
-			const rowWidth = Math.max(0, rowRight - rowLeft);
-			const minLeft = paddingX;
-			const maxLeft = Math.max(minLeft, (window.innerWidth - paddingX) - rowWidth);
-			const targetLeft = clamp(centerX - (rowWidth / 2), minLeft, maxLeft);
-			const deltaX = targetLeft - rowLeft;
-			const rowEls = rowBlocks.reduce((acc, b) => acc.concat(b.elements), []);
+			const
+				rowLeft = Math.min(...rowBlocks.map(b => b.left)),
+				rowRight = Math.max(...rowBlocks.map(b => b.left + b.width)),
+				rowWidth = Math.max(0, rowRight - rowLeft),
+				minLeft = paddingX,
+				maxLeft = Math.max(minLeft, (window.innerWidth - paddingX) - rowWidth),
+				targetLeft = clamp(centerX - (rowWidth / 2), minLeft, maxLeft),
+				deltaX = targetLeft - rowLeft,
+				rowEls = rowBlocks.reduce((acc, b) => acc.concat(b.elements), []);
 			shiftElementsX(rowEls, deltaX);
 		}
 		rowBlocks = [];
@@ -1627,18 +1712,18 @@ const layoutGridByCompositeGroup = ({
 	};
 
 	groupEntries.forEach(([key, items]) => {
-		const count = items.length;
-		const cols = Math.max(1, Math.min(maxColsInGroup, count));
-		const rows = Math.ceil(count / cols);
+		const
+			count = items.length,
+			cols = Math.max(1, Math.min(maxColsInGroup, count)),
+			rows = Math.ceil(count / cols),
+			blockW = (cols * cardW) + ((cols - 1) * gapX),
+			blockH = (rows * cardH) + ((rows - 1) * gapY),
+			totalH = labelToBlockGap + blockH,
+			isSmallGroup = count < 4;
 
-		const blockW = (cols * cardW) + ((cols - 1) * gapX);
-		const blockH = (rows * cardH) + ((rows - 1) * gapY);
-		const totalH = labelToBlockGap + blockH;
-		const isSmallGroup = count < 4;
-
-		let blockLeft;
-		let blockTop;
-		let rowBlockEls = [];
+		let blockLeft,
+			blockTop,
+			rowBlockEls = [];
 
 		if (isSmallGroup) {
 			// Pack small groups on the same line, with extra spacing between them.
@@ -1664,8 +1749,9 @@ const layoutGridByCompositeGroup = ({
 		}
 
 		items.forEach((item, idx) => {
-			const nodeId = item.node.id;
-			const el = document.getElementById(`node-${nodeId}`);
+			const
+				nodeId = item.node.id,
+				el = document.getElementById(`node-${nodeId}`);
 			if (!el) return;
 
 			el.classList.remove('hidden');
@@ -1679,10 +1765,11 @@ const layoutGridByCompositeGroup = ({
 
 			if (!checkTrait(item.node.trait)) el.classList.add('ghosted');
 
-			const row = Math.floor(idx / cols);
-			const col = idx % cols;
-			const x = blockLeft + (col * (cardW + gapX)) + (cardW / 2);
-			const y = blockTop + (row * (cardH + gapY)) + (cardH / 2);
+			const
+				row = Math.floor(idx / cols),
+				col = idx % cols,
+				x = blockLeft + (col * (cardW + gapX)) + (cardW / 2),
+				y = blockTop + (row * (cardH + gapY)) + (cardH / 2);
 			el.style.left = `${x}px`;
 			el.style.top = `${y}px`;
 			rowBlockEls.push(el);
@@ -1709,8 +1796,8 @@ function initGraph() {
 	const initialCluster = url.searchParams.get('cluster');
 	if (initialCluster != null) {
 		const enabled = (initialCluster === '1' || initialCluster.toLowerCase() === 'true');
-		gridLayoutEnabled = enabled;
-		gridLayoutCheckbox.checked = enabled;
+		clusterLayoutEnabled = enabled;
+		clusterLayoutCheckbox.checked = enabled;
 	}
 
 	const initialTrait = url.searchParams.get('trait');
@@ -1830,22 +1917,21 @@ function setupInteractions(card, id) {
 		initialLeft, initialTop,
 		moveThresholdPx = 3;
 
-	const dpr = window.devicePixelRatio || 1;
-	const roundPx = (v) => Math.round(v * dpr) / dpr;
-
-	const startDrag = (clientX, clientY, pointerType = 'mouse') => {
-		isDragging = true;
-		hasMoved = false;
-		startX = clientX;
-		startY = clientY;
-		// Touch screens report tiny jitter; use a larger threshold so taps still select.
-		moveThresholdPx = (pointerType === 'touch') ? 10 : 3;
-		card.classList.add('dragging');
-		initialLeft = parseFloat(card.style.left) || 0;
-		initialTop = parseFloat(card.style.top) || 0;
-		beginInteraction();
-		startLinesLoop();
-	};
+	const
+		dpr = window.devicePixelRatio || 1,
+		roundPx = (v) => Math.round(v * dpr) / dpr,
+		startDrag = (clientX, clientY, pointerType = 'mouse') => {
+			isDragging = true;
+			hasMoved = false;
+			startX = clientX;
+			startY = clientY;
+			// Touch screens report tiny jitter; use a larger threshold so taps still select.
+			moveThresholdPx = (pointerType === 'touch') ? 10 : 3;
+			card.classList.add('dragging');
+			initialLeft = parseFloat(card.style.left) || 0;
+			initialTop = parseFloat(card.style.top) || 0;
+			startLinesLoop();
+		};
 
 	const updateDrag = (clientX, clientY) => {
 		if (!isDragging) return;
@@ -1868,7 +1954,6 @@ function setupInteractions(card, id) {
 		card.classList.remove('dragging');
 		stopLinesLoop();
 		updateLinesOnce();
-		endInteraction();
 
 		if (!hasMoved) {
 			if (currentCenterId !== id) {
@@ -1949,9 +2034,10 @@ function getBreadcrumbPath(targetId) {
 
 	const findPath = (allowAllEdges) => {
 		let adjList = {};
-		const defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']);
-		const isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t || 'anatomy');
-		const isAllowedNode = (id, nodeData) => {
+		const
+			defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']),
+			isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t || 'anatomy'),
+			isAllowedNode = (id, nodeData) => {
 			if (!nodeData) return false;
 			if (id === targetId) return true;
 			return checkTrait(nodeData.trait) && checkTypeFilter(nodeData.type);
@@ -1979,8 +2065,9 @@ function getBreadcrumbPath(targetId) {
 			const type = e.type || 'anatomy';
 			if (!isAllowedEdgeType(type)) return;
 
-			const sourceData = nodes.find(n => n.id === e.source);
-			const targetData = nodes.find(n => n.id === e.target);
+			const
+				sourceData = nodes.find(n => n.id === e.source),
+				targetData = nodes.find(n => n.id === e.target);
 			if (!sourceData || !targetData) return;
 
 			// Allow traversal source->target and target->source (breadcrumb can follow either direction).
@@ -2059,9 +2146,18 @@ function updateBreadcrumbs(centerId) {
 	});
 }
 
+function calcNodePositionPetal() {
+
+}
+
+
+function calcNodePositionHierarchical() {
+
+}
+
 function renderGraph(centerId) {
 	currentCenterId = centerId;
-	gridLayoutEnabled = !!gridLayoutCheckbox?.checked;
+	clusterLayoutEnabled = !!clusterLayoutCheckbox?.checked;
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
@@ -2161,7 +2257,7 @@ function renderGraph(centerId) {
 
 	let renderCenterY = centerY;
 	let renderParentY = null;
-	if (gridLayoutEnabled) {
+	if (clusterLayoutEnabled) {
 		const centerH = centerEl.offsetHeight || (7.5 * emSize);
 		renderParentY = (clusterParentTopEm * emSize) + (centerH / 2);
 		renderCenterY = renderParentY + centerH + (clusterParentSelectedGapEm * emSize);
@@ -2171,12 +2267,12 @@ function renderGraph(centerId) {
 	centerEl.style.top = `${renderCenterY}px`;
 
 	panX = centerX * (1 - currentZoom);
-	const panAnchorY = (gridLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
+	const panAnchorY = (clusterLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
 	panY = panAnchorY * (1 - currentZoom);
 	applyPanZoomTransform();
 
-	if (gridLayoutEnabled) {
-		layoutGridByCompositeGroup({
+	if (clusterLayoutEnabled) {
+		layoutClusterByCompositeGroup({
 			centerId,
 			centerNodeData,
 			parentId,
@@ -2187,7 +2283,7 @@ function renderGraph(centerId) {
 			parentAnchorY: renderParentY
 		});
 	} else {
-		const baseRadius = normalLayout.baseRadiusPx;
+		const baseRadius = petalLayout.baseRadiusPx;
 
 	for (let d = 1; d <= currentDepthShown; d++) {
 		const layerNodes = nodesByDepth[d];
@@ -2213,10 +2309,10 @@ function renderGraph(centerId) {
 		});
 
 		Object.entries(groups).forEach(([pId, children]) => {
-			let px = centerX;
-			let py = centerY;
-			let pAngle = 0;
-			let isCenter = true;
+			let px = centerX,
+				py = centerY,
+				pAngle = 0,
+				isCenter = true;
 
 			if (d > 1) {
 				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
@@ -2229,15 +2325,12 @@ function renderGraph(centerId) {
 			}
 
 			// Flower layout: 360° for center, partial outward fan for petals
-			const totalSpread = isCenter ? normalLayout.centerTotalSpreadRad : normalLayout.petalTotalSpreadRad;
-			const startAngle = isCenter ? normalLayout.centerStartAngleRad : pAngle - (totalSpread / 2);
-
-			// Required spacing decreases if there are many nodes, but keep it readable
-			const requiredArcLength = children.length * normalLayout.requiredArcPerChildPx;
-
-			// Increase next circle radius: 1.0 (d=1), 1.4 (d=2), 1.8 (d=3)
-			const sizeMultiplier = normalLayout.depthRadiusMultiplierStart + (d - 1) * normalLayout.depthRadiusMultiplierStep;
-			const dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
+			const
+				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
+				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2),
+				requiredArcLength = children.length * petalLayout.requiredArcPerChildPx,
+				sizeMultiplier = petalLayout.depthRadiusMultiplierStart + (d - 1) * petalLayout.depthRadiusMultiplierStep,
+				dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
 
 			children.forEach((nData, index) => {
 				const el = document.getElementById(`node-${nData.node.id}`);
@@ -2268,8 +2361,9 @@ function renderGraph(centerId) {
 
 				nData.angle = angle;
 
-				const nx = px + dynamicRadius * Math.cos(angle);
-				const ny = py + dynamicRadius * Math.sin(angle);
+				const
+					nx = px + dynamicRadius * Math.cos(angle),
+					ny = py + dynamicRadius * Math.sin(angle);
 
 				// Save coordinates so the next depth children can fan out from this node
 				nData.x = nx;
@@ -2302,7 +2396,6 @@ function renderGraph(centerId) {
 		pathLine.setAttribute('marker-mid', style.marker);
 		pathLine.setAttribute('marker-start', 'url(#start-marker)');
 		pathLine.setAttribute('marker-end', 'url(#end-marker)');
-		pathLine.setAttribute('fill', style.color);
 
 		const
 			sourceNode = nodes.find(n => n.id === e.source) || {},
@@ -2353,17 +2446,6 @@ const requestPanZoomUpdate = () => {
 	});
 };
 
-let interactionDepth = 0;
-const beginInteraction = () => {
-	interactionDepth++;
-	document.body.classList.add('is-interacting');
-};
-
-const endInteraction = () => {
-	interactionDepth = Math.max(0, interactionDepth - 1);
-	if (interactionDepth === 0) document.body.classList.remove('is-interacting');
-};
-
 const updateVisualViewportBottomOffset = () => {
 	// On Android Chrome, the visual viewport can be shorter than window.innerHeight
 	// due to browser UI. Move the bottom bar up by the overlap.
@@ -2372,8 +2454,9 @@ const updateVisualViewportBottomOffset = () => {
 		document.documentElement.style.setProperty('--vv-bottom-offset', '0px');
 		return;
 	}
-	const visualBottom = vv.offsetTop + vv.height;
-	const overlap = Math.max(0, window.innerHeight - visualBottom);
+	const
+		visualBottom = vv.offsetTop + vv.height,
+		overlap = Math.max(0, window.innerHeight - visualBottom);
 	document.documentElement.style.setProperty('--vv-bottom-offset', `${overlap}px`);
 };
 
@@ -2385,25 +2468,28 @@ window.addEventListener('resize', updateVisualViewportBottomOffset);
 updateVisualViewportBottomOffset();
 
 const applyPanZoomTransform = () => {
-	const dpr = window.devicePixelRatio || 1;
-	const roundPx = (v) => Math.round(v * dpr) / dpr;
-	const tx = roundPx(panX);
-	const ty = roundPx(panY);
-	const z = currentZoom;
+	const
+		dpr = window.devicePixelRatio || 1,
+		roundPx = (v) => Math.round(v * dpr) / dpr,
+		tx = roundPx(panX),
+		ty = roundPx(panY),
+		z = currentZoom;
 
 	nodesZoom.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
 	linesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
 };
 
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-const minZoom = 0.05;
-const maxZoom = 10;
+const
+	clamp = (v, min, max) => Math.min(max, Math.max(min, v)),
+	minZoom = 0.05,
+	maxZoom = 10;
 
 const setZoomAt = (newZoom, clientX, clientY) => {
-	const z = clamp(newZoom, minZoom, maxZoom);
-	const rect = appContainer.getBoundingClientRect();
-	const anchorX = clientX - rect.left;
-	const anchorY = clientY - rect.top;
+	const
+		z = clamp(newZoom, minZoom, maxZoom),
+		rect = appContainer.getBoundingClientRect(),
+		anchorX = clientX - rect.left,
+		anchorY = clientY - rect.top;
 
 	panX = anchorX - (anchorX - panX) * (z / currentZoom);
 	panY = anchorY - (anchorY - panY) * (z / currentZoom);
@@ -2414,9 +2500,6 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 appContainer.addEventListener('wheel', (e) => {
 	if (e.target.closest('#search-results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
 	e.preventDefault();
-	beginInteraction();
-	clearTimeout(window.__wheelInteractionTimeout);
-	window.__wheelInteractionTimeout = setTimeout(() => endInteraction(), 150);
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
 	setZoomAt(currentZoom * zoomDelta, e.clientX, e.clientY);
 }, { passive: false });
@@ -2429,7 +2512,6 @@ appContainer.addEventListener('mousedown', (e) => {
 	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 
 	isGraphPanning = true;
-	beginInteraction();
 	startPanX = e.clientX;
 	startPanY = e.clientY;
 	initialPanX = panX;
@@ -2449,7 +2531,6 @@ document.addEventListener('mouseup', () => {
 	if (isGraphPanning) {
 		isGraphPanning = false;
 		appContainer.style.cursor = '';
-		endInteraction();
 	}
 });
 
@@ -2480,7 +2561,6 @@ graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.target.closest('.card')) return;
 	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 	e.preventDefault();
-	beginInteraction();
 	try {
 		graphContainer.setPointerCapture(e.pointerId);
 	} catch (err) {
@@ -2549,7 +2629,6 @@ const endTouchPointer = (pointerId) => {
 	}
 	if (touchPointers.size === 0) {
 		touchIsPanning = false;
-		endInteraction();
 	}
 };
 
@@ -2588,7 +2667,6 @@ if (!('PointerEvent' in window)) {
 		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 		if (!e.touches || e.touches.length === 0) return;
 		e.preventDefault();
-		beginInteraction();
 
 		if (e.touches.length === 1) {
 			window.__isTouchPinching = false;
@@ -2651,7 +2729,6 @@ if (!('PointerEvent' in window)) {
 		}
 		if (!e.touches || e.touches.length === 0) {
 			touchFallbackIsPanning = false;
-			endInteraction();
 		}
 	}, { passive: false });
 
@@ -2659,7 +2736,6 @@ if (!('PointerEvent' in window)) {
 		e.preventDefault();
 		window.__isTouchPinching = false;
 		touchFallbackIsPanning = false;
-		endInteraction();
 	}, { passive: false });
 }
 
