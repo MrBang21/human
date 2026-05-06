@@ -93,7 +93,6 @@
 	--text-c: 0.18;
 	--text-hover-c: 0.2;
 
-
 	--line-l: 0.8;
 	--line-c: 0.11;
 
@@ -119,6 +118,7 @@
 
 	--shadow-l: 0.3;
 	--shadow-c: 0.1;
+	--shadow-h: var(--accent-h);
 
 	--hue-female: 340;
 	--hue-male: 240;
@@ -278,12 +278,12 @@ body,
 
 .card {
 	position: fixed;
+	isolation: isolate;
 	min-width: 10em;
 	max-width: 20em;
 	/* Prevent the browser from hijacking touch drags */
 	touch-action: none;
 	background-color: var(--card);
-	backdrop-filter: var(--backdrop);
 	border: .25em solid oklch(var(--node-l) var(--node-c) var(--_hue));
 	border-radius: 1em;
 	padding: 2.25em 1em 1em 1em;
@@ -574,7 +574,6 @@ select {
 		#search-results {
 			margin-top: .5em;
 			background-color: var(--block);
-			backdrop-filter: var(--backdrop);
 			border-radius: .5em;
 
 			max-height: 350px;
@@ -641,7 +640,6 @@ select {
 		border-radius: .5em;
 		padding: 0 .5em;
 		background-color: var(--input);
-		backdrop-filter: var(--backdrop);
 	}
 
 	.toggle:focus-within {
@@ -686,7 +684,6 @@ footer {
 #node-description {
 	border: .125em solid var(--border);
 	background-color: var(--block);
-	backdrop-filter: var(--backdrop);
 }
 
 #node-description {
@@ -965,7 +962,6 @@ svg {
 		border-radius: 1em;
 		corner-shape: squircle;
 		background-color: var(--block);
-		backdrop-filter: var(--backdrop);
 	}
 
 	#mobile-bar button {
@@ -1133,6 +1129,14 @@ svg {
 		box-shadow: 0 .5em 1em 0 var(--shadow);
 		backdrop-filter: var(--backdrop);
 	}
+	#legend,
+	#breadcrumb-stack,
+	#node-description,
+	#mobile-bar,
+	.toggle {
+		backdrop-filter: var(--backdrop);
+	}
+	/*
 	.card {
 		backdrop-filter: var(--backdrop);
 		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--shadow-h) / 0.5);
@@ -1144,7 +1148,19 @@ svg {
 			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
 		}
 	}
-
+	*/
+	.card {
+		backface-visibility: hidden;
+		backdrop-filter: var(--backdrop);
+		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.5);
+		box-shadow: var(--_shadow);
+		&.current {
+			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+		}
+		&:hover {
+			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+		}
+	}
 }
 
 
