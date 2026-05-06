@@ -172,7 +172,6 @@
 		--text-hover-l: 0.9;
 		--text-hover-c: 0.15;
 
-
 		--card-l: 0.25;
 		--card-c: 0.0;
 		--card-hover-l: 0.25;
@@ -184,7 +183,6 @@
 		--input-l: 0.2;
 		--button-l: 0.2;
 
-
 		--accent-l: 0.7;
 		--accent-hover-l: 0.8;
 		--accent-active-l: 0.9;
@@ -193,9 +191,6 @@
 		--node-l: 0.8;
 
 		--selected-l: 0.85;
-
-
-
 
 	}
 }
@@ -924,7 +919,7 @@ svg {
 	}
 
 	path.edge-path {
-		stroke-width: .175em;
+		stroke-width: .2em;
 		fill: none;
 		shape-rendering: geometricPrecision;
 		stroke-linecap: round;
@@ -1036,7 +1031,7 @@ svg {
 	}
 
 	/* Override desktop auto-open behavior on mobile.
-	   Even if JS marks the node as `visible`, only the Info tab should reveal it. */
+		Even if JS marks the node as `visible`, only the Info tab should reveal it. */
 	#node-description.visible {
 		display: none;
 	}
@@ -2571,9 +2566,10 @@ function renderGraph(centerId) {
 			sourceNode = nodes.find(n => n.id === e.source) || {},
 			targetNode = nodes.find(n => n.id === e.target) || {},
 			sourceMatches = checkTrait(sourceNode.trait) && checkTypeFilter(sourceNode.type),
-			targetMatches = checkTrait(targetNode.trait) && checkTypeFilter(targetNode.type);
+			targetMatches = checkTrait(targetNode.trait) && checkTypeFilter(targetNode.type),
+			edgeMatches = checkTypeFilter(e.type);
 
-		if (!sourceMatches || !targetMatches) pathLine.setAttribute('opacity', '0.25');
+		if (!edgeMatches && (!sourceMatches || !targetMatches)) pathLine.setAttribute('opacity', '0.25');
 		if (style.dash !== 'none') pathLine.setAttribute('stroke-dasharray', style.dash);
 
 		linesZoom.append(pathLine);
