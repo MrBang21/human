@@ -42,33 +42,83 @@
 <style>
 :root {
 	color-scheme: light;
-	accent-color: var(--url-color);
+	accent-color: var(--url);
 	--mobile-bar-height: 3.25em;
 	--vv-bottom-offset: 0px;
-	--bg-color: oklch(0.95 0 0);
-	--card-bg: oklch(1 0 0);
-	--card-border: oklch(0.8 0 0);
-	--text-main: oklch(0.3 0 0);
-	--text-muted: oklch(0.4 0 0);
-	--shadow-base: oklch(0 0 0 / 0.5);
-	--shadow-hover: oklch(0 0 0 / 0.8);
+	--body: oklch(0.95 0 0); /* oklch(0.95 0 0); */
+	--card: oklch(1 0 0);
+	--text: oklch(0.3 0 0);
+	--muted: oklch(0.4 0 0);
+	--shadow: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / 0.5);
+	--shadow-hover: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / 0.8);
 
-	--ui-bg: oklch(1 0 0);
-	--ui-border: oklch(0.8 0 0);
-	--ui-shadow: oklch(0 0 0 / 0.5);
+	--block-l: 1;
+	--block-c: 0;
+	--block-h: 0;
+	--block: oklch(var(--block-l) var(--block-c) var(--block-h));
+
+	--border-l: 0.5;
+	--border-c: 0;
+	--border-h: 0;
+	--border: oklch(var(--border-l) var(--border-c) var(--border-h));
+
+	--card-l: 0.975;
+	--card-c: 0;
+	--card-hover-l: 1;
+	--card-hover-c: 0;
+	--card-h: 220;
+	--card: oklch(var(--card-l) var(--card-c) var(--card-h));
+
+
+	--input-l: 1;
+	--input-c: 0;
+	--input-h: 0;
+	--input: oklch(var(--input-l) var(--input-c) var(--input-h));
+
+	--button-l: 1;
+	--button-c: 0;
+	--button-h: 0;
+	--button: oklch(var(--button-l) var(--button-c) var(--button-h));
+
+	--button-hover-l: 1;
+	--button-hover-c: 0;
+	--button-active-l: 1;
+	--button-active-c: 0;
+
+
 	--search-hover: oklch(0.95 0 0);
 
-	--text-lightness: 0.6;
-	--text-hover-lightness: 0.7;
-	--text-chroma: 0.18;
-	--text-hover-chroma: 0.2;
-	--card-lightness: 0.975;
-	--card-chroma: 0;
-	--card-hover-lightness: 1;
-	--card-hover-chroma: 0;
-	--card-hue: 220;
-	--shadow-lightness: 0.3;
-	--shadow-chroma: 0.1;
+	--text-l: 0.6;
+	--text-hover-l: 0.7;
+	--text-c: 0.18;
+	--text-hover-c: 0.2;
+
+
+	--line-l: 0.8;
+	--line-c: 0.11;
+
+	--node-l: 0.7;
+	--node-c: 0.11;
+
+	--selected-l: 0.8;
+	--selected-c: 0.11;
+
+	--accent-l: 0.7;
+	--accent-c: 0.11;
+	--accent-h: 220;
+
+	--accent-hover-l: 0.7;
+	--accent-hover-c: 0.2;
+
+	--accent-active-l: 0.8;
+	--accent-active-c: 0.2;
+
+	--accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
+	--accent-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--accent-h));
+	--accent-active: oklch(var(--accent-active-l) var(--accent-active-c) var(--accent-h));
+
+	--shadow-l: 0.3;
+	--shadow-c: 0.1;
 
 	--hue-female: 340;
 	--hue-male: 240;
@@ -85,47 +135,68 @@
 	--hue-energetic: 340;
 	--hue-url: 240;
 
-	--trait-male: oklch(var(--text-lightness) var(--text-chroma) var(--hue-male));
-	--trait-female: oklch(var(--text-lightness) var(--text-chroma) var(--hue-female));
-	--trait-shared: oklch(var(--text-lightness) var(--text-chroma) var(--hue-shared));
+	--trait-male: oklch(var(--node-l) var(--node-c) var(--hue-male));
+	--trait-female: oklch(var(--node-l) var(--node-c) var(--hue-female));
+	--trait-shared: oklch(var(--node-l) var(--node-c) var(--hue-shared));
 
-	--center-bg: oklch(var(--card-hover-lightness) var(--card-hover-chroma) var(--card-hue));
+	--url: oklch(var(--accent-l) var(--accent-c) var(--hue-url));
+	--url-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url));
 
-	--url-color: oklch(var(--text-lightness) var(--text-chroma) var(--hue-url));
-	--url-hover: oklch(min(var(--text-lightness) + 0.1, 0.9) var(--text-chroma) var(--hue-url));
+	@media (prefers-reduced-transparency: no-preference) {
+		@supports (backdrop-filter: blur(0)) {
+			--backdrop: blur(2em);
+			--block: oklch(var(--block-l) var(--block-c) var(--block-h) / 0.2);
+			--card: oklch(var(--card-l) var(--card-c) var(--card-h) / 0.01);
+			--input: oklch(var(--input-l) var(--input-c) var(--input-h) / 0.8);
+			--button: oklch(var(--button-l) var(--button-c) var(--button-h) / 0.8);
+			--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / 0.8);
+			--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / 0.8);
+		}
+	}
 }
 
 @media (prefers-color-scheme: dark) {
 	:root {
 		color-scheme: dark;
-		--bg-color: oklch(0.2 0 0);
-		--card-bg: oklch(0.25 0 0);
-		--card-border: oklch(0.3 0 0);
-		--text-main: oklch(0.8 0 0);
-		--text-muted: oklch(0.7 0 0);
-		--shadow-base: oklch(var(--shadow-lightness) var(--shadow-chroma) 0 / 0.3);
-		--shadow-hover: oklch(var(--shadow-lightness) var(--shadow-chroma) 0 / 0.6);
+		--body: oklch(0.2 0 0);
+		--text: oklch(0.8 0 0);
+		--muted: oklch(0.7 0 0);
 
-		--ui-bg: oklch(0.2 0 0);
-		--ui-border: oklch(0.3 0 0);
-		--ui-shadow: oklch(var(--shadow-lightness) 0 0 / 0.5);
+		--block-l: 0.2;
+		--border-l: 0.3;
+
 		--search-hover: oklch(0.3 0 0);
 
-		--trait-male: oklch(var(--text-lightness) var(--text-chroma) var(--hue-male));
-		--trait-female: oklch(var(--text-lightness) var(--text-chroma) var(--hue-female));
-		--trait-shared: oklch(var(--text-lightness) var(--text-chroma) var(--hue-shared));
+		--text-l: 0.8;
+		--text-c: 0.12;
+		--text-hover-l: 0.9;
+		--text-hover-c: 0.15;
 
-		--text-lightness: 0.8;
-		--text-chroma: 0.12;
-		--text-hover-lightness: 0.9;
-		--text-hover-chroma: 0.15;
-		--card-lightness: 0.25;
-		--card-chroma: 0.0;
-		--card-hover-lightness: 0.25;
-		--card-hover-chroma: 0;
-		--card-hue: 240;
-		--shadow-lightness: 0.7;
-		--shadow-chroma: 0.1;
+
+		--card-l: 0.25;
+		--card-c: 0.0;
+		--card-hover-l: 0.25;
+		--card-hover-c: 0;
+		--card-h: 240;
+		--shadow-l: 0.7;
+		--shadow-c: 0.1;
+
+		--input-l: 0.2;
+		--button-l: 0.2;
+
+
+		--accent-l: 0.7;
+		--accent-hover-l: 0.8;
+		--accent-active-l: 0.9;
+
+		--line-l: 0.7;
+		--node-l: 0.8;
+
+		--selected-l: 0.85;
+
+
+
+
 	}
 }
 
@@ -134,7 +205,7 @@
 	scrollbar-width: thin;
 	scrollbar-gutter: auto;
 	corner-shape: squircle;
-	text-wrap-style: pretty;
+	text-wrap-style: balance;
 }
 
 html {
@@ -144,23 +215,18 @@ html {
 body {
 	margin: 0;
 	padding: 0;
-	background-color: var(--bg-color);
-	color: var(--text-main);
+	background-color: var(--body);
+	color: var(--text);
 	font-family:
 		system-ui,
 		sans-serif;
 	overflow: hidden;
 	user-select: none;
-	transition: background-color 0.3s, color 0.3s;
-
-	font-variation-settings: "GRAD" 100;
 }
 
 a {
-	color: var(--url-color);
+	color: var(--url);
 	text-decoration: none;
-	transition: color 0.3s;
-
 	&:hover {
 		color: var(--url-hover);
 		text-decoration: underline;
@@ -216,31 +282,16 @@ body,
 	max-width: 20em;
 	/* Prevent the browser from hijacking touch drags */
 	touch-action: none;
-	--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue));
-	background: var(--_back);
-
-	@supports (backdrop-filter: blur(0)) {
-		--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue) / 0.2);
-		backdrop-filter: blur(1em);
-	}
-
-	border: .125em solid oklch(var(--text-lightness) var(--text-chroma) var(--_hue));
+	background-color: var(--card);
+	backdrop-filter: var(--backdrop);
+	border: .25em solid oklch(var(--node-l) var(--node-c) var(--_hue));
 	border-radius: 1em;
 	padding: 2.25em 1em 1em 1em;
-	box-shadow: 0 0 1em -0.25em oklch(var(--shadow-lightness) var(--shadow-chroma) var(--_hue) / 0.5);
+
 	cursor: grab;
+	text-align: center;
 	translate: -50% -50%;
 	transform-origin: center;
-	transition:
-		scale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-		left 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-		top 0.5s cubic-bezier(0.25, 0.8, 0.25, 1),
-		box-shadow 0.3s ease,
-		filter 0.3s ease,
-		background-color 0.3s ease,
-		border-color 0.3s ease,
-		opacity 0.3s ease;
-	text-align: center;
 
 	&:active {
 		cursor: grabbing;
@@ -268,21 +319,20 @@ body,
 	}
 
 	&:hover {
-		box-shadow: 0 1em 1em -.5em oklch(var(--shadow-lightness) var(--shadow-chroma) var(--_hue) / 0.8);
-		--text-lightness: var(--text-hover-lightness);
-		--text-chroma: var(--text-hover-chroma);
+		--node-l: var(--selected-l);
+		--node-c: var(--selected-c);
 		z-index: 5;
 		scale: 1.05;
 	}
 
 	&.trait-male {
-		--_text-hue: var(--hue-male);
+		--_icon-hue: var(--hue-male);
 	}
 	&.trait-female {
-		--_text-hue: var(--hue-female);
+		--_icon-hue: var(--hue-female);
 	}
 	&.trait-shared {
-		--_text-hue: var(--hue-shared);
+		--_icon-hue: var(--hue-shared);
 	}
 
 
@@ -314,51 +364,48 @@ body,
 		--_hue: var(--hue-energetic);
 	}
 
-	.card-icon {
+	svg {
 		position: absolute;
 		top: -1.5em;
 		left: 50%;
 		transform: translateX(-50%);
 		width: 3em;
 		height: 3em;
-		background-color: var(--card-bg);
-		border: .125em solid oklch(var(--text-lightness) var(--text-chroma) var(--_text-hue));
-		border-radius: 100%;
+		background-color: oklch(var(--card-l) var(--card-c) var(--card-h));
+		border: inherit;
+		border-radius: 50%;
 		padding: .25em;
 		corner-shape: round;
-		fill: oklch(var(--text-lightness) var(--text-chroma) var(--_text-hue));
-		color: oklch(var(--text-lightness) var(--text-chroma) var(--_text-hue));
+		fill: oklch(var(--line-l) var(--line-c) var(--_icon-hue));
+		color: oklch(var(--line-l) var(--line-c) var(--_icon-hue));
 		pointer-events: none;
 	}
 
 	h3 {
 		margin: 0 0 0.5em 0;
 		font-size: 1.25em;
-		transition: color 0.3s ease;
-		color: oklch(var(--text-lightness) var(--text-chroma) var(--_text-hue));
+		color: oklch(var(--text-l) var(--text-c) var(--_text-hue));
 	}
 
 	p {
 		margin: 0;
 		font-size: 0.95em;
-		color: var(--text-muted);
+		color: var(--muted);
 	}
 
-	&.center-node {
+	&.current {
+		--node-l: var(--selected-l);
+		--node-c: var(--selected-c);
+		scale: 1.025;
 		min-width: 14em;
 		z-index: 100;
-		background-color: var(--center-bg);
-		box-shadow: 0 1em 2em -.5em oklch(var(--shadow-lightness) var(--shadow-chroma) var(--_hue) / 0.8);
-
-		@supports (backdrop-filter: blur(0)) {
-			background-color: var(--center-bg) with alpha(var(--center-bg) / 0.8);
-			backdrop-filter: blur(2em);
+		&:hover {
+			scale: 1.1;
 		}
 	}
 
 	&.dragging {
-		transition: box-shadow 0.3s ease, filter 0.3s ease, background-color 0.3s ease !important;
-		z-index: 100 !important;
+		z-index: 1000;
 	}
 
 	&.ghosted {
@@ -369,7 +416,7 @@ body,
 		filter: grayscale(20%);
 	}
 
-	&.center-node.ghosted {
+	&.current.ghosted {
 		filter: grayscale(40%);
 	}
 }
@@ -385,7 +432,7 @@ body,
 }
 
 #breadcrumb-stack {
-	background: var(--ui-bg);
+	background-color: var(--block);
 	padding: .5em 1em;
 	border-radius: .5em;
 	corner-shape: squircle;
@@ -399,7 +446,6 @@ body,
 	gap: .25em;
 	align-items: center;
 	flex: 0 1 min-content;
-	transition: background-color 0.3s;
 }
 
 #breadcrumb-stack > * {
@@ -409,9 +455,8 @@ body,
 
 .breadcrumb-item {
 	cursor: pointer;
-	color: var(--url-color);
+	color: var(--url);
 	font-weight: 500;
-	transition: color 0.2s;
 }
 
 .breadcrumb-item:hover {
@@ -420,29 +465,72 @@ body,
 }
 
 .breadcrumb-separator {
-	color: var(--text-muted);
+	color: var(--muted);
 	font-size: 12px;
 	margin: 0 4px;
 }
 
 .breadcrumb-current {
-	color: var(--text-main);
+	color: var(--text);
 	font-weight: bold;
 	cursor: default;
 }
-select, input {
+input, select, button {
+	max-height: 2.5em;
+}
+input, select, option, textarea, button {
+	font-family: inherit;
+	font-size: inherit;
+	line-height: inherit;
 	outline: none;
 	padding: .5em;
-	font-size: 1em;
-	background: var(--ui-bg);
+	color: var(--text);
+	background-color: var(--input);
+	border: 1px solid var(--border);
+	border-radius: .5em;
+	corner-shape: squircle;
+	&::placeholder {
+		color: var(--muted);
+	}
+	&:focus {
+		border-color: var(--url);
+	}
+}
 
-	@supports (backdrop-filter: blur(0)) {
-		--_back: oklch(var(--card-lightness) var(--card-chroma) var(--card-hue) / 0.2);
-		background: var(--_back);
-		backdrop-filter: blur(1em);
-		option {
-			background: var(--ui-bg);
+button {
+	background-color: var(--button);
+	cursor: pointer;
+}
+
+select {
+	&, &::picker(select) {
+		appearance: base-select;
+		border-radius: .5em;
+		color: var(--text);
+		cursor: pointer;
+		border: 1px solid var(--border);
+	}
+	&::picker-icon {
+		color: var(--accent);
+	}
+	&:open::picker-icon {
+		rotate: 180deg;
+	}
+	option {
+		padding: .5em;
+		border-radius: 0;
+		border: none;
+		&:hover {
+			background-color: var(--search-hover);
 		}
+		&:checked {
+			background-color: var(--accent);
+			color: var(--body);
+		}
+		&::checkmark {
+			color: inherit;
+		}
+
 	}
 }
 
@@ -453,28 +541,27 @@ select, input {
 	justify-content: flex-end;
 	position: relative;
 	align-items: center;
+	> div {
+		background-color: transparent;
+	}
 
 	.select {
 		position: relative;
 		display: flex;
 	}
-
+	/*
 	#depth-control, #trait-filter, #type-filter {
-		appearance: base-select;
-		color: var(--text-main);
-		border: 1px solid var(--ui-border);
-		border-radius: .5em;
-		cursor: pointer;
 		transition: border-color 0.3s, background-color 0.3s, color 0.3s;
 
 		&:focus {
-			border-color: var(--url-color);
+			border-color: var(--url);
 		}
 		option {
 			padding: .5em;
-			background: var(--ui-bg);
+			background-color: var(--block);
 		}
 	}
+	*/
 
 	#search-container {
 		position: relative;
@@ -482,46 +569,30 @@ select, input {
 
 		#search-input {
 			width: 100%;
-			color: var(--text-main);
-			border: 1px solid var(--ui-border);
-			border-radius: .5em;
-			box-sizing: border-box;
-			outline: none;
-			transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-
-			&::placeholder {
-				color: var(--text-muted);
-			}
-
-			&:focus {
-				border-color: var(--url-color);
-			}
 		}
 
 		#search-results {
 			margin-top: .5em;
-			background: var(--ui-bg);
-			@supports (backdrop-filter: blur(0)) {
-				background: var(--_back);
-				backdrop-filter: blur(1em);
-			}
+			background-color: var(--block);
+			backdrop-filter: var(--backdrop);
 			border-radius: .5em;
-			box-shadow: 0 4px 20px var(--ui-shadow);
+
 			max-height: 350px;
 			overflow-y: auto;
 			display: none;
-			border: 1px solid var(--ui-border);
+			border: 1px solid var(--border);
 			border-radius: 1em;
 			corner-shape: squircle;
 			position: fixed;
 			list-style: none;
 			padding: 0;
 			margin: 0;
+			z-index: 3000000;
 
 			li {
 				cursor: pointer;
-				border-bottom: 1px solid var(--ui-border);
-				transition: background-color 0.2s;
+				border-bottom: 1px solid var(--border);
+				background-color: var(--block);
 
 				&:last-child {
 					border-bottom: none;
@@ -546,7 +617,7 @@ select, input {
 
 				.name {
 					font-weight: 600;
-					color: var(--text-main);
+					color: var(--text);
 					margin-bottom: 4px;
 					margin-top: 0;
 					font-size: 1.1em;
@@ -554,7 +625,7 @@ select, input {
 
 				.desc {
 					font-size: 11px;
-					color: var(--text-muted);
+					color: var(--muted);
 					text-transform: uppercase;
 					letter-spacing: 0.5px;
 				}
@@ -566,19 +637,15 @@ select, input {
 		display: flex;
 		align-items: center;
 		height: 2.5em;
-		background: var(--ui-bg);
-		border: 1px solid var(--ui-border);
+		border: 1px solid var(--border);
 		border-radius: .5em;
 		padding: 0 .5em;
-		transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-		@supports (backdrop-filter: blur(0)) {
-			background: var(--_back);
-			backdrop-filter: blur(1em);
-		}
+		background-color: var(--input);
+		backdrop-filter: var(--backdrop);
 	}
 
 	.toggle:focus-within {
-		border-color: var(--url-color);
+		border-color: var(--url);
 	}
 
 	.toggle label {
@@ -586,7 +653,7 @@ select, input {
 		align-items: center;
 		gap: .5em;
 		cursor: pointer;
-		color: var(--text-muted);
+		color: var(--muted);
 		white-space: nowrap;
 	}
 
@@ -601,7 +668,7 @@ select, input {
 #legend,
 footer {
 	position: fixed;
-	background: var(--ui-bg);
+	background-color: var(--block);
 	border-radius: .5em;
 	min-height: 2em;
 	z-index: 200;
@@ -615,18 +682,11 @@ footer {
 }
 
 #legend,
-#trait-filter,
-#type-filter,
-#search-input,
 #breadcrumb-stack,
 #node-description {
-	border: .125em solid var(--ui-border);
-	background: var(--ui-bg);
-
-	@supports (backdrop-filter: blur(0)) {
-		background: var(--ui-bg) with alpha(var(--ui-bg) / 0.2);
-		backdrop-filter: blur(1em);
-	}
+	border: .125em solid var(--border);
+	background-color: var(--block);
+	backdrop-filter: var(--backdrop);
 }
 
 #node-description {
@@ -654,13 +714,13 @@ footer {
 #node-description h2 {
 	margin: 0 0 0.5em 0;
 	font-size: 1.4em;
-	color: var(--text-main);
+	color: var(--text);
 }
 
 #node-description p {
 	margin: 0;
 	font-size: 0.95em;
-	color: var(--text-muted);
+	color: var(--muted);
 	line-height: 1.5;
 	white-space: pre-wrap;
 }
@@ -678,7 +738,7 @@ footer {
 	font-size: 1.1em;
 	margin-top: 1em;
 	margin-bottom: 0.5em;
-	color: var(--text-main);
+	color: var(--text);
 }
 #nd-links li {
 	margin-bottom: 0.25em;
@@ -700,12 +760,12 @@ footer {
 .legend-section-title {
 	font-weight: bold;
 	margin-bottom: .5em;
-	color: var(--text-main);
+	color: var(--text);
 }
 
 .legend-divider {
 	height: .1em;
-	background: var(--ui-border);
+	background-color: var(--border);
 	margin: .5em 0;
 }
 
@@ -726,38 +786,38 @@ footer {
 }
 
 .legend-line.anatomy {
-	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy));
+	background-color: oklch(var(--line-l) var(--line-c) var(--hue-anatomy));
 }
 
 .legend-line.nerve {
-	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-nerve));
+	background-color: oklch(var(--line-l) var(--line-c) var(--hue-nerve));
 }
 
 .legend-line.sexual {
-	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-sexual));
+	background-color: oklch(var(--line-l) var(--line-c) var(--hue-sexual));
 }
 
 .legend-line.removed {
-	border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed));
+	border-bottom: 3px dashed oklch(var(--line-l) var(--line-c) var(--hue-removed));
 	height: 0;
 }
 
 .legend-line.consequence {
-	background: oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence));
+	background-color: oklch(var(--line-l) var(--line-c) var(--hue-consequence));
 }
 
 .legend-line.benefit {
-	border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit));
+	border-bottom: 3px dotted oklch(var(--line-l) var(--line-c) var(--hue-benefit));
 	height: 0;
 }
 
 .legend-line.harm {
-	border-bottom: 3px dotted oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm));
+	border-bottom: 3px dotted oklch(var(--line-l) var(--line-c) var(--hue-harm));
 	height: 0;
 }
 
 .legend-line.energetic {
-	border-bottom: 3px dashed oklch(var(--text-lightness) var(--text-chroma) var(--hue-energetic));
+	border-bottom: 3px dashed oklch(var(--line-l) var(--line-c) var(--hue-energetic));
 	height: 0;
 }
 
@@ -814,7 +874,7 @@ footer {
 	}
 
 	line {
-		stroke: oklch(var(--text-lightness) var(--text-chroma) var(--_hue));
+		stroke: oklch(var(--text-l) var(--text-c) var(--_hue));
 		stroke-width: 3;
 	}
 }
@@ -823,9 +883,9 @@ footer {
 	inset: auto 1em 1em auto;
 	padding: .5em 1em;
 	font-size: 12px;
-	color: var(--text-muted);
+	color: var(--muted);
 	border: none;
-	background: transparent;
+	background-color: transparent;
 	text-align: right;
 }
 
@@ -863,19 +923,16 @@ svg {
 	}
 
 	path:not(.edge-path) {
-		transition: fill 0.3s ease;
-		fill: oklch(var(--text-lightness) var(--text-chroma) var(--_hue));
+		fill: oklch(var(--node-l) var(--node-c) var(--_hue));
 	}
 
 	path.edge-path {
-		stroke-width: 3;
-		color: #f0f;
+		stroke-width: .175em;
 		fill: none;
-		/* Allow stroke + markers to scale with zoom */
 		shape-rendering: geometricPrecision;
 		stroke-linecap: round;
 		stroke-linejoin: round;
-		transition: stroke-opacity 0.3s, opacity 0.3s, stroke 0.3s ease, stroke-width 0.3s ease;
+
 	}
 }
 
@@ -885,7 +942,7 @@ svg {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	font-size: 18px;
-	color: var(--text-muted);
+	color: var(--muted);
 	z-index: 100;
 }
 
@@ -904,23 +961,14 @@ svg {
 		justify-content: space-between;
 		gap: .5em;
 		padding: 0 .5em;
-		border: .125em solid var(--ui-border);
+		border: .125em solid var(--border);
 		border-radius: 1em;
 		corner-shape: squircle;
-		background: var(--ui-bg);
-
-		@supports (backdrop-filter: blur(0)) {
-			background: var(--ui-bg) with alpha(var(--ui-bg) / 0.2);
-			backdrop-filter: blur(1em);
-		}
-
+		background-color: var(--block);
+		backdrop-filter: var(--backdrop);
 	}
 
 	#mobile-bar button {
-		appearance: none;
-		border: 1px solid var(--ui-border);
-		background: transparent;
-		color: var(--text-main);
 		border-radius: .75em;
 		padding: .5em .75em;
 		font: inherit;
@@ -931,13 +979,16 @@ svg {
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		transition: border-color 0.2s, background-color 0.2s, color 0.2s;
 	}
 
 	#mobile-bar button[aria-pressed="true"] {
-		border-color: var(--url-color);
-		color: var(--url-color);
-		background: var(--search-hover);
+		border-color: var(--url);
+		color: var(--url);
+		--background-color: var(--search-hover);
+		--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / 0.2);
+		--button-c: 0.20;
+		--button-h: 20;
+
 	}
 
 	#mobile-bar button:disabled {
@@ -1016,13 +1067,94 @@ svg {
 	}
 
 }
+
+@media (prefers-reduced-motion: no-preference) {
+	/* turn on transitions and animations */
+	a,
+	h3,
+	.breadcrumb-item {
+		transition: color 0.3s ease;
+	}
+	input, select, button {
+		transition:
+			border-color 0.3s ease,
+			background-color 0.3s ease,
+			color 0.3s ease;
+	}
+	select::picker-icon {
+		transition: rotate 0.3s ease;
+	}
+	#search-results li {
+		transition: background-color 0.2s ease;
+	}
+	.toggle {
+		transition:
+			border-color 0.3s ease,
+			background-color 0.3s ease,
+			color 0.3s ease;
+	}
+	svg {
+		transition:
+			fill 0.3s ease,
+			color 0.3s ease;
+		/*
+		path:not(.edge-path) {
+			transition: fill 0.3s ease;
+		}
+		*/
+		path.edge-path {
+			transition:
+				stroke-opacity 0.3s ease,
+				opacity 0.3s ease,
+				stroke 0.3s ease,
+				stroke-width 0.3s ease;
+		}
+	}
+	#mobile-bar button {
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+	.card {
+		transition:
+			scale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+			box-shadow 0.3s ease,
+			background-color 0.3s ease,
+			border-color 0.3s ease,
+			opacity 0.5s ease;
+	}
+}
+
+@media (prefers-reduced-transparency: no-preference) {
+	/* turn on backdrop-filter effects and box-shadow */
+
+	#search-results {
+		box-shadow: 0 .5em 1em 0 var(--shadow);
+		backdrop-filter: var(--backdrop);
+	}
+	.card {
+		backdrop-filter: var(--backdrop);
+		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--shadow-h) / 0.5);
+		box-shadow: var(--_shadow);
+		&.current {
+			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+		}
+		&:hover {
+			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+		}
+	}
+
+}
+
+
 </style>
 </head>
 
 <body>
 <template id="card-template">
 	<div class="card">
-		<svg class="card-icon" viewBox="0 0 24 24">
+		<svg class="icon" viewBox="0 0 24 24">
 			<use href=""></use>
 		</svg>
 		<h3>Title</h3>
@@ -1356,15 +1488,15 @@ const petalLayout = {
 };
 
 const edgeStyles = {
-	'root': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '3', dash: 'none', marker: 'url(#arrow-anatomy)' },
-	'anatomy': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
-	'nerve': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-nerve))', width: '2.5', dash: 'none', marker: 'url(#arrow-nerve)' },
-	'sexual': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-sexual))', width: '2.5', dash: 'none', marker: 'url(#arrow-sexual)' },
-	'removed': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-removed))', width: '3', dash: '8, 4', marker: 'url(#arrow-removed)' },
-	'consequence': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-consequence))', width: '3', dash: 'none', marker: 'url(#arrow-consequence)' },
-	'benefit': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-benefit))', width: '3', dash: '4, 4', marker: 'url(#arrow-benefit)' },
-	'harm': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' },
-	'energetic': { color: 'oklch(var(--text-lightness) var(--text-chroma) var(--hue-energetic))', width: '2', dash: '6, 6', marker: 'url(#arrow-energetic)' }
+	'root': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-anatomy))', width: '3', dash: 'none', marker: 'url(#arrow-anatomy)' },
+	'anatomy': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
+	'nerve': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-nerve))', width: '2.5', dash: 'none', marker: 'url(#arrow-nerve)' },
+	'sexual': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-sexual))', width: '2.5', dash: 'none', marker: 'url(#arrow-sexual)' },
+	'removed': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-removed))', width: '3', dash: '8, 4', marker: 'url(#arrow-removed)' },
+	'consequence': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-consequence))', width: '3', dash: 'none', marker: 'url(#arrow-consequence)' },
+	'benefit': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-benefit))', width: '3', dash: '4, 4', marker: 'url(#arrow-benefit)' },
+	'harm': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' },
+	'energetic': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-energetic))', width: '2', dash: '6, 6', marker: 'url(#arrow-energetic)' }
 };
 
 let activeLineElements = [],
@@ -1482,7 +1614,7 @@ const checkTrait = (t) => {
 	if (currentTraitFilter === 'all') return true;
 
 	if (filters && filters.traits) {
-		const traitFilter = filters.traits.find(p => p.name.toLowerCase() === currentTraitFilter.toLowerCase());
+		const traitFilter = filters.traits.find(p => p.key === currentTraitFilter);
 		if (traitFilter && traitFilter.items) {
 			return traitFilter.items.includes(tr);
 		}
@@ -1496,7 +1628,7 @@ const checkTypeFilter = (type) => {
 	if (currentTypeFilter === 'all') return true;
 
 	if (filters && filters.types) {
-		const perspective = filters.types.find(p => p.name.toLowerCase() === currentTypeFilter.toLowerCase());
+		const perspective = filters.types.find(p => p.key === currentTypeFilter);
 		if (perspective && perspective.items) {
 			return perspective.items.includes(ty);
 		}
@@ -1521,7 +1653,7 @@ async function loadGraphData() {
 			typeFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
 			filters.types.forEach(p => {
 				const opt = document.createElement('option');
-				opt.value = p.name.toLowerCase();
+				opt.value = p.key;
 				opt.textContent = p.name;
 				if (p.title) opt.title = p.title;
 				typeFilterDropdown.appendChild(opt);
@@ -1533,7 +1665,7 @@ async function loadGraphData() {
 			traitFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
 			filters.traits.forEach(t => {
 				const opt = document.createElement('option');
-				opt.value = t.name.toLowerCase();
+				opt.value = t.key;
 				opt.textContent = t.name;
 				traitFilterDropdown.appendChild(opt);
 			});
@@ -1661,7 +1793,7 @@ const layoutClusterByCompositeGroup = ({
 		const parentEl = document.getElementById(`node-${parentId}`);
 		if (parentEl) {
 			parentEl.classList.remove('hidden');
-			parentEl.classList.remove('center-node');
+			parentEl.classList.remove('current');
 			parentEl.classList.add('parent');
 			if (!checkTrait(parentMeta.node.trait)) parentEl.classList.add('ghosted');
 			parentEl.style.left = `${centerX}px`;
@@ -1760,7 +1892,7 @@ const layoutClusterByCompositeGroup = ({
 			if (!el) return;
 
 			el.classList.remove('hidden');
-			el.classList.remove('center-node');
+			el.classList.remove('current');
 
 			if (item.meta?.isOutgoing) {
 				el.classList.add('target');
@@ -2037,16 +2169,17 @@ function getBreadcrumbPath(targetId) {
 		targetNode = nodes.find(n => n.id === targetId),
 		targetTrait = targetNode ? targetNode.trait : null;
 
-	const findPath = (allowAllEdges) => {
+	// Helper to build a path with a custom edge direction
+	const findPathDirected = (edgeDirection, allowAllEdges) => {
 		let adjList = {};
 		const
 			defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']),
 			isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t || 'anatomy'),
 			isAllowedNode = (id, nodeData) => {
-			if (!nodeData) return false;
-			if (id === targetId) return true;
-			return checkTrait(nodeData.trait) && checkTypeFilter(nodeData.type);
-		};
+				if (!nodeData) return false;
+				if (id === targetId) return true;
+				return checkTrait(nodeData.trait) && checkTypeFilter(nodeData.type);
+			};
 		const weightFor = (neighborData) => {
 			let weight = 1;
 			if (targetTrait && neighborData.trait !== targetTrait) {
@@ -2070,14 +2203,21 @@ function getBreadcrumbPath(targetId) {
 			const type = e.type || 'anatomy';
 			if (!isAllowedEdgeType(type)) return;
 
-			const
-				sourceData = nodes.find(n => n.id === e.source),
-				targetData = nodes.find(n => n.id === e.target);
+			const sourceData = nodes.find(n => n.id === e.source);
+			const targetData = nodes.find(n => n.id === e.target);
 			if (!sourceData || !targetData) return;
 
-			// Allow traversal source->target and target->source (breadcrumb can follow either direction).
-			if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
-			if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
+			if (edgeDirection === 'targetToSource') {
+				// Only allow target->source traversal
+				if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
+			} else if (edgeDirection === 'sourceToTarget') {
+				// Only allow source->target traversal
+				if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
+			} else {
+				// Allow both directions (legacy fallback)
+				if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
+				if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
+			}
 		});
 		let distances = {},
 			previous = {},
@@ -2114,8 +2254,17 @@ function getBreadcrumbPath(targetId) {
 		}
 		return path;
 	};
-	let path = findPath(false);
-	if (!path) path = findPath(true);
+
+	// 1. Try strict target->source path (upstream)
+	let path = findPathDirected('targetToSource', false);
+	// 2. If not found, try target->source with all edge types
+	if (!path) path = findPathDirected('targetToSource', true);
+	// 3. If still not found, try source->target (downstream, fallback)
+	if (!path) path = findPathDirected('sourceToTarget', false);
+	if (!path) path = findPathDirected('sourceToTarget', true);
+	// 4. If still not found, fallback to legacy (both directions)
+	if (!path) path = findPathDirected('both', false);
+	if (!path) path = findPathDirected('both', true);
 	return path || [targetId];
 }
 
@@ -2242,7 +2391,7 @@ function renderGraph(centerId) {
 	}
 	document.querySelectorAll('.card').forEach(el => {
 		el.classList.add('hidden');
-		el.classList.remove('center-node');
+		el.classList.remove('current');
 		el.classList.remove('ghosted');
 		el.classList.remove('parent');
 		el.classList.remove('source');
@@ -2255,7 +2404,7 @@ function renderGraph(centerId) {
 	const centerEl = document.getElementById(`node-${centerId}`);
 	if (!centerEl) return;
 	centerEl.classList.remove('hidden');
-	centerEl.classList.add('center-node');
+	centerEl.classList.add('current');
 
 	const centerMatches = checkTrait(centerNodeData.trait);
 	if (!centerMatches) centerEl.classList.add('ghosted');
