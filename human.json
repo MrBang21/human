@@ -2,6 +2,7 @@
 	"filters": {
 		"types": [
 			{
+				"key": "all",
 				"name": "All",
 				"items": [
 					"root",
@@ -16,6 +17,7 @@
 				]
 			},
 			{
+				"key": "biological",
 				"name": "Biological",
 				"title": "Strictly anatomical and physiological points",
 				"items": [
@@ -31,6 +33,7 @@
 				"default": true
 			},
 			{
+				"key": "energetic",
 				"name": "Energetic",
 				"title": "Spiritual, yogic, and energetic perspectives",
 				"items": [
@@ -46,6 +49,7 @@
 				]
 			},
 			{
+				"key": "anatomy",
 				"name": "Anatomy",
 				"items": [
 					"root",
@@ -54,6 +58,7 @@
 				]
 			},
 			{
+				"key": "consequence",
 				"name": "Consequence",
 				"items": [
 					"root",
@@ -64,14 +69,16 @@
 				]
 			},
 			{
-				"name": "Nerves / Neuro",
+				"key": "neuro",
+				"name": "Neuro",
 				"items": [
 					"root",
 					"nerve"
 				]
 			},
 			{
-				"name": "Sexual / Erogenous",
+				"key": "erogenous",
+				"name": "Erogenous",
 				"items": [
 					"root",
 					"sexual",
@@ -83,6 +90,7 @@
 		],
 		"traits": [
 			{
+				"key": "all",
 				"name": "All",
 				"items": [
 					"shared",
@@ -92,12 +100,14 @@
 				"default": true
 			},
 			{
+				"key": "shared",
 				"name": "Shared",
 				"items": [
 					"shared"
 				]
 			},
 			{
+				"key": "female",
 				"name": "Female",
 				"items": [
 					"female",
@@ -105,6 +115,7 @@
 				]
 			},
 			{
+				"key": "male",
 				"name": "Male",
 				"items": [
 					"male",
