@@ -69,7 +69,6 @@
 	--card-h: 220;
 	--card: oklch(var(--card-l) var(--card-c) var(--card-h));
 
-
 	--input-l: 1;
 	--input-c: 0;
 	--input-h: 0;
@@ -84,7 +83,6 @@
 	--button-hover-c: 0;
 	--button-active-l: 1;
 	--button-active-c: 0;
-
 
 	--search-hover: oklch(0.95 0 0);
 
@@ -188,10 +186,9 @@
 		--accent-active-l: 0.9;
 
 		--line-l: 0.7;
-		--node-l: 0.8;
+		--node-l: 0.9;
 
 		--selected-l: 0.85;
-
 	}
 }
 
@@ -271,6 +268,8 @@ body,
 	transform-origin: 0 0;
 }
 
+
+
 .card {
 	position: fixed;
 	isolation: isolate;
@@ -287,6 +286,11 @@ body,
 	text-align: center;
 	translate: -50% -50%;
 	transform-origin: center;
+	transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), scale 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease-out, opacity 0.6s ease-out, box-shadow 0.2s ease-out;
+
+	&.dragging {
+		transition: scale 0.2s ease-out, box-shadow 0.2s ease-out !important;
+	}
 
 	&:active {
 		cursor: grabbing;
@@ -371,8 +375,7 @@ body,
 		border-radius: 50%;
 		padding: .25em;
 		corner-shape: round;
-		fill: oklch(var(--line-l) var(--line-c) var(--_icon-hue));
-		color: oklch(var(--line-l) var(--line-c) var(--_icon-hue));
+		color: oklch(var(--node-l) var(--node-c) var(--_icon-hue));
 		pointer-events: none;
 	}
 
@@ -772,45 +775,9 @@ footer {
 }
 
 .legend-line {
-	width: 3em;
-	height: .2em;
+	width: 64px;
+	height: 24px;
 	margin-right: 1em;
-}
-
-.legend-line.anatomy {
-	background-color: oklch(var(--line-l) var(--line-c) var(--hue-anatomy));
-}
-
-.legend-line.nerve {
-	background-color: oklch(var(--line-l) var(--line-c) var(--hue-nerve));
-}
-
-.legend-line.sexual {
-	background-color: oklch(var(--line-l) var(--line-c) var(--hue-sexual));
-}
-
-.legend-line.removed {
-	border-bottom: 3px dashed oklch(var(--line-l) var(--line-c) var(--hue-removed));
-	height: 0;
-}
-
-.legend-line.consequence {
-	background-color: oklch(var(--line-l) var(--line-c) var(--hue-consequence));
-}
-
-.legend-line.benefit {
-	border-bottom: 3px dotted oklch(var(--line-l) var(--line-c) var(--hue-benefit));
-	height: 0;
-}
-
-.legend-line.harm {
-	border-bottom: 3px dotted oklch(var(--line-l) var(--line-c) var(--hue-harm));
-	height: 0;
-}
-
-.legend-line.energetic {
-	border-bottom: 3px dashed oklch(var(--line-l) var(--line-c) var(--hue-energetic));
-	height: 0;
 }
 
 .legend-text-icon {
@@ -882,50 +849,94 @@ footer {
 }
 
 svg {
-	#arrow-anatomy {
+	--icon-fill: currentColor;
+	--icon-stroke: currentColor;
+
+	#arrow-root,
+	.root {
+		--_hue: var(--hue-root);
+		--_width: .3em;
+	}
+
+	#arrow-anatomy,
+	.anatomy {
 		--_hue: var(--hue-anatomy);
+		--_width: .25em;
 	}
 
-	#arrow-nerve {
+	#arrow-nerve,
+	.nerve {
 		--_hue: var(--hue-nerve);
+		--_width: .2em;
 	}
 
-	#arrow-sexual {
+	#arrow-sexual,
+	.sexual {
 		--_hue: var(--hue-sexual);
+		--_width: .2em;
 	}
 
-	#arrow-removed {
+	#arrow-removed,
+	.removed {
 		--_hue: var(--hue-removed);
+		--_width: .2em;
+		--_dash: 8 16;
 	}
 
-	#arrow-consequence {
+	#arrow-consequence,
+	.consequence {
 		--_hue: var(--hue-consequence);
+		--_width: .2em;
+		--_dash: 4 8;
 	}
 
-	#arrow-benefit {
+	#arrow-benefit,
+	.benefit {
 		--_hue: var(--hue-benefit);
+		--_width: .2em;
+		--_dash: 4 4;
 	}
 
-	#arrow-harm {
+	#arrow-harm,
+	.harm {
 		--_hue: var(--hue-harm);
+		--_width: .2em;
+		--_dash: 4 4;
 	}
 
-	#arrow-energetic {
+	#arrow-energetic,
+	.energetic {
 		--_hue: var(--hue-energetic);
+		--_width: .15em;
+		--_dash: 6 6;
 	}
 
-	path:not(.edge-path) {
-		fill: oklch(var(--node-l) var(--node-c) var(--_hue));
-	}
-
-	path.edge-path {
-		stroke-width: .2em;
+	path.edge {
 		fill: none;
-		shape-rendering: geometricPrecision;
+		color: oklch(var(--line-l) var(--line-c) var(--_hue));
+		stroke-width: var(--_width, 2);
+		stroke-dasharray: var(--_dash, none);
+		stroke: currentColor;
 		stroke-linecap: round;
 		stroke-linejoin: round;
-
+		shape-rendering: geometricPrecision;
 	}
+
+	marker,
+	marker path {
+		fill: oklch(var(--node-l) var(--node-c) var(--_hue));
+	}
+}
+
+.fill {
+	fill: var(--icon-fill, currentColor);
+}
+.stroke {
+	fill: none;
+	stroke: var(--icon-stroke, currentColor);
+	stroke-width: 2;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
 
 #loading {
@@ -937,7 +948,6 @@ svg {
 	color: var(--muted);
 	z-index: 100;
 }
-
 
 @media (max-width: 700px) {
 	#mobile-bar {
@@ -1089,11 +1099,11 @@ svg {
 			fill 0.3s ease,
 			color 0.3s ease;
 		/*
-		path:not(.edge-path) {
+		path:not(.edge) {
 			transition: fill 0.3s ease;
 		}
 		*/
-		path.edge-path {
+		path.edge {
 			transition:
 				stroke-opacity 0.3s ease,
 				opacity 0.3s ease,
@@ -1201,7 +1211,7 @@ svg {
 		<div id="breadcrumb-stack"></div>
 		<div id="controls-container">
 			<div class="select">
-				<select id="type-filter" title="Filter by biological or energetic domain">
+				<select id="type-filter" title="Filter by connection type">
 					<button>
 						<selectedcontent></selectedcontent>
 					</button>
@@ -1215,6 +1225,12 @@ svg {
 					<option value="1">1</option>
 					<option value="2" selected>2</option>
 					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="8">8</option>
+					<option value="9">9</option>
 				</select>
 			</div>
 			<div class="select">
@@ -1224,10 +1240,10 @@ svg {
 					</button>
 				</select>
 			</div>
-			<div class="toggle" title="Cluster nodes by type • category • trait">
-				<label for="grid-layout">
-					<input type="checkbox" id="grid-layout">
-					<span>Cluster</span>
+			<div class="toggle" title="Mountain view">
+				<label for="mountain-layout">
+					<input type="checkbox" id="mountain-layout">
+					<span>Mountain</span>
 				</label>
 			</div>
 			<div class="input" id="search-container" title="Search the database">
@@ -1246,28 +1262,44 @@ svg {
 	<div id="legend">
 		<div class="legend-section-title">Connection Types</div>
 		<div class="legend-item">
-			<div class="legend-line anatomy"></div> Default Anatomy
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
+			</svg> Default Anatomy
 		</div>
 		<div class="legend-item">
-			<div class="legend-line nerve"></div> Neuronal / Nerve
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
+			</svg> Neuronal / Nerve
 		</div>
 		<div class="legend-item">
-			<div class="legend-line sexual"></div> Sexual / Erogenous
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
+			</svg> Sexual / Erogenous
 		</div>
 		<div class="legend-item">
-			<div class="legend-line removed"></div> Excised / Removed
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
+			</svg> Excised / Removed
 		</div>
 		<div class="legend-item">
-			<div class="legend-line consequence"></div> Adverse Consequence
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
+			</svg> Adverse Consequence
 		</div>
 		<div class="legend-item">
-			<div class="legend-line benefit"></div> Claimed Benefit
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
+			</svg> Claimed Benefit
 		</div>
 		<div class="legend-item">
-			<div class="legend-line harm"></div> Direct Harm
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
+			</svg> Direct Harm
 		</div>
 		<div class="legend-item">
-			<div class="legend-line energetic"></div> Energetic
+			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+				<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
+			</svg> Energetic
 		</div>
 		<div class="legend-divider"></div>
 		<div class="legend-section-title">Biological Traits</div>
@@ -1292,16 +1324,16 @@ svg {
 	<div id="graph-container">
 		<svg id="lines-layer">
 			<defs id="svg-defs">
-				<marker id="arrow-anatomy" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-root" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
-				<marker id="arrow-nerve" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-anatomy" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
-				<marker id="arrow-sexual" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-nerve" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z" />
+				</marker>
+				<marker id="arrow-sexual" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 10,5
 						C 9.8,5 8.2,5 6.0,7.8
 						2.2,12.9 -2.8,7.8
@@ -1311,65 +1343,28 @@ svg {
 						10,5
 						Z" />
 				</marker>
-				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
 				</marker>
-				<marker id="arrow-consequence" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6"
-					markerHeight="6" orient="auto">
+				<marker id="arrow-consequence" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
 				</marker>
-				<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
-				<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
 				</marker>
-				<marker id="arrow-energetic" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6"
-					orient="auto">
+				<marker id="arrow-energetic" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
 
-				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10"
-					orient="auto" markerUnits="userSpaceOnUse">
-					<circle cx="5" cy="5" r="5" fill="context-stroke" />
+				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
+					<circle cx="5" cy="5" r="5" />
 				</marker>
-				<marker id="end-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10"
-					orient="auto" markerUnits="userSpaceOnUse">
-					<circle cx="5" cy="5" r="5" fill="context-stroke" />
+				<marker id="end-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
+					<circle cx="5" cy="5" r="5" />
 				</marker>
-
-				<g id="icon-region" fill="currentColor">
-					<path
-						d="M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M10.5,22V16H7.5V10A2,2 0 0,1 9.5,8H14.5A2,2 0 0,1 16.5,10V16H13.5V22H10.5Z" />
-				</g>
-				<g id="icon-organ" fill="currentColor">
-					<circle cx="15" cy="14" r="5" />
-					<circle cx="6" cy="16" r="2" />
-					<circle cx="8" cy="7" r="3" />
-				</g>
-				<g id="icon-sexual" fill="currentColor">
-					<path
-						d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-				</g>
-				<g id="icon-surgery" fill="currentColor">
-					<path
-						d="M21.5,5.5L18.5,2.5L14,2.5L7,11.5V14.5L2,19.5L4.5,22L9.5,17H12.5L21.5,10V5.5M12.9,9.4L11.5,8L15.4,3.5H17.2L20.5,6.8V8.6L12.9,9.4Z" />
-				</g>
-				<g id="icon-upgrade" fill="currentColor">
-					<path d="M12,4L4,12H9V20H15V12H20L12,4M13,18H11V12H7.83L12,7.83L16.17,12H13V18M4,2H20V4H4V2Z" />
-				</g>
-				<g id="icon-downgrade" fill="currentColor">
-					<path
-						d="M12,20L20,12H15V4H9V12H4L12,20M11,6H13V12H16.17L12,16.17L7.83,12H11V6M4,22H20V20H4V22Z" />
-				</g>
-				<g id="icon-note">
-					<path
-						d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1Zm7 16H5V5h2v2h10V5h2v14Z"
-						fill="currentColor" />
-				</g>
 			</defs>
 			<g id="lines-zoom"></g>
 		</svg>
@@ -1378,25 +1373,85 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.6 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.7 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
+
+<svg id="icons" style="display: none;">
+	<g id="icon-region" class="fill">
+		<path
+			d="M12,2A2,2 0 0,1 14,4A2,2 0 0,1 12,6A2,2 0 0,1 10,4A2,2 0 0,1 12,2M10.5,22V16H7.5V10A2,2 0 0,1 9.5,8H14.5A2,2 0 0,1 16.5,10V16H13.5V22H10.5Z" />
+	</g>
+	<g id="icon-nerve" class="stroke" >
+		<path
+			d="M 8 12
+			m -4 0
+			a 4 4 0 1 1 8 0
+			a 4 4 0 1 1 -8 0 z
+			M 12 12
+			C 14.5 11.5 15.5 7.5 17.8 8.5
+			C 20 9.5 19.2 13.8 21.5 13
+			M 4 12
+			C 2.2 9.2 1.1 6.5 0.5 5.8
+			M 4 12
+			C 2.1 12.8 1.3 15.2 0.6 17
+			M 4 12
+			C 1.8 11.5 0.9 12.8 0.5 11.2
+			M 21.5 13
+			L 23.5 10.8
+			M 21.5 13
+			L 23.5 15.2" />
+	</g>
+	<g id="icon-organ" class="fill">
+		<circle cx="15" cy="14" r="5" />
+		<circle cx="6" cy="16" r="2" />
+		<circle cx="8" cy="7" r="3" />
+	</g>
+	<g id="icon-sexual" class="fill">
+		<path
+			d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+	</g>
+	<g id="icon-surgery" class="fill">
+		<path
+			d="M21.5,5.5L18.5,2.5L14,2.5L7,11.5V14.5L2,19.5L4.5,22L9.5,17H12.5L21.5,10V5.5M12.9,9.4L11.5,8L15.4,3.5H17.2L20.5,6.8V8.6L12.9,9.4Z" />
+	</g>
+	<g id="icon-upgrade" class="fill">
+		<path d="M12,4L4,12H9V20H15V12H20L12,4M13,18H11V12H7.83L12,7.83L16.17,12H13V18M4,2H20V4H4V2Z" />
+	</g>
+	<g id="icon-downgrade" class="fill">
+		<path
+			d="M12,20L20,12H15V4H9V12H4L12,20M11,6H13V12H16.17L12,16.17L7.83,12H11V6M4,22H20V20H4V22Z" />
+	</g>
+	<g id="icon-note" class="fill">
+		<path
+			d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2Zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1Zm7 16H5V5h2v2h10V5h2v14Z"
+			fill="currentColor" />
+	</g>
+</svg>
 <script>
-let nodes = [],
+let
+	nodes = [],
 	edges = [],
 	descriptions = {},
 	sources = {},
 	filters = {},
 	currentCenterId = '',
+	previousCenterId = null,
 	currentTraitFilter = 'all',
 	currentTypeFilter = 'all',
-	clusterLayoutEnabled = false,
+	mountainLayoutEnabled = false,
 	currentZoom = 1,
 	panX = 0,
-	panY = 0;
+	panY = 0,
+	activeMobilePanel = null,
+	activeLineElements = [],
+	animationLoopRunning = false,
+	linesLoopScheduled = false;
 
 const
+	urlXY = false,
+	urlZ = true,
 	graphContainer = document.getElementById('graph-container'),
 	nodesLayer = document.getElementById('nodes-layer'),
 	nodesZoom = document.getElementById('nodes-zoom'),
@@ -1411,17 +1466,47 @@ const
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
-	clusterLayoutCheckbox = document.getElementById('grid-layout'),
+	mountainLayoutCheckbox = document.getElementById('mountain-layout'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
 	cardTemplate = document.getElementById('card-template'),
 	searchResultTemplate = document.getElementById('search-result-template'),
-	descriptionSourceTemplate = document.getElementById('description-source-template');
-
-const
+	descriptionSourceTemplate = document.getElementById('description-source-template'),
 	mobileBar = document.getElementById('mobile-bar'),
-	mobilePanels = ['search', 'filters', 'legend', 'info'];
-let activeMobilePanel = null;
+	mobilePanels = ['search', 'filters', 'legend', 'info'],
+	mountainParentTopEm = 7,
+	mountainParentSelectedGapEm = 2.75,
+	mountainLayout = {
+		paddingXEm: 2,
+		gapXEm: 1.5,
+		gapYEm: 2.0,
+		groupGapXEm: 1.0,
+		rowGapYEm: 3.5,
+		groupsStartGapYEm: 0.0,
+		labelToBlockGapEm: 7.0,
+		maxColsInGroup: 10
+	},
+	petalLayout = {
+		baseRadiusPx: 400,
+		requiredArcPerChildPx: 100,
+		depthRadiusMultiplierStart: 1.0,
+		depthRadiusMultiplierStep: 0.4,
+		centerTotalSpreadRad: 2 * Math.PI,
+		centerStartAngleRad: -Math.PI / 2,
+		petalTotalSpreadRad: Math.PI * 0.8
+	},
+	edgeStyles = {
+		'root': 'url(#arrow-root)',
+		'anatomy': 'url(#arrow-anatomy)',
+		'nerve': 'url(#arrow-nerve)',
+		'sexual': 'url(#arrow-sexual)',
+		'removed': 'url(#arrow-removed)',
+		'consequence': 'url(#arrow-consequence)',
+		'benefit': 'url(#arrow-benefit)',
+		'harm': 'url(#arrow-harm)',
+		'energetic': 'url(#arrow-energetic)'
+	};
+
 
 function clearMobilePanels() {
 	mobilePanels.forEach(p => document.body.classList.remove(`mobile-panel-${p}`));
@@ -1439,21 +1524,17 @@ function updateMobileBarUI() {
 
 function setMobilePanel(panel) {
 	if (!mobileBar) return;
-
 	if (!panel || panel === activeMobilePanel) {
 		clearMobilePanels();
 		updateMobileBarUI();
 		return;
 	}
-
 	if (!mobilePanels.includes(panel)) return;
-
 	// Ensure only one panel is open at a time (mobile tab bar behavior).
 	clearMobilePanels();
 	document.body.classList.add(`mobile-panel-${panel}`);
 	activeMobilePanel = panel;
 	updateMobileBarUI();
-
 	if (panel === 'search') {
 		requestAnimationFrame(() => searchInput?.focus());
 	}
@@ -1468,81 +1549,26 @@ if (mobileBar) {
 	updateMobileBarUI();
 }
 
-// Cluster/grid layout tuning (all units are in `em`).
-// Vertical spacing tends to matter more than horizontal in this view,
-// so adjust `gapYEm` / `rowGapYEm` first when tuning.
-const
-	clusterParentTopEm = 7,
-	clusterParentSelectedGapEm = 2.75;
-
-const clusterLayout = {
-	paddingXEm: 2,
-	gapXEm: 1.5,
-	gapYEm: 2.0,
-	groupGapXEm: 1.0,
-	rowGapYEm: 3.5,
-	groupsStartGapYEm: 0.0,
-	labelToBlockGapEm: 7.0,
-	maxColsInGroup: 10
-};
-
-// Petal (non-cluster) layout tuning.
-// Uses a flower/radial fan-out where the center uses 360° and outer layers use a partial arc.
-const petalLayout = {
-	baseRadiusPx: 400,
-	requiredArcPerChildPx: 100,
-	depthRadiusMultiplierStart: 1.0,
-	depthRadiusMultiplierStep: 0.4,
-	centerTotalSpreadRad: 2 * Math.PI,
-	centerStartAngleRad: -Math.PI / 2,
-	petalTotalSpreadRad: Math.PI * 0.8
-};
-
-const edgeStyles = {
-	'root': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-anatomy))', width: '3', dash: 'none', marker: 'url(#arrow-anatomy)' },
-	'anatomy': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-anatomy))', width: '2', dash: 'none', marker: 'url(#arrow-anatomy)' },
-	'nerve': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-nerve))', width: '2.5', dash: 'none', marker: 'url(#arrow-nerve)' },
-	'sexual': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-sexual))', width: '2.5', dash: 'none', marker: 'url(#arrow-sexual)' },
-	'removed': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-removed))', width: '3', dash: '8, 4', marker: 'url(#arrow-removed)' },
-	'consequence': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-consequence))', width: '3', dash: 'none', marker: 'url(#arrow-consequence)' },
-	'benefit': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-benefit))', width: '3', dash: '4, 4', marker: 'url(#arrow-benefit)' },
-	'harm': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-harm))', width: '3', dash: '4, 4', marker: 'url(#arrow-harm)' },
-	'energetic': { color: 'oklch(var(--line-l) var(--line-c) var(--hue-energetic))', width: '2', dash: '6, 6', marker: 'url(#arrow-energetic)' }
-};
-
-let activeLineElements = [],
-	animationLoopRunning = false,
-	linesLoopScheduled = false;
-
-
 function splitCubic(x0, y0, x1, y1, x2, y2, x3, y3) {
-	const t = 0.5;
-
-	// First level
-	const x01 = x0 + (x1 - x0) * t;
-	const y01 = y0 + (y1 - y0) * t;
-
-	const x12 = x1 + (x2 - x1) * t;
-	const y12 = y1 + (y2 - y1) * t;
-
-	const x23 = x2 + (x3 - x2) * t;
-	const y23 = y2 + (y3 - y2) * t;
-
-	// Second level
-	const x012 = x01 + (x12 - x01) * t;
-	const y012 = y01 + (y12 - y01) * t;
-
-	const x123 = x12 + (x23 - x12) * t;
-	const y123 = y12 + (y23 - y12) * t;
-
-	// Split point
-	const xm = x012 + (x123 - x012) * t;
-	const ym = y012 + (y123 - y012) * t;
+	const
+		t = 0.5,
+		x01 = x0 + (x1 - x0) * t, // First level
+		y01 = y0 + (y1 - y0) * t,
+		x12 = x1 + (x2 - x1) * t,
+		y12 = y1 + (y2 - y1) * t,
+		x23 = x2 + (x3 - x2) * t,
+		y23 = y2 + (y3 - y2) * t,
+		x012 = x01 + (x12 - x01) * t, // Second level
+		y012 = y01 + (y12 - y01) * t,
+		x123 = x12 + (x23 - x12) * t,
+		y123 = y12 + (y23 - y12) * t,
+		xm = x012 + (x123 - x012) * t, // Split point
+		ym = y012 + (y123 - y012) * t;
 
 	return {
 		mid: { x: xm, y: ym },
 		left:  { c1: { x: x01,  y: y01  }, c2: { x: x012, y: y012 } },
-		right: { c1: { x: x123, y: y123 }, c2: { x: x23,  y: y23  } }
+		right: { c1: { x: x123, y: y123 }, c2: { x: x23,  y: y23  } },
 	};
 }
 
@@ -1696,8 +1722,32 @@ function updateUrlState(id) {
 	url.searchParams.set('depth', depthDropdown.value);
 	url.searchParams.set('trait', currentTraitFilter);
 	url.searchParams.set('perspective', currentTypeFilter);
-	url.searchParams.set('cluster', clusterLayoutEnabled ? '1' : '0');
+	url.searchParams.set('mountain', mountainLayoutEnabled ? '1' : '0');
+	// Clear pan when entering new node or changing traits
+	url.searchParams.delete('x');
+	url.searchParams.delete('y');
 	history.pushState(null, null, url.toString());
+}
+
+let panZoomTimeout;
+function updateUrlPanZoom() {
+	clearTimeout(panZoomTimeout);
+	panZoomTimeout = setTimeout(() => {
+		const url = new URL(window.location);
+		if (urlZ) {
+			url.searchParams.set('z', currentZoom.toFixed(2));
+		} else {
+			url.searchParams.delete('z');
+		}
+		if (urlXY) {
+			url.searchParams.set('x', (panX / window.innerWidth).toFixed(4));
+			url.searchParams.set('y', (panY / window.innerHeight).toFixed(4));
+		} else {
+			url.searchParams.delete('x');
+			url.searchParams.delete('y');
+		}
+		history.replaceState(null, null, url.toString());
+	}, 250);
 }
 
 traitFilterDropdown.addEventListener('change', (e) => {
@@ -1726,8 +1776,8 @@ depthDropdown.addEventListener('change', (e) => {
 	e.target.blur();
 });
 
-clusterLayoutCheckbox.addEventListener('change', (e) => {
-	clusterLayoutEnabled = !!e.target.checked;
+mountainLayoutCheckbox.addEventListener('change', (e) => {
+	mountainLayoutEnabled = !!e.target.checked;
 	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
@@ -1741,7 +1791,7 @@ const getCompositeGroupKey = (node) => {
 	return `${type}|${category}|${trait}`;
 };
 
-const layoutClusterByCompositeGroup = ({
+const layoutMountainByCompositeGroup = ({
 	centerId,
 	centerNodeData,
 	parentId,
@@ -1754,12 +1804,12 @@ const layoutClusterByCompositeGroup = ({
 	// Remove prior group labels
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
 	const
-		paddingX = clusterLayout.paddingXEm * emSize,
-		gapX = clusterLayout.gapXEm * emSize,
-		gapY = clusterLayout.gapYEm * emSize,
-		groupGapX = clusterLayout.groupGapXEm * emSize,
-		rowGapY = clusterLayout.rowGapYEm * emSize,
-		labelToBlockGap = clusterLayout.labelToBlockGapEm * emSize,
+		paddingX = mountainLayout.paddingXEm * emSize,
+		gapX = mountainLayout.gapXEm * emSize,
+		gapY = mountainLayout.gapYEm * emSize,
+		groupGapX = mountainLayout.groupGapXEm * emSize,
+		rowGapY = mountainLayout.rowGapYEm * emSize,
+		labelToBlockGap = mountainLayout.labelToBlockGapEm * emSize,
 		sizeSample = centerEl || document.querySelector('.card'),
 		measuredW = sizeSample?.offsetWidth || 0,
 		measuredH = sizeSample?.offsetHeight || 0,
@@ -1814,8 +1864,8 @@ const layoutClusterByCompositeGroup = ({
 	}
 
 	const
-		maxColsInGroup = clusterLayout.maxColsInGroup,
-		groupsStartGapY = clusterLayout.groupsStartGapYEm * emSize;
+		maxColsInGroup = mountainLayout.maxColsInGroup,
+		groupsStartGapY = mountainLayout.groupsStartGapYEm * emSize;
 	let yCursor = centerY + (cardH / 2) + groupsStartGapY,
 		rowX = paddingX,
 		rowY = yCursor,
@@ -1823,8 +1873,9 @@ const layoutClusterByCompositeGroup = ({
 		rowHasItems = false,
 		rowBlocks = [];
 
-	const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-	const shiftElementsX = (elements, deltaX) => {
+	const
+		clamp = (v, min, max) => Math.min(max, Math.max(min, v)),
+		shiftElementsX = (elements, deltaX) => {
 		if (!deltaX) return;
 		elements.forEach((el) => {
 			if (!el) return;
@@ -1937,15 +1988,16 @@ function getIdFromHash() {
 }
 
 function initGraph() {
-	const url = new URL(window.location);
-	const initialDepth = url.searchParams.get('depth');
+	const
+		url = new URL(window.location),
+		initialDepth = url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
 
-	const initialCluster = url.searchParams.get('cluster');
-	if (initialCluster != null) {
-		const enabled = (initialCluster === '1' || initialCluster.toLowerCase() === 'true');
-		clusterLayoutEnabled = enabled;
-		clusterLayoutCheckbox.checked = enabled;
+	const initialMountain = url.searchParams.get('mountain');
+	if (initialMountain != null) {
+		const enabled = (initialMountain === '1' || initialMountain.toLowerCase() === 'true');
+		mountainLayoutEnabled = enabled;
+		mountainLayoutCheckbox.checked = enabled;
 	}
 
 	const initialTrait = url.searchParams.get('trait');
@@ -2190,32 +2242,38 @@ function getBreadcrumbPath(targetId) {
 				if (!nodeData) return false;
 				if (id === targetId) return true;
 				return checkTrait(nodeData.trait) && checkTypeFilter(nodeData.type);
+			},
+			weightFor = (neighborData) => {
+				let weight = 5; // Base weight (e.g. for anatomy/structure)
+
+				if (neighborData.type === 'root') {
+					weight = 1; // Prioritize root types even higher than anatomy
+				} else if (neighborData.category !== 'anatomy' && neighborData.category !== 'structure') {
+					weight += 20; // Deprioritize non-anatomy
+				}
+
+				if (targetTrait && neighborData.trait !== targetTrait) {
+					weight += 10;
+					if (neighborData.trait !== 'shared') weight += 50;
+				}
+
+				if (neighborData.category === 'other') {
+					weight += 20;
+				}
+				return weight;
+			},
+			addEdge = (fromId, toId, toData) => {
+				if (!adjList[fromId]) adjList[fromId] = [];
+				adjList[fromId].push({ node: toId, weight: weightFor(toData) });
 			};
-		const weightFor = (neighborData) => {
-			let weight = 1;
-			if (targetTrait && neighborData.trait !== targetTrait) {
-				weight += 10;
-				if (neighborData.trait !== 'shared') weight += 50;
-			}
-			if (neighborData.category !== 'anatomy' && neighborData.category !== 'structure') {
-				weight += 20;
-			}
-			if (neighborData.category === 'other') {
-				weight += 20;
-			}
-			return weight;
-		};
-		const addEdge = (fromId, toId, toData) => {
-			if (!adjList[fromId]) adjList[fromId] = [];
-			adjList[fromId].push({ node: toId, weight: weightFor(toData) });
-		};
 
 		edges.forEach(e => {
 			const type = e.type || 'anatomy';
 			if (!isAllowedEdgeType(type)) return;
 
-			const sourceData = nodes.find(n => n.id === e.source);
-			const targetData = nodes.find(n => n.id === e.target);
+			const
+				sourceData = nodes.find(n => n.id === e.source),
+				targetData = nodes.find(n => n.id === e.target);
 			if (!sourceData || !targetData) return;
 
 			if (edgeDirection === 'targetToSource') {
@@ -2311,18 +2369,12 @@ function updateBreadcrumbs(centerId) {
 	});
 }
 
-function calcNodePositionPetal() {
-
-}
-
-
-function calcNodePositionHierarchical() {
-
-}
+function calcNodePositionPetal() {}
+function calcNodePositionMountain() {}
 
 function renderGraph(centerId) {
 	currentCenterId = centerId;
-	clusterLayoutEnabled = !!clusterLayoutCheckbox?.checked;
+	mountainLayoutEnabled = !!mountainLayoutCheckbox?.checked;
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
@@ -2370,15 +2422,12 @@ function renderGraph(centerId) {
 			const
 				neighborId = e.source === curr.id ? e.target : e.source,
 				neighborNode = nodes.find(n => n.id === neighborId);
-
 			// Skip processing this branch if the neighbor's trait/perspective doesn't match
 			if (neighborNode && (!checkTrait(neighborNode.trait) || !checkTypeFilter(neighborNode.type))) return;
-
 			if (!visitedEdges.has(e)) {
 				visitedEdges.add(e);
 				edgesToRender.push(e);
 			}
-
 			if (!visitedNodes.has(neighborId)) {
 				visitedNodes.add(neighborId);
 				if (neighborNode) {
@@ -2420,24 +2469,50 @@ function renderGraph(centerId) {
 	const centerMatches = checkTrait(centerNodeData.trait);
 	if (!centerMatches) centerEl.classList.add('ghosted');
 
-	let renderCenterY = centerY;
-	let renderParentY = null;
-	if (clusterLayoutEnabled) {
+	let renderCenterY = centerY,
+		renderParentY = null;
+	if (mountainLayoutEnabled) {
 		const centerH = centerEl.offsetHeight || (7.5 * emSize);
-		renderParentY = (clusterParentTopEm * emSize) + (centerH / 2);
-		renderCenterY = renderParentY + centerH + (clusterParentSelectedGapEm * emSize);
+		renderParentY = (mountainParentTopEm * emSize) + (centerH / 2);
+		renderCenterY = renderParentY + centerH + (mountainParentSelectedGapEm * emSize);
 	}
 
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${renderCenterY}px`;
 
-	panX = centerX * (1 - currentZoom);
-	const panAnchorY = (clusterLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
-	panY = panAnchorY * (1 - currentZoom);
+	const panAnchorY = (mountainLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
+	if (centerId !== previousCenterId) {
+		const urlParams = new URL(window.location).searchParams;
+		if (!previousCenterId) {
+			if (urlZ && urlParams.has('z')) {
+				currentZoom = parseFloat(urlParams.get('z')) || 1;
+			} else if (urlZ && urlParams.has('zoom')) {
+				currentZoom = parseFloat(urlParams.get('zoom')) || 1;
+			} else {
+				currentZoom = 1;
+			}
+
+			if (urlXY && urlParams.has('x') && urlParams.has('y')) {
+				const
+					paramX = parseFloat(urlParams.get('x')),
+					paramY = parseFloat(urlParams.get('y'));
+				panX = !isNaN(paramX) ? paramX * window.innerWidth : centerX * (1 - currentZoom);
+				panY = !isNaN(paramY) ? paramY * window.innerHeight : panAnchorY * (1 - currentZoom);
+			} else {
+				panX = centerX * (1 - currentZoom);
+				panY = panAnchorY * (1 - currentZoom);
+			}
+		} else {
+			panX = centerX * (1 - currentZoom);
+			panY = panAnchorY * (1 - currentZoom);
+		}
+		previousCenterId = centerId;
+	}
+
 	applyPanZoomTransform();
 
-	if (clusterLayoutEnabled) {
-		layoutClusterByCompositeGroup({
+	if (mountainLayoutEnabled) {
+		layoutMountainByCompositeGroup({
 			centerId,
 			centerNodeData,
 			parentId,
@@ -2489,7 +2564,7 @@ function renderGraph(centerId) {
 				}
 			}
 
-			// Flower layout: 360° for center, partial outward fan for petals
+			// Petal layout: 360° for center, partial outward fan for petals
 			const
 				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
 				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2),
@@ -2501,7 +2576,17 @@ function renderGraph(centerId) {
 				const el = document.getElementById(`node-${nData.node.id}`);
 				if (!el) return;
 
-				el.classList.remove('hidden');
+				const wasHidden = el.classList.contains('hidden');
+				if (wasHidden) {
+					el.style.left = `${px}px`;
+					el.style.top = `${py}px`;
+					el.style.scale = '0';
+					el.style.opacity = '0';
+					el.classList.remove('hidden');
+					void el.offsetWidth; // force layout
+				} else {
+					el.classList.remove('hidden');
+				}
 
 				if (nData.isOutgoing) {
 					el.classList.add('target');
@@ -2534,8 +2619,15 @@ function renderGraph(centerId) {
 				nData.x = nx;
 				nData.y = ny;
 
-				el.style.left = `${nx}px`;
-				el.style.top = `${ny}px`;
+				const delay = (d - 1) * 100 + index * 30;
+				setTimeout(() => {
+					el.style.left = `${nx}px`;
+					el.style.top = `${ny}px`;
+					if (wasHidden) {
+						el.style.scale = '';
+						el.style.opacity = '';
+					}
+				}, delay);
 			});
 		});
 	}
@@ -2548,17 +2640,12 @@ function renderGraph(centerId) {
 		if (!sourceEl || !targetEl) return;
 		if (sourceEl.classList.contains('hidden') || targetEl.classList.contains('hidden')) return;
 
-		const pathLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-		pathLine.classList.add('edge-path');
-
 		const
+			pathLine = document.createElementNS('http://www.w3.org/2000/svg', 'path'),
 			edgeType = e.type || 'anatomy',
-			style = edgeStyles[edgeType];
-
-		pathLine.setAttribute('stroke', style.color);
-		pathLine.style.color = style.color;
-
-		pathLine.setAttribute('marker-mid', style.marker);
+			marker = edgeStyles[edgeType];
+		pathLine.classList.add('edge', `${edgeType}`);
+		pathLine.setAttribute('marker-mid', marker);
 		pathLine.setAttribute('marker-start', 'url(#start-marker)');
 		pathLine.setAttribute('marker-end', 'url(#end-marker)');
 
@@ -2570,7 +2657,6 @@ function renderGraph(centerId) {
 			edgeMatches = checkTypeFilter(e.type);
 
 		if (!edgeMatches && (!sourceMatches || !targetMatches)) pathLine.setAttribute('opacity', '0.25');
-		if (style.dash !== 'none') pathLine.setAttribute('stroke-dasharray', style.dash);
 
 		linesZoom.append(pathLine);
 
@@ -2580,7 +2666,12 @@ function renderGraph(centerId) {
 			targetEl: targetEl
 		});
 	});
-	updateLinesOnce();
+
+	startLinesLoop();
+	setTimeout(() => {
+		stopLinesLoop();
+		updateLinesOnce();
+	}, 2000);
 }
 
 let resizeTimeout;
@@ -2609,6 +2700,7 @@ const requestPanZoomUpdate = () => {
 	requestAnimationFrame(() => {
 		panZoomRafPending = false;
 		applyPanZoomTransform();
+		updateUrlPanZoom();
 	});
 };
 
@@ -2656,7 +2748,6 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 		rect = appContainer.getBoundingClientRect(),
 		anchorX = clientX - rect.left,
 		anchorY = clientY - rect.top;
-
 	panX = anchorX - (anchorX - panX) * (z / currentZoom);
 	panY = anchorY - (anchorY - panY) * (z / currentZoom);
 	currentZoom = z;
@@ -2676,7 +2767,6 @@ let isGraphPanning = false,
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
 	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#search-results') || e.target.closest('footer')) return;
-
 	isGraphPanning = true;
 	startPanX = e.clientX;
 	startPanY = e.clientY;
@@ -2758,27 +2848,24 @@ graphContainer.addEventListener('pointermove', (e) => {
 	if (!touchPointers.has(e.pointerId)) return;
 	e.preventDefault();
 	touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
 	if (window.__isTouchPinching && touchPointers.size >= 2) {
 		const pair = getTwoPointers();
 		if (!pair) return;
-		const d = Math.max(1, dist2(pair[0], pair[1]));
-		const ratio = d / touchPinchStartDist;
-		const newZoom = clamp(touchPinchStartZoom * ratio, minZoom, maxZoom);
-		const midClientX = (pair[0].x + pair[1].x) / 2;
-		const midClientY = (pair[0].y + pair[1].y) / 2;
-		// Anchor zoom at the pinch midpoint using the same math as wheel zoom.
-		const rect = appContainer.getBoundingClientRect();
-		const anchorX = midClientX - rect.left;
-		const anchorY = midClientY - rect.top;
-
+		const
+			d = Math.max(1, dist2(pair[0], pair[1])),
+			ratio = d / touchPinchStartDist,
+			newZoom = clamp(touchPinchStartZoom * ratio, minZoom, maxZoom),
+			midClientX = (pair[0].x + pair[1].x) / 2,
+			midClientY = (pair[0].y + pair[1].y) / 2,
+			rect = appContainer.getBoundingClientRect(),
+			anchorX = midClientX - rect.left,
+			anchorY = midClientY - rect.top;
 		panX = anchorX - (anchorX - touchPinchStartPanX) * (newZoom / touchPinchStartZoom);
 		panY = anchorY - (anchorY - touchPinchStartPanY) * (newZoom / touchPinchStartZoom);
 		currentZoom = newZoom;
 		requestPanZoomUpdate();
 		return;
 	}
-
 	if (touchIsPanning && touchPointers.size === 1) {
 		panX = touchInitialPanX + (e.clientX - touchPanStartX);
 		panY = touchInitialPanY + (e.clientY - touchPanStartY);
@@ -2813,8 +2900,8 @@ graphContainer.addEventListener('pointercancel', (e) => {
 // TouchEvent fallback (not all mobile browsers fully support Pointer Events + touch-action)
 // Only register this fallback if Pointer Events are not available.
 if (!('PointerEvent' in window)) {
-	let touchFallbackIsPanning = false;
-	let touchFallbackStartX = 0,
+	let touchFallbackIsPanning = false,
+		touchFallbackStartX = 0,
 		touchFallbackStartY = 0,
 		touchFallbackInitialPanX = 0,
 		touchFallbackInitialPanY = 0,
@@ -2822,18 +2909,15 @@ if (!('PointerEvent' in window)) {
 		touchFallbackPinchStartZoom = 1,
 		touchFallbackPinchStartPanX = 0,
 		touchFallbackPinchStartPanY = 0;
-
 	const getTouchPair = (touches) => {
 		if (!touches || touches.length < 2) return null;
 		return [touches[0], touches[1]];
 	};
-
 	graphContainer.addEventListener('touchstart', (e) => {
 		if (e.target.closest('.card')) return;
 		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
 		if (!e.touches || e.touches.length === 0) return;
 		e.preventDefault();
-
 		if (e.touches.length === 1) {
 			window.__isTouchPinching = false;
 			touchFallbackIsPanning = true;
@@ -2843,7 +2927,6 @@ if (!('PointerEvent' in window)) {
 			touchFallbackInitialPanY = panY;
 			return;
 		}
-
 		if (e.touches.length >= 2) {
 			window.__isTouchPinching = true;
 			touchFallbackIsPanning = false;
@@ -2855,39 +2938,35 @@ if (!('PointerEvent' in window)) {
 			touchFallbackPinchStartPanY = panY;
 		}
 	}, { passive: false });
-
 	graphContainer.addEventListener('touchmove', (e) => {
 		if (!e.touches || e.touches.length === 0) return;
 		e.preventDefault();
-
 		if (window.__isTouchPinching && e.touches.length >= 2) {
 			const pair = getTouchPair(e.touches);
 			if (!pair) return;
-			const a = { x: pair[0].clientX, y: pair[0].clientY };
-			const b = { x: pair[1].clientX, y: pair[1].clientY };
-			const d = Math.max(1, dist2(a, b));
-			const ratio = d / Math.max(1, touchFallbackPinchStartDist);
-			const newZoom = clamp(touchFallbackPinchStartZoom * ratio, minZoom, maxZoom);
-			const midClientX = (a.x + b.x) / 2;
-			const midClientY = (a.y + b.y) / 2;
-			const rect = appContainer.getBoundingClientRect();
-			const anchorX = midClientX - rect.left;
-			const anchorY = midClientY - rect.top;
-
+			const
+				a = { x: pair[0].clientX, y: pair[0].clientY },
+				b = { x: pair[1].clientX, y: pair[1].clientY },
+				d = Math.max(1, dist2(a, b)),
+				ratio = d / Math.max(1, touchFallbackPinchStartDist),
+				newZoom = clamp(touchFallbackPinchStartZoom * ratio, minZoom, maxZoom),
+				midClientX = (a.x + b.x) / 2,
+				midClientY = (a.y + b.y) / 2,
+				rect = appContainer.getBoundingClientRect(),
+				anchorX = midClientX - rect.left,
+				anchorY = midClientY - rect.top;
 			panX = anchorX - (anchorX - touchFallbackPinchStartPanX) * (newZoom / touchFallbackPinchStartZoom);
 			panY = anchorY - (anchorY - touchFallbackPinchStartPanY) * (newZoom / touchFallbackPinchStartZoom);
 			currentZoom = newZoom;
 			requestPanZoomUpdate();
 			return;
 		}
-
 		if (touchFallbackIsPanning && e.touches.length === 1) {
 			panX = touchFallbackInitialPanX + (e.touches[0].clientX - touchFallbackStartX);
 			panY = touchFallbackInitialPanY + (e.touches[0].clientY - touchFallbackStartY);
 			requestPanZoomUpdate();
 		}
 	}, { passive: false });
-
 	graphContainer.addEventListener('touchend', (e) => {
 		e.preventDefault();
 		if (!e.touches || e.touches.length < 2) {
@@ -2897,7 +2976,6 @@ if (!('PointerEvent' in window)) {
 			touchFallbackIsPanning = false;
 		}
 	}, { passive: false });
-
 	graphContainer.addEventListener('touchcancel', (e) => {
 		e.preventDefault();
 		window.__isTouchPinching = false;
