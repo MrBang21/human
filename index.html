@@ -1240,10 +1240,10 @@ svg {
 					</button>
 				</select>
 			</div>
-			<div class="toggle" title="Mountain view">
-				<label for="mountain-layout">
-					<input type="checkbox" id="mountain-layout">
-					<span>Mountain</span>
+			<div class="toggle" title="Stack view">
+				<label for="stack-layout">
+					<input type="checkbox" id="stack-layout">
+					<span>Stack</span>
 				</label>
 			</div>
 			<div class="input" id="search-container" title="Search the database">
@@ -1440,7 +1440,7 @@ let
 	previousCenterId = null,
 	currentTraitFilter = 'all',
 	currentTypeFilter = 'all',
-	mountainLayoutEnabled = false,
+	stackLayoutEnabled = false,
 	currentZoom = 1,
 	panX = 0,
 	panY = 0,
@@ -1466,7 +1466,7 @@ const
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
-	mountainLayoutCheckbox = document.getElementById('mountain-layout'),
+	stackLayoutCheckbox = document.getElementById('stack-layout'),
 	searchInput = document.getElementById('search-input'),
 	searchResults = document.getElementById('search-results'),
 	cardTemplate = document.getElementById('card-template'),
@@ -1474,9 +1474,9 @@ const
 	descriptionSourceTemplate = document.getElementById('description-source-template'),
 	mobileBar = document.getElementById('mobile-bar'),
 	mobilePanels = ['search', 'filters', 'legend', 'info'],
-	mountainParentTopEm = 7,
-	mountainParentSelectedGapEm = 2.75,
-	mountainLayout = {
+	stackParentTopEm = 7,
+	stackParentSelectedGapEm = 2.75,
+	stackLayout = {
 		paddingXEm: 2,
 		gapXEm: 1.5,
 		gapYEm: 2.0,
@@ -1722,7 +1722,7 @@ function updateUrlState(id) {
 	url.searchParams.set('depth', depthDropdown.value);
 	url.searchParams.set('trait', currentTraitFilter);
 	url.searchParams.set('perspective', currentTypeFilter);
-	url.searchParams.set('mountain', mountainLayoutEnabled ? '1' : '0');
+	url.searchParams.set('stack', stackLayoutEnabled ? '1' : '0');
 	// Clear pan when entering new node or changing traits
 	url.searchParams.delete('x');
 	url.searchParams.delete('y');
@@ -1776,8 +1776,8 @@ depthDropdown.addEventListener('change', (e) => {
 	e.target.blur();
 });
 
-mountainLayoutCheckbox.addEventListener('change', (e) => {
-	mountainLayoutEnabled = !!e.target.checked;
+stackLayoutCheckbox.addEventListener('change', (e) => {
+	stackLayoutEnabled = !!e.target.checked;
 	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
@@ -1791,7 +1791,7 @@ const getCompositeGroupKey = (node) => {
 	return `${type}|${category}|${trait}`;
 };
 
-const layoutMountainByCompositeGroup = ({
+const layoutStackByCompositeGroup = ({
 	centerId,
 	centerNodeData,
 	parentId,
@@ -1804,12 +1804,12 @@ const layoutMountainByCompositeGroup = ({
 	// Remove prior group labels
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
 	const
-		paddingX = mountainLayout.paddingXEm * emSize,
-		gapX = mountainLayout.gapXEm * emSize,
-		gapY = mountainLayout.gapYEm * emSize,
-		groupGapX = mountainLayout.groupGapXEm * emSize,
-		rowGapY = mountainLayout.rowGapYEm * emSize,
-		labelToBlockGap = mountainLayout.labelToBlockGapEm * emSize,
+		paddingX = StackLayout.paddingXEm * emSize,
+		gapX = StackLayout.gapXEm * emSize,
+		gapY = StackLayout.gapYEm * emSize,
+		groupGapX = StackLayout.groupGapXEm * emSize,
+		rowGapY = StackLayout.rowGapYEm * emSize,
+		labelToBlockGap = StackLayout.labelToBlockGapEm * emSize,
 		sizeSample = centerEl || document.querySelector('.card'),
 		measuredW = sizeSample?.offsetWidth || 0,
 		measuredH = sizeSample?.offsetHeight || 0,
@@ -1864,8 +1864,8 @@ const layoutMountainByCompositeGroup = ({
 	}
 
 	const
-		maxColsInGroup = mountainLayout.maxColsInGroup,
-		groupsStartGapY = mountainLayout.groupsStartGapYEm * emSize;
+		maxColsInGroup = StackLayout.maxColsInGroup,
+		groupsStartGapY = StackLayout.groupsStartGapYEm * emSize;
 	let yCursor = centerY + (cardH / 2) + groupsStartGapY,
 		rowX = paddingX,
 		rowY = yCursor,
@@ -1993,11 +1993,11 @@ function initGraph() {
 		initialDepth = url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
 
-	const initialMountain = url.searchParams.get('mountain');
-	if (initialMountain != null) {
-		const enabled = (initialMountain === '1' || initialMountain.toLowerCase() === 'true');
-		mountainLayoutEnabled = enabled;
-		mountainLayoutCheckbox.checked = enabled;
+	const initialStack = url.searchParams.get('stack');
+	if (initialStack != null) {
+		const enabled = (initialStack === '1' || initialStack.toLowerCase() === 'true');
+		stackLayoutEnabled = enabled;
+		stackLayoutCheckbox.checked = enabled;
 	}
 
 	const initialTrait = url.searchParams.get('trait');
@@ -2370,11 +2370,11 @@ function updateBreadcrumbs(centerId) {
 }
 
 function calcNodePositionPetal() {}
-function calcNodePositionMountain() {}
+function calcNodePositionStack() {}
 
 function renderGraph(centerId) {
 	currentCenterId = centerId;
-	mountainLayoutEnabled = !!mountainLayoutCheckbox?.checked;
+	stackLayoutEnabled = !!stackLayoutCheckbox?.checked;
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
@@ -2471,16 +2471,16 @@ function renderGraph(centerId) {
 
 	let renderCenterY = centerY,
 		renderParentY = null;
-	if (mountainLayoutEnabled) {
+	if (stackLayoutEnabled) {
 		const centerH = centerEl.offsetHeight || (7.5 * emSize);
-		renderParentY = (mountainParentTopEm * emSize) + (centerH / 2);
-		renderCenterY = renderParentY + centerH + (mountainParentSelectedGapEm * emSize);
+		renderParentY = (stackParentTopEm * emSize) + (centerH / 2);
+		renderCenterY = renderParentY + centerH + (stackParentSelectedGapEm * emSize);
 	}
 
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${renderCenterY}px`;
 
-	const panAnchorY = (mountainLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
+	const panAnchorY = (stackLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
 	if (centerId !== previousCenterId) {
 		const urlParams = new URL(window.location).searchParams;
 		if (!previousCenterId) {
@@ -2511,8 +2511,8 @@ function renderGraph(centerId) {
 
 	applyPanZoomTransform();
 
-	if (mountainLayoutEnabled) {
-		layoutMountainByCompositeGroup({
+	if (stackLayoutEnabled) {
+		layoutStackByCompositeGroup({
 			centerId,
 			centerNodeData,
 			parentId,
