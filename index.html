@@ -680,7 +680,7 @@ footer {
 #legend,
 #breadcrumb-stack,
 #node-description {
-	border: .125em solid var(--border);
+	border: 1px solid var(--border);
 	background-color: var(--block);
 }
 
@@ -963,7 +963,7 @@ svg {
 		justify-content: space-between;
 		gap: .5em;
 		padding: 0 .5em;
-		border: .125em solid var(--border);
+		border: 1px solid var(--border);
 		border-radius: 1em;
 		corner-shape: squircle;
 		background-color: var(--block);
@@ -1804,12 +1804,12 @@ const layoutStackByCompositeGroup = ({
 	// Remove prior group labels
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
 	const
-		paddingX = StackLayout.paddingXEm * emSize,
-		gapX = StackLayout.gapXEm * emSize,
-		gapY = StackLayout.gapYEm * emSize,
-		groupGapX = StackLayout.groupGapXEm * emSize,
-		rowGapY = StackLayout.rowGapYEm * emSize,
-		labelToBlockGap = StackLayout.labelToBlockGapEm * emSize,
+		paddingX = stackLayout.paddingXEm * emSize,
+		gapX = stackLayout.gapXEm * emSize,
+		gapY = stackLayout.gapYEm * emSize,
+		groupGapX = stackLayout.groupGapXEm * emSize,
+		rowGapY = stackLayout.rowGapYEm * emSize,
+		labelToBlockGap = stackLayout.labelToBlockGapEm * emSize,
 		sizeSample = centerEl || document.querySelector('.card'),
 		measuredW = sizeSample?.offsetWidth || 0,
 		measuredH = sizeSample?.offsetHeight || 0,
@@ -1864,8 +1864,8 @@ const layoutStackByCompositeGroup = ({
 	}
 
 	const
-		maxColsInGroup = StackLayout.maxColsInGroup,
-		groupsStartGapY = StackLayout.groupsStartGapYEm * emSize;
+		maxColsInGroup = stackLayout.maxColsInGroup,
+		groupsStartGapY = stackLayout.groupsStartGapYEm * emSize;
 	let yCursor = centerY + (cardH / 2) + groupsStartGapY,
 		rowX = paddingX,
 		rowY = yCursor,
