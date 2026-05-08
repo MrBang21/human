@@ -1668,17 +1668,21 @@ async function loadGraphData() {
 function updateUrlState(id) {
 	const url = new URL(window.location);
 	url.hash = id;
-	url.searchParams.set('depth', depthDropdown.value);
-	url.searchParams.set('trait', currentTraitFilter);
-	url.searchParams.set('perspective', currentTypeFilter);
+	url.searchParams.set('d', depthDropdown.value);
+	url.searchParams.set('t', currentTraitFilter);
+	url.searchParams.set('p', currentTypeFilter);
 	if (currentView === 'stacked') {
-		url.searchParams.set('view', 'stacked');
+		url.searchParams.set('v', 'stacked');
 	} else if (currentView === 'physics') {
-		url.searchParams.set('view', 'physics');
+		url.searchParams.set('v', 'physics');
 	} else {
-		url.searchParams.delete('view');
+		url.searchParams.delete('v');
 	}
 	url.searchParams.delete('stack');
+	url.searchParams.delete('depth');
+	url.searchParams.delete('trait');
+	url.searchParams.delete('perspective');
+	url.searchParams.delete('view');
 	// Clear pan when entering new node or changing traits
 	url.searchParams.delete('x');
 	url.searchParams.delete('y');
@@ -1946,10 +1950,10 @@ function getIdFromHash() {
 function initGraph() {
 	const
 		url = new URL(window.location),
-		initialDepth = url.searchParams.get('depth');
+		initialDepth = url.searchParams.get('d') || url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
 
-	let initialView = url.searchParams.get('view');
+	let initialView = url.searchParams.get('v') || url.searchParams.get('view');
 	if (!initialView && url.searchParams.get('stack') === '1') {
 		initialView = 'stacked';
 	}
@@ -1958,7 +1962,7 @@ function initGraph() {
 		viewSelect.value = initialView;
 	}
 
-	const initialTrait = url.searchParams.get('trait');
+	const initialTrait = url.searchParams.get('t') || url.searchParams.get('trait');
 	if (initialTrait) {
 		traitFilterDropdown.value = initialTrait;
 		currentTraitFilter = initialTrait;
@@ -1970,7 +1974,7 @@ function initGraph() {
 		}
 	}
 
-	const initialType = url.searchParams.get('perspective');
+	const initialType = url.searchParams.get('p') || url.searchParams.get('perspective');
 	if (initialType) {
 		typeFilterDropdown.value = initialType;
 		currentTypeFilter = initialType;
