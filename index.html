@@ -429,7 +429,7 @@ body,
 	gap: 1em;
 }
 
-#breadcrumb-stack {
+#breadcrumbs {
 	background-color: var(--block);
 	padding: .5em 1em;
 	border-radius: .5em;
@@ -444,35 +444,31 @@ body,
 	gap: .25em;
 	align-items: center;
 	flex: 0 1 min-content;
+	> * {
+		white-space: nowrap;
+		flex-shrink: 0;
+	}
+	.item {
+		cursor: pointer;
+		color: var(--url);
+		font-weight: 500;
+		&:hover {
+			color: var(--url-hover);
+			text-decoration: underline;
+		}
+	}
+	.separator {
+		color: var(--muted);
+		font-size: 12px;
+		margin: 0 4px;
+	}
+	.current {
+		color: var(--text);
+		font-weight: bold;
+		cursor: default;
+	}
 }
 
-#breadcrumb-stack > * {
-	white-space: nowrap;
-	flex-shrink: 0;
-}
-
-.breadcrumb-item {
-	cursor: pointer;
-	color: var(--url);
-	font-weight: 500;
-}
-
-.breadcrumb-item:hover {
-	color: var(--url-hover);
-	text-decoration: underline;
-}
-
-.breadcrumb-separator {
-	color: var(--muted);
-	font-size: 12px;
-	margin: 0 4px;
-}
-
-.breadcrumb-current {
-	color: var(--text);
-	font-weight: bold;
-	cursor: default;
-}
 input, select, button {
 	max-height: 2.5em;
 }
@@ -528,11 +524,14 @@ select {
 		&::checkmark {
 			color: inherit;
 		}
-
+		&:disabled {
+			color: var(--muted);
+			cursor: not-allowed;
+		}
 	}
 }
 
-#controls-container {
+#controls {
 	display: flex;
 	gap: .25em;
 	flex: 1 1 50%;
@@ -547,33 +546,17 @@ select {
 		position: relative;
 		display: flex;
 	}
-	/*
-	#depth-control, #trait-filter, #type-filter {
-		transition: border-color 0.3s, background-color 0.3s, color 0.3s;
-
-		&:focus {
-			border-color: var(--url);
-		}
-		option {
-			padding: .5em;
-			background-color: var(--block);
-		}
-	}
-	*/
 
 	#search-container {
 		position: relative;
 		flex: 0 1 auto;
-
-		#search-input {
+		#search {
 			width: 100%;
 		}
-
-		#search-results {
+		#results {
 			margin-top: .5em;
 			background-color: var(--block);
 			border-radius: .5em;
-
 			max-height: 350px;
 			overflow-y: auto;
 			display: none;
@@ -585,33 +568,27 @@ select {
 			padding: 0;
 			margin: 0;
 			z-index: 3000000;
-
 			li {
 				cursor: pointer;
 				border-bottom: 1px solid var(--border);
 				background-color: var(--block);
-
 				&:last-child {
 					border-bottom: none;
 				}
-
 				&:hover {
 					background-color: var(--search-hover);
 				}
-
 				a {
 					display: block;
 					padding: 1em;
 					text-decoration: none;
 					color: inherit;
 				}
-
 				.card {
 					all: revert;
 					display: block !important;
 					font-family: inherit;
 				}
-
 				.name {
 					font-weight: 600;
 					color: var(--text);
@@ -619,7 +596,6 @@ select {
 					margin-top: 0;
 					font-size: 1.1em;
 				}
-
 				.desc {
 					font-size: 11px;
 					color: var(--muted);
@@ -629,7 +605,6 @@ select {
 			}
 		}
 	}
-
 	.toggle {
 		display: flex;
 		align-items: center;
@@ -638,26 +613,23 @@ select {
 		border-radius: .5em;
 		padding: 0 .5em;
 		background-color: var(--input);
-	}
-
-	.toggle:focus-within {
-		border-color: var(--url);
-	}
-
-	.toggle label {
-		display: flex;
-		align-items: center;
-		gap: .5em;
-		cursor: pointer;
-		color: var(--muted);
-		white-space: nowrap;
-	}
-
-	.toggle input[type="checkbox"] {
-		margin: 0;
-		padding: 0;
-		width: 1.1em;
-		height: 1.1em;
+		input[type="checkbox"] {
+			margin: 0;
+			padding: 0;
+			width: 1.1em;
+			height: 1.1em;
+		}
+		label {
+			display: flex;
+			align-items: center;
+			gap: .5em;
+			cursor: pointer;
+			color: var(--muted);
+			white-space: nowrap;
+		}
+		&:focus-within {
+			border-color: var(--url);
+		}
 	}
 }
 
@@ -670,21 +642,21 @@ footer {
 	z-index: 200;
 }
 
-#controls-container,
-#breadcrumb-stack {
+#controls,
+#breadcrumbs {
 	border-radius: .5em;
 	min-height: 2em;
 	z-index: 200;
 }
 
 #legend,
-#breadcrumb-stack,
-#node-description {
+#breadcrumbs,
+#description {
 	border: 1px solid var(--border);
 	background-color: var(--block);
 }
 
-#node-description {
+#description {
 	position: fixed;
 	top: 4.5em;
 	left: 1em;
@@ -695,146 +667,120 @@ footer {
 	z-index: 200;
 	display: none;
 	border-radius: .5em;
-}
-
-#node-description.visible {
-	display: block;
+	&.visible {
+		display: block;
+	}
+	h2 {
+		margin: 0 0 0.5em 0;
+		font-size: 1.4em;
+		color: var(--text);
+	}
+	p {
+		margin: 0;
+		font-size: 0.95em;
+		color: var(--muted);
+		line-height: 1.5;
+		white-space: pre-wrap;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		li {
+			margin-bottom: 0.25em;
+			overflow: clip;
+			a {
+				display: block;
+				font-size: 0.9em;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+		&:not(:empty)::before {
+			content: "Sources:";
+			display: block;
+			font-weight: bold;
+			font-size: 1.1em;
+			margin-top: 1em;
+			margin-bottom: 0.5em;
+			color: var(--text);
+		}
+	}
 }
 
 #mobile-bar {
 	display: none;
 }
 
-
-#node-description h2 {
-	margin: 0 0 0.5em 0;
-	font-size: 1.4em;
-	color: var(--text);
-}
-
-#node-description p {
-	margin: 0;
-	font-size: 0.95em;
-	color: var(--muted);
-	line-height: 1.5;
-	white-space: pre-wrap;
-}
-
-#nd-links {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-}
-
-#nd-links:not(:empty)::before {
-	content: "Sources:";
-	display: block;
-	font-weight: bold;
-	font-size: 1.1em;
-	margin-top: 1em;
-	margin-bottom: 0.5em;
-	color: var(--text);
-}
-#nd-links li {
-	margin-bottom: 0.25em;
-	overflow: clip;
-}
-#nd-links li a {
-	display: block;
-	font-size: 0.9em;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-}
-
 #legend {
 	inset: auto auto 1em 1em;
 	padding: 1em;
-}
-
-.legend-section-title {
-	font-weight: bold;
-	margin-bottom: .5em;
-	color: var(--text);
-}
-
-.legend-divider {
-	height: .1em;
-	background-color: var(--border);
-	margin: .5em 0;
-}
-
-.legend-item {
-	display: flex;
-	align-items: center;
-	margin-bottom: .5em;
-}
-
-.legend-item:last-child {
-	margin-bottom: 0;
-}
-
-.legend-line {
-	width: 64px;
-	height: 24px;
-	margin-right: 1em;
-}
-
-.legend-text-icon {
-	font-weight: bold;
-	width: 3em;
-	text-align: center;
-	margin-right: 1em;
-}
-
-.legend-text-icon.male {
-	color: var(--trait-male);
-}
-
-.legend-text-icon.female {
-	color: var(--trait-female);
-}
-
-.legend-text-icon.shared {
-	color: var(--trait-shared);
-}
-
-.legend-line {
-	&.anatomy {
-		--_hue: var(--hue-anatomy);
+	.title {
+		font-weight: bold;
+		margin-bottom: .5em;
+		color: var(--text);
 	}
-
-	&.nerve {
-		--_hue: var(--hue-nerve);
+	.item {
+		display: flex;
+		align-items: center;
+		margin-bottom: .5em;
+		&:last-child {
+			margin-bottom: 0;
+		}
 	}
-
-	&.sexual {
-		--_hue: var(--hue-sexual);
+	.divider {
+		height: .1em;
+		background-color: var(--border);
+		margin: .5em 0;
 	}
-
-	&.removed {
-		--_hue: var(--hue-removed);
+	.line {
+		width: 64px;
+		height: 24px;
+		margin-right: 1em;
+		&.anatomy {
+			--_hue: var(--hue-anatomy);
+		}
+		&.nerve {
+			--_hue: var(--hue-nerve);
+		}
+		&.sexual {
+			--_hue: var(--hue-sexual);
+		}
+		&.removed {
+			--_hue: var(--hue-removed);
+		}
+		&.consequence {
+			--_hue: var(--hue-consequence);
+		}
+		&.benefit {
+			--_hue: var(--hue-benefit);
+		}
+		&.harm {
+			--_hue: var(--hue-harm);
+		}
+		&.energetic {
+			--_hue: var(--hue-energetic);
+		}
+		line {
+			stroke: oklch(var(--text-l) var(--text-c) var(--_hue));
+			stroke-width: 3;
+		}
 	}
-
-	&.consequence {
-		--_hue: var(--hue-consequence);
-	}
-
-	&.benefit {
-		--_hue: var(--hue-benefit);
-	}
-
-	&.harm {
-		--_hue: var(--hue-harm);
-	}
-
-	&.energetic {
-		--_hue: var(--hue-energetic);
-	}
-
-	line {
-		stroke: oklch(var(--text-l) var(--text-c) var(--_hue));
-		stroke-width: 3;
+	.trait {
+		font-weight: bold;
+		width: 3em;
+		text-align: center;
+		margin-right: 1em;
+		&.male {
+			color: var(--trait-male);
+		}
+		&.female {
+			color: var(--trait-female);
+		}
+		&.shared {
+			color: var(--trait-shared);
+		}
 	}
 }
 
@@ -989,7 +935,6 @@ svg {
 		--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / 0.2);
 		--button-c: 0.20;
 		--button-h: 20;
-
 	}
 
 	#mobile-bar button:disabled {
@@ -1004,26 +949,26 @@ svg {
 		gap: .5em;
 	}
 
-	#breadcrumb-stack {
+	#breadcrumbs {
 		width: 100%;
 		justify-content: flex-start;
 		overflow-x: auto;
 		-webkit-overflow-scrolling: touch;
 	}
 
-	#controls-container {
+	#controls {
 		display: none;
 		justify-content: flex-start;
 		flex-wrap: wrap;
 		gap: .5em;
 	}
 
-	body.mobile-panel-search #controls-container,
-	body.mobile-panel-filters #controls-container {
+	body.mobile-panel-search #controls,
+	body.mobile-panel-filters #controls {
 		display: flex;
 	}
 
-	body.mobile-panel-search #controls-container > :not(#search-container) {
+	body.mobile-panel-search #controls > :not(#search-container) {
 		display: none;
 	}
 
@@ -1031,7 +976,7 @@ svg {
 		display: none;
 	}
 
-	#node-description {
+	#description {
 		left: .5em;
 		right: .5em;
 		width: auto;
@@ -1042,15 +987,15 @@ svg {
 
 	/* Override desktop auto-open behavior on mobile.
 		Even if JS marks the node as `visible`, only the Info tab should reveal it. */
-	#node-description.visible {
+	#description.visible {
 		display: none;
 	}
 
-	body.mobile-panel-info #node-description {
+	body.mobile-panel-info #description {
 		display: block;
 	}
 
-	body.mobile-panel-info #node-description.visible {
+	body.mobile-panel-info #description.visible {
 		display: block;
 	}
 
@@ -1062,18 +1007,16 @@ svg {
 		overflow: auto;
 		-webkit-overflow-scrolling: touch;
 	}
-
 	body.mobile-panel-legend #legend {
 		display: block;
 	}
-
 }
 
 @media (prefers-reduced-motion: no-preference) {
 	/* turn on transitions and animations */
 	a,
 	h3,
-	.breadcrumb-item {
+	.item {
 		transition: color 0.3s ease;
 	}
 	input, select, button {
@@ -1085,7 +1028,7 @@ svg {
 	select::picker-icon {
 		transition: rotate 0.3s ease;
 	}
-	#search-results li {
+	#results li {
 		transition: background-color 0.2s ease;
 	}
 	.toggle {
@@ -1130,13 +1073,13 @@ svg {
 @media (prefers-reduced-transparency: no-preference) {
 	/* turn on backdrop-filter effects and box-shadow */
 
-	#search-results {
+	#results {
 		box-shadow: 0 .5em 1em 0 var(--shadow);
 		backdrop-filter: var(--backdrop);
 	}
 	#legend,
-	#breadcrumb-stack,
-	#node-description,
+	#breadcrumbs,
+	#description,
 	#mobile-bar,
 	.toggle {
 		backdrop-filter: var(--backdrop);
@@ -1206,10 +1149,9 @@ svg {
 
 <main id="app">
 	<div id="loading">Loading database...</div>
-
 	<div id="top-bar">
-		<div id="breadcrumb-stack"></div>
-		<div id="controls-container">
+		<div id="breadcrumbs"></div>
+		<div id="controls">
 			<div class="select">
 				<select id="type-filter" title="Filter by connection type">
 					<button>
@@ -1240,87 +1182,87 @@ svg {
 					</button>
 				</select>
 			</div>
-			<div class="toggle" title="Stack view">
-				<label for="stack-layout">
-					<input type="checkbox" id="stack-layout">
-					<span>Stack</span>
-				</label>
+			<div class="select">
+				<select id="view-select" title="Select graph layout">
+					<button>
+						<selectedcontent></selectedcontent>
+					</button>
+					<option value="petal" selected>Petal</option>
+					<option value="physics" disabled>Physics</option>
+					<option value="stacked">Stacked</option>
+				</select>
 			</div>
 			<div class="input" id="search-container" title="Search the database">
-				<input type="text" id="search-input" placeholder="Search ...">
-				<ul id="search-results"></ul>
+				<input type="text" id="search" placeholder="Search ...">
+				<ul id="results"></ul>
 			</div>
 		</div>
 	</div>
-
-	<div id="node-description" aria-live="polite">
-		<h2 id="nd-title"></h2>
-		<p id="nd-content"></p>
-		<ul id="nd-links"></ul>
+	<div id="description" aria-live="polite">
+		<h2></h2>
+		<p></p>
+		<ul></ul>
 	</div>
-
 	<div id="legend">
-		<div class="legend-section-title">Connection Types</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="title">Connection Types</div>
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
 			</svg> Default Anatomy
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
 			</svg> Neuronal / Nerve
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
 			</svg> Sexual / Erogenous
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
 			</svg> Excised / Removed
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
 			</svg> Adverse Consequence
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
 			</svg> Claimed Benefit
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
 			</svg> Direct Harm
 		</div>
-		<div class="legend-item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="legend-line">
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
 			</svg> Energetic
 		</div>
-		<div class="legend-divider"></div>
-		<div class="legend-section-title">Biological Traits</div>
-		<div class="legend-item">
-			<div class="legend-text-icon male">Aa</div> Male
+		<div class="divider"></div>
+		<div class="title">Biological Traits</div>
+		<div class="item">
+			<div class="trait male">Aa</div> Male
 		</div>
-		<div class="legend-item">
-			<div class="legend-text-icon female">Aa</div> Female
+		<div class="item">
+			<div class="trait female">Aa</div> Female
 		</div>
-		<div class="legend-item">
-			<div class="legend-text-icon shared">Aa</div> Shared
+		<div class="item">
+			<div class="trait shared">Aa</div> Shared
 		</div>
 	</div>
-
 	<div id="mobile-bar" aria-label="Mobile controls">
 		<button type="button" data-panel="search" aria-pressed="false">Search</button>
 		<button type="button" data-panel="filters" aria-pressed="false">Filters</button>
 		<button type="button" data-panel="legend" aria-pressed="false">Legend</button>
 		<button type="button" data-panel="info" aria-pressed="false">Info</button>
 	</div>
-
 	<div id="graph-container">
 		<svg id="lines-layer">
 			<defs id="svg-defs">
@@ -1358,7 +1300,6 @@ svg {
 				<marker id="arrow-energetic" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
-
 				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
 					<circle cx="5" cy="5" r="5" />
 				</marker>
@@ -1373,7 +1314,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.7 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.7.1 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1440,7 +1381,7 @@ let
 	previousCenterId = null,
 	currentTraitFilter = 'all',
 	currentTypeFilter = 'all',
-	stackLayoutEnabled = false,
+	currentView = 'petal',
 	currentZoom = 1,
 	panX = 0,
 	panY = 0,
@@ -1458,24 +1399,27 @@ const
 	linesLayer = document.getElementById('lines-layer'),
 	linesZoom = document.getElementById('lines-zoom'),
 	defsHTML = document.getElementById('svg-defs').outerHTML,
-	stackContainer = document.getElementById('breadcrumb-stack'),
-	nodeDescription = document.getElementById('node-description'),
-	ndTitle = document.getElementById('nd-title'),
-	ndContent = document.getElementById('nd-content'),
-	ndLinks = document.getElementById('nd-links'),
+	breadcrumbs = document.getElementById('breadcrumbs'),
+	nodeDescription = document.getElementById('description'),
+	nodeTitle = nodeDescription.querySelector('h2'),
+	nodeContent = nodeDescription.querySelector('p'),
+	nodeLinks = nodeDescription.querySelector('ul'),
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
-	stackLayoutCheckbox = document.getElementById('stack-layout'),
-	searchInput = document.getElementById('search-input'),
-	searchResults = document.getElementById('search-results'),
+	viewSelect = document.getElementById('view-select'),
+	searchInput = document.getElementById('search'),
+	searchResults = document.getElementById('results'),
 	cardTemplate = document.getElementById('card-template'),
 	searchResultTemplate = document.getElementById('search-result-template'),
 	descriptionSourceTemplate = document.getElementById('description-source-template'),
 	mobileBar = document.getElementById('mobile-bar'),
-	mobilePanels = ['search', 'filters', 'legend', 'info'],
-	stackParentTopEm = 7,
-	stackParentSelectedGapEm = 2.75,
+	mobilePanels = [
+		'search',
+		'filters',
+		'legend',
+		'info'
+	],
 	stackLayout = {
 		paddingXEm: 2,
 		gapXEm: 1.5,
@@ -1484,7 +1428,9 @@ const
 		rowGapYEm: 3.5,
 		groupsStartGapYEm: 0.0,
 		labelToBlockGapEm: 7.0,
-		maxColsInGroup: 10
+		maxColsInGroup: 10,
+		parentTopEm: 1,
+		parentSelectedGapEm: 2,
 	},
 	petalLayout = {
 		baseRadiusPx: 400,
@@ -1493,7 +1439,10 @@ const
 		depthRadiusMultiplierStep: 0.4,
 		centerTotalSpreadRad: 2 * Math.PI,
 		centerStartAngleRad: -Math.PI / 2,
-		petalTotalSpreadRad: Math.PI * 0.8
+		petalTotalSpreadRad: Math.PI * 0.8,
+	},
+	physicsLayout = {
+
 	},
 	edgeStyles = {
 		'root': 'url(#arrow-root)',
@@ -1722,7 +1671,14 @@ function updateUrlState(id) {
 	url.searchParams.set('depth', depthDropdown.value);
 	url.searchParams.set('trait', currentTraitFilter);
 	url.searchParams.set('perspective', currentTypeFilter);
-	url.searchParams.set('stack', stackLayoutEnabled ? '1' : '0');
+	if (currentView === 'stacked') {
+		url.searchParams.set('view', 'stacked');
+	} else if (currentView === 'physics') {
+		url.searchParams.set('view', 'physics');
+	} else {
+		url.searchParams.delete('view');
+	}
+	url.searchParams.delete('stack');
 	// Clear pan when entering new node or changing traits
 	url.searchParams.delete('x');
 	url.searchParams.delete('y');
@@ -1776,8 +1732,8 @@ depthDropdown.addEventListener('change', (e) => {
 	e.target.blur();
 });
 
-stackLayoutCheckbox.addEventListener('change', (e) => {
-	stackLayoutEnabled = !!e.target.checked;
+viewSelect.addEventListener('change', (e) => {
+	currentView = e.target.value;
 	updateUrlState(currentCenterId);
 	renderGraph(currentCenterId);
 	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
@@ -1993,11 +1949,13 @@ function initGraph() {
 		initialDepth = url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
 
-	const initialStack = url.searchParams.get('stack');
-	if (initialStack != null) {
-		const enabled = (initialStack === '1' || initialStack.toLowerCase() === 'true');
-		stackLayoutEnabled = enabled;
-		stackLayoutCheckbox.checked = enabled;
+	let initialView = url.searchParams.get('view');
+	if (!initialView && url.searchParams.get('stack') === '1') {
+		initialView = 'stacked';
+	}
+	if (initialView && viewSelect.querySelector(`option[value="${initialView}"]`)) {
+		currentView = initialView;
+		viewSelect.value = initialView;
 	}
 
 	const initialTrait = url.searchParams.get('trait');
@@ -2339,7 +2297,7 @@ function getBreadcrumbPath(targetId) {
 
 function updateBreadcrumbs(centerId) {
 	const path = getBreadcrumbPath(centerId);
-	stackContainer.replaceChildren();
+	breadcrumbs.replaceChildren();
 
 	path.forEach((nodeId, index) => {
 		const nodeData = nodes.find(n => n.id === nodeId);
@@ -2351,20 +2309,20 @@ function updateBreadcrumbs(centerId) {
 		span.textContent = nodeData.title;
 
 		if (isLast) {
-			span.className = 'breadcrumb-current';
+			span.className = 'current';
 		} else {
-			span.className = 'breadcrumb-item';
+			span.className = 'item';
 			span.onclick = () => {
 				updateUrlState(nodeId);
 				renderGraph(nodeId);
 			};
 		}
-		stackContainer.append(span);
+		breadcrumbs.append(span);
 		if (!isLast) {
 			const separator = document.createElement('span');
-			separator.className = 'breadcrumb-separator';
+			separator.className = 'separator';
 			separator.textContent = '>';
-			stackContainer.append(separator);
+			breadcrumbs.append(separator);
 		}
 	});
 }
@@ -2374,7 +2332,7 @@ function calcNodePositionStack() {}
 
 function renderGraph(centerId) {
 	currentCenterId = centerId;
-	stackLayoutEnabled = !!stackLayoutCheckbox?.checked;
+	currentView = viewSelect?.value || 'petal';
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
@@ -2385,10 +2343,10 @@ function renderGraph(centerId) {
 
 	updateBreadcrumbs(centerId);
 
-	// Always update the node-description content to avoid stale text when switching nodes.
-	ndTitle.textContent = centerNodeData?.title || centerId;
-	ndContent.textContent = descriptions[centerId] || '';
-	ndLinks.replaceChildren();
+	// Always update the description content to avoid stale text when switching nodes.
+	nodeTitle.textContent = centerNodeData?.title || centerId;
+	nodeContent.textContent = descriptions[centerId] || '';
+	nodeLinks.replaceChildren();
 	if (sources[centerId]) {
 		sources[centerId].forEach(source => {
 			const clone = descriptionSourceTemplate.content.cloneNode(true),
@@ -2396,7 +2354,7 @@ function renderGraph(centerId) {
 
 			linkEl.href = source.url;
 			linkEl.textContent = source.title;
-			ndLinks.append(clone);
+			nodeLinks.append(clone);
 		});
 	}
 
@@ -2471,16 +2429,16 @@ function renderGraph(centerId) {
 
 	let renderCenterY = centerY,
 		renderParentY = null;
-	if (stackLayoutEnabled) {
+	if (currentView === 'stacked') {
 		const centerH = centerEl.offsetHeight || (7.5 * emSize);
-		renderParentY = (stackParentTopEm * emSize) + (centerH / 2);
-		renderCenterY = renderParentY + centerH + (stackParentSelectedGapEm * emSize);
+		renderParentY = (stackLayout.parentTopEm * emSize) + (centerH / 2);
+		renderCenterY = renderParentY + centerH + (stackLayout.parentSelectedGapEm * emSize);
 	}
 
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${renderCenterY}px`;
 
-	const panAnchorY = (stackLayoutEnabled && renderParentY != null) ? renderParentY : renderCenterY;
+	const panAnchorY = (currentView === 'stacked' && renderParentY != null) ? renderParentY : renderCenterY;
 	if (centerId !== previousCenterId) {
 		const urlParams = new URL(window.location).searchParams;
 		if (!previousCenterId) {
@@ -2511,7 +2469,7 @@ function renderGraph(centerId) {
 
 	applyPanZoomTransform();
 
-	if (stackLayoutEnabled) {
+	if (currentView === 'stacked') {
 		layoutStackByCompositeGroup({
 			centerId,
 			centerNodeData,
@@ -2755,7 +2713,7 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 };
 
 appContainer.addEventListener('wheel', (e) => {
-	if (e.target.closest('#search-results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
+	if (e.target.closest('#results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
 	e.preventDefault();
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
 	setZoomAt(currentZoom * zoomDelta, e.clientX, e.clientY);
@@ -2766,7 +2724,7 @@ let isGraphPanning = false,
 
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
-	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#results') || e.target.closest('footer')) return;
 	isGraphPanning = true;
 	startPanX = e.clientX;
 	startPanY = e.clientY;
@@ -2815,7 +2773,7 @@ const dist2 = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
 graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.pointerType !== 'touch') return;
 	if (e.target.closest('.card')) return;
-	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#description') || e.target.closest('#results') || e.target.closest('footer')) return;
 	e.preventDefault();
 	try {
 		graphContainer.setPointerCapture(e.pointerId);
@@ -2915,7 +2873,7 @@ if (!('PointerEvent' in window)) {
 	};
 	graphContainer.addEventListener('touchstart', (e) => {
 		if (e.target.closest('.card')) return;
-		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#node-description') || e.target.closest('#search-results') || e.target.closest('footer')) return;
+		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#description') || e.target.closest('#results') || e.target.closest('footer')) return;
 		if (!e.touches || e.touches.length === 0) return;
 		e.preventDefault();
 		if (e.touches.length === 1) {
