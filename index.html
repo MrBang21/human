@@ -1188,7 +1188,7 @@ svg {
 						<selectedcontent></selectedcontent>
 					</button>
 					<option value="petal" selected>Petal</option>
-					<option value="physics" disabled>Physics</option>
+					<option value="physics">Physics</option>
 					<option value="stacked">Stacked</option>
 				</select>
 			</div>
@@ -1314,7 +1314,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.7.1 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1388,11 +1388,22 @@ let
 	activeMobilePanel = null,
 	activeLineElements = [],
 	animationLoopRunning = false,
-	linesLoopScheduled = false;
+	linesLoopScheduled = false,
+	resizeTimeout = null,
+	panZoomRafPending = false,
+	physicsLoopRunning = false,
+	physicsNodes = [],
+	physicsEdges = [],
+	isGraphPanning = false,
+	startPanX,
+	startPanY,
+	initialPanX,
+	initialPanY;
 
 const
 	urlXY = false,
 	urlZ = true,
+	appContainer = document.getElementById('app'),
 	graphContainer = document.getElementById('graph-container'),
 	nodesLayer = document.getElementById('nodes-layer'),
 	nodesZoom = document.getElementById('nodes-zoom'),
@@ -1414,6 +1425,8 @@ const
 	searchResultTemplate = document.getElementById('search-result-template'),
 	descriptionSourceTemplate = document.getElementById('description-source-template'),
 	mobileBar = document.getElementById('mobile-bar'),
+	minZoom = 0.05,
+	maxZoom = 10,
 	mobilePanels = [
 		'search',
 		'filters',
@@ -1442,7 +1455,45 @@ const
 		petalTotalSpreadRad: Math.PI * 0.8,
 	},
 	physicsLayout = {
-
+		linePull: {
+			'@default': 1.0,
+			'root': 0.1,
+			'anatomy': 0.5,
+			'nerve': 0.8,
+			'sexual': 0.2,
+			'removed': 0.2,
+			'consequence': 0.4,
+			'benefit': 0.4,
+			'harm': 0.2,
+			'energetic': 0.3,
+		},
+		lineLength: {
+			'@default': 800,
+			'root': 500,
+			'anatomy': 500,
+			'nerve': 700,
+			'sexual': 1000,
+			'removed': 800,
+			'consequence': 800,
+			'benefit': 800,
+			'harm': 800,
+			'energetic': 800,
+		},
+		sourcePull: 0.8,
+		targetPull: 0.2,
+		springMultiplier: 2,
+		forceCap: 1000,
+		nodeRepulsion: 3000000,
+		maxRepulsion: 10000000,
+		nodeGapSq: 1000000,
+		minOverlapDistSq: 100,
+		damping: 0.50,
+		centerGravity: 0.01,
+		forceMultiplier: 0.06,
+		maxVelocity: 1000,
+		energyThreshold: 0.015,
+		alpha: 1.0,
+		alphaCoolDown: 0.001,
 	},
 	edgeStyles = {
 		'root': 'url(#arrow-root)',
@@ -1456,6 +1507,43 @@ const
 		'energetic': 'url(#arrow-energetic)'
 	};
 
+
+const Bang = {
+	clamp: (num, min, max) => Math.min(Math.max(num, min), max),
+	roundPx: (v) => {
+		const dpr = window.devicePixelRatio || 1;
+		return Math.round(v * dpr) / dpr;
+	},
+	getEdgeWeight: (t) => {
+		if (!t || t === 'anatomy') return 1;
+		if (t === 'benefit') return 2;
+		if (t === 'consequence' || t === 'harm') return 3;
+		if (t === 'removed') return 4;
+		return 5;
+	},
+	dist2: (a, b) => Math.hypot(b.x - a.x, b.y - a.y),
+	splitCubic: (x0, y0, x1, y1, x2, y2, x3, y3) => {
+		const
+			t = 0.5,
+			x01 = x0 + (x1 - x0) * t, // First level
+			y01 = y0 + (y1 - y0) * t,
+			x12 = x1 + (x2 - x1) * t,
+			y12 = y1 + (y2 - y1) * t,
+			x23 = x2 + (x3 - x2) * t,
+			y23 = y2 + (y3 - y2) * t,
+			x012 = x01 + (x12 - x01) * t, // Second level
+			y012 = y01 + (y12 - y01) * t,
+			x123 = x12 + (x23 - x12) * t,
+			y123 = y12 + (y23 - y12) * t,
+			xm = x012 + (x123 - x012) * t, // Split point
+			ym = y012 + (y123 - y012) * t;
+		return {
+			mid: { x: xm, y: ym },
+			left:  { c1: { x: x01,  y: y01  }, c2: { x: x012, y: y012 } },
+			right: { c1: { x: x123, y: y123 }, c2: { x: x23,  y: y23  } },
+		};
+	}
+};
 
 function clearMobilePanels() {
 	mobilePanels.forEach(p => document.body.classList.remove(`mobile-panel-${p}`));
@@ -1498,45 +1586,13 @@ if (mobileBar) {
 	updateMobileBarUI();
 }
 
-function splitCubic(x0, y0, x1, y1, x2, y2, x3, y3) {
-	const
-		t = 0.5,
-		x01 = x0 + (x1 - x0) * t, // First level
-		y01 = y0 + (y1 - y0) * t,
-		x12 = x1 + (x2 - x1) * t,
-		y12 = y1 + (y2 - y1) * t,
-		x23 = x2 + (x3 - x2) * t,
-		y23 = y2 + (y3 - y2) * t,
-		x012 = x01 + (x12 - x01) * t, // Second level
-		y012 = y01 + (y12 - y01) * t,
-		x123 = x12 + (x23 - x12) * t,
-		y123 = y12 + (y23 - y12) * t,
-		xm = x012 + (x123 - x012) * t, // Split point
-		ym = y012 + (y123 - y012) * t;
-
-	return {
-		mid: { x: xm, y: ym },
-		left:  { c1: { x: x01,  y: y01  }, c2: { x: x012, y: y012 } },
-		right: { c1: { x: x123, y: y123 }, c2: { x: x23,  y: y23  } },
-	};
-}
-
-const hasReverse = activeLineElements.some(other =>
-	other.sourceEl === item.targetEl &&
-	other.targetEl === item.sourceEl
-);
-
 function updateLinesOnce() {
-	const
-		dpr = window.devicePixelRatio || 1,
-		round = v => Math.round(v * dpr) / dpr;
-
 	activeLineElements.forEach(item => {
 		const
-			sx = round(parseFloat(item.sourceEl.style.left) || 0),
-			sy = round(parseFloat(item.sourceEl.style.top) || 0),
-			ex = round(parseFloat(item.targetEl.style.left) || 0),
-			ey = round(parseFloat(item.targetEl.style.top) || 0),
+			sx = Bang.roundPx(parseFloat(item.sourceEl.style.left) || 0),
+			sy = Bang.roundPx(parseFloat(item.sourceEl.style.top) || 0),
+			ex = Bang.roundPx(parseFloat(item.targetEl.style.left) || 0),
+			ey = Bang.roundPx(parseFloat(item.targetEl.style.top) || 0),
 			dx = ex - sx,
 			dy = ey - sy,
 			len = Math.hypot(dx, dy) || 1,
@@ -1562,7 +1618,7 @@ function updateLinesOnce() {
 			c1y = sy + dy * 0.25 + py * k,
 			c2x = sx + dx * 0.75 + px * k,
 			c2y = sy + dy * 0.75 + py * k,
-			{ mid, left, right } = splitCubic(
+			{ mid, left, right } = Bang.splitCubic(
 				sx, sy, c1x, c1y, c2x, c2y, ex, ey
 			);
 		item.line.setAttribute(
@@ -1761,7 +1817,6 @@ const layoutStackByCompositeGroup = ({
 	anchorY,
 	parentAnchorY
 }) => {
-	// Remove prior group labels
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
 	const
 		paddingX = stackLayout.paddingXEm * emSize,
@@ -1781,11 +1836,8 @@ const layoutStackByCompositeGroup = ({
 			if (!metaById.has(nData.node.id)) metaById.set(nData.node.id, nData);
 		});
 	}
-
-	// Pull parent out to render standalone above center
 	const parentMeta = parentId ? metaById.get(parentId) : null;
 	if (parentId) metaById.delete(parentId);
-
 	const groupMap = new Map();
 	metaById.forEach((meta) => {
 		const
@@ -1794,22 +1846,15 @@ const layoutStackByCompositeGroup = ({
 		if (!groupMap.has(key)) groupMap.set(key, []);
 		groupMap.get(key).push(item);
 	});
-
-	// Smallest first so biggest ends up at bottom
 	const groupEntries = Array.from(groupMap.entries()).sort((a, b) => {
 		const d = a[1].length - b[1].length;
 		return d !== 0 ? d : a[0].localeCompare(b[0]);
 	});
-
 	const
 		centerX = window.innerWidth / 2,
 		centerY = anchorY ?? ((window.innerHeight / 2) + (3 * emSize));
-
-	// Selected node stays centered in the viewport
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${centerY}px`;
-
-	// Parent node alone above the selected node
 	if (parentMeta) {
 		const parentEl = document.getElementById(`node-${parentId}`);
 		if (parentEl) {
@@ -1822,7 +1867,6 @@ const layoutStackByCompositeGroup = ({
 			parentEl.style.top = `${parentAnchorY ?? fallbackParentY}px`;
 		}
 	}
-
 	const
 		maxColsInGroup = stackLayout.maxColsInGroup,
 		groupsStartGapY = stackLayout.groupsStartGapYEm * emSize;
@@ -1832,9 +1876,7 @@ const layoutStackByCompositeGroup = ({
 		rowMaxH = 0,
 		rowHasItems = false,
 		rowBlocks = [];
-
 	const
-		clamp = (v, min, max) => Math.min(max, Math.max(min, v)),
 		shiftElementsX = (elements, deltaX) => {
 		if (!deltaX) return;
 		elements.forEach((el) => {
@@ -1847,8 +1889,6 @@ const layoutStackByCompositeGroup = ({
 
 	const flushRow = () => {
 		if (!rowHasItems) return;
-
-		// Center the packed row of small groups as a whole.
 		if (rowBlocks.length) {
 			const
 				rowLeft = Math.min(...rowBlocks.map(b => b.left)),
@@ -1856,13 +1896,12 @@ const layoutStackByCompositeGroup = ({
 				rowWidth = Math.max(0, rowRight - rowLeft),
 				minLeft = paddingX,
 				maxLeft = Math.max(minLeft, (window.innerWidth - paddingX) - rowWidth),
-				targetLeft = clamp(centerX - (rowWidth / 2), minLeft, maxLeft),
+				targetLeft = Bang.clamp(centerX - (rowWidth / 2), minLeft, maxLeft),
 				deltaX = targetLeft - rowLeft,
 				rowEls = rowBlocks.reduce((acc, b) => acc.concat(b.elements), []);
 			shiftElementsX(rowEls, deltaX);
 		}
 		rowBlocks = [];
-
 		yCursor = rowY + rowMaxH + rowGapY;
 		rowY = yCursor;
 		rowX = paddingX;
@@ -2080,73 +2119,89 @@ function setupInteractions(card, id) {
 		moveThresholdPx = 3;
 
 	const
-		dpr = window.devicePixelRatio || 1,
-		roundPx = (v) => Math.round(v * dpr) / dpr,
 		startDrag = (clientX, clientY, pointerType = 'mouse') => {
 			isDragging = true;
 			hasMoved = false;
 			startX = clientX;
 			startY = clientY;
-			// Touch screens report tiny jitter; use a larger threshold so taps still select.
 			moveThresholdPx = (pointerType === 'touch') ? 10 : 3;
 			card.classList.add('dragging');
 			initialLeft = parseFloat(card.style.left) || 0;
 			initialTop = parseFloat(card.style.top) || 0;
 			startLinesLoop();
-		};
-
-	const updateDrag = (clientX, clientY) => {
-		if (!isDragging) return;
-		const
-			dx = (clientX - startX) / currentZoom,
-			dy = (clientY - startY) / currentZoom;
-
-		// Decide tap vs drag using raw pointer movement (zoom-independent).
-		if (Math.abs(clientX - startX) > moveThresholdPx || Math.abs(clientY - startY) > moveThresholdPx) {
-			hasMoved = true;
-		}
-
-		card.style.left = `${roundPx(initialLeft + dx)}px`;
-		card.style.top = `${roundPx(initialTop + dy)}px`;
-	};
-
-	const endDrag = () => {
-		if (!isDragging) return;
-		isDragging = false;
-		card.classList.remove('dragging');
-		stopLinesLoop();
-		updateLinesOnce();
-
-		if (!hasMoved) {
-			if (currentCenterId !== id) {
-				updateUrlState(id);
+		},
+		updateDrag = (clientX, clientY) => {
+			if (!isDragging) return;
+			const
+				dx = (clientX - startX) / currentZoom,
+				dy = (clientY - startY) / currentZoom;
+			if (Math.abs(clientX - startX) > moveThresholdPx || Math.abs(clientY - startY) > moveThresholdPx) {
+				hasMoved = true;
 			}
-			renderGraph(id);
-		}
-	};
-
+			const
+				newLeft = Bang.roundPx(initialLeft + dx),
+				newTop = Bang.roundPx(initialTop + dy);
+			card.style.left = `${newLeft}px`;
+			card.style.top = `${newTop}px`;
+			if (currentView === 'physics' && typeof physicsNodes !== 'undefined') {
+				const nd = physicsNodes.find(n => n.node.id === id);
+				if (nd) {
+					nd.x = newLeft;
+					nd.y = newTop;
+					nd.vx = 0;
+					nd.vy = 0;
+					nd.isDragging = true;
+					physicsLayout.alpha = 1.0;
+					if (!physicsLoopRunning) {
+						physicsLoopRunning = true;
+						requestAnimationFrame(physicsTick);
+					}
+				}
+			}
+		},
+		endDrag = () => {
+			if (!isDragging) return;
+			isDragging = false;
+			card.classList.remove('dragging');
+			stopLinesLoop();
+			updateLinesOnce();
+			if (currentView === 'physics' && typeof physicsNodes !== 'undefined') {
+				const nd = physicsNodes.find(n => n.node.id === id);
+				if (nd) {
+					nd.isDragging = false;
+					if (hasMoved) {
+						nd.isPinned = true;
+					}
+					physicsLayout.alpha = 1.0;
+					if (!physicsLoopRunning) {
+						physicsLoopRunning = true;
+						requestAnimationFrame(physicsTick);
+					}
+				}
+			}
+			if (!hasMoved) {
+				if (currentCenterId !== id) {
+					updateUrlState(id);
+				}
+				renderGraph(id);
+			}
+		},
+		drag = (e) => {
+			updateDrag(e.clientX, e.clientY);
+		},
+		drop = (e) => {
+			if (!isDragging) return;
+			document.removeEventListener('mousemove', drag);
+			document.removeEventListener('mouseup', drop);
+			endDrag();
+		};
 	card.addEventListener('mousedown', (e) => {
 		if (e.button !== 0) return;
 		e.preventDefault();
-
 		startDrag(e.clientX, e.clientY, 'mouse');
-
 		document.addEventListener('mousemove', drag);
 		document.addEventListener('mouseup', drop);
 	});
-
-	function drag(e) {
-		updateDrag(e.clientX, e.clientY);
-	}
-
-	function drop(e) {
-		if (!isDragging) return;
-		document.removeEventListener('mousemove', drag);
-		document.removeEventListener('mouseup', drop);
-		endDrag();
-	}
-
-	// Touch / mobile support (Pointer Events)
 	card.addEventListener('pointerdown', (e) => {
 		if (e.pointerType !== 'touch') return;
 		// If a pinch gesture is active, let the graph handle it.
@@ -2159,12 +2214,10 @@ function setupInteractions(card, id) {
 		}
 		startDrag(e.clientX, e.clientY, 'touch');
 	});
-
 	card.addEventListener('pointermove', (e) => {
 		if (e.pointerType !== 'touch') return;
 		updateDrag(e.clientX, e.clientY);
 	});
-
 	card.addEventListener('pointerup', (e) => {
 		if (e.pointerType !== 'touch') return;
 		try {
@@ -2174,7 +2227,6 @@ function setupInteractions(card, id) {
 		}
 		endDrag();
 	});
-
 	card.addEventListener('pointercancel', (e) => {
 		if (e.pointerType !== 'touch') return;
 		try {
@@ -2189,12 +2241,9 @@ function setupInteractions(card, id) {
 function getBreadcrumbPath(targetId) {
 	const rootId = 'human';
 	if (targetId === rootId) return [rootId];
-
 	const
 		targetNode = nodes.find(n => n.id === targetId),
 		targetTrait = targetNode ? targetNode.trait : null;
-
-	// Helper to build a path with a custom edge direction
 	const findPathDirected = (edgeDirection, allowAllEdges) => {
 		let adjList = {};
 		const
@@ -2207,18 +2256,15 @@ function getBreadcrumbPath(targetId) {
 			},
 			weightFor = (neighborData) => {
 				let weight = 5; // Base weight (e.g. for anatomy/structure)
-
 				if (neighborData.type === 'root') {
 					weight = 1; // Prioritize root types even higher than anatomy
 				} else if (neighborData.category !== 'anatomy' && neighborData.category !== 'structure') {
 					weight += 20; // Deprioritize non-anatomy
 				}
-
 				if (targetTrait && neighborData.trait !== targetTrait) {
 					weight += 10;
 					if (neighborData.trait !== 'shared') weight += 50;
 				}
-
 				if (neighborData.category === 'other') {
 					weight += 20;
 				}
@@ -2228,16 +2274,13 @@ function getBreadcrumbPath(targetId) {
 				if (!adjList[fromId]) adjList[fromId] = [];
 				adjList[fromId].push({ node: toId, weight: weightFor(toData) });
 			};
-
 		edges.forEach(e => {
 			const type = e.type || 'anatomy';
 			if (!isAllowedEdgeType(type)) return;
-
 			const
 				sourceData = nodes.find(n => n.id === e.source),
 				targetData = nodes.find(n => n.id === e.target);
 			if (!sourceData || !targetData) return;
-
 			if (edgeDirection === 'targetToSource') {
 				// Only allow target->source traversal
 				if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
@@ -2285,15 +2328,10 @@ function getBreadcrumbPath(targetId) {
 		}
 		return path;
 	};
-
-	// 1. Try strict target->source path (upstream)
 	let path = findPathDirected('targetToSource', false);
-	// 2. If not found, try target->source with all edge types
 	if (!path) path = findPathDirected('targetToSource', true);
-	// 3. If still not found, try source->target (downstream, fallback)
 	if (!path) path = findPathDirected('sourceToTarget', false);
 	if (!path) path = findPathDirected('sourceToTarget', true);
-	// 4. If still not found, fallback to legacy (both directions)
 	if (!path) path = findPathDirected('both', false);
 	if (!path) path = findPathDirected('both', true);
 	return path || [targetId];
@@ -2302,16 +2340,13 @@ function getBreadcrumbPath(targetId) {
 function updateBreadcrumbs(centerId) {
 	const path = getBreadcrumbPath(centerId);
 	breadcrumbs.replaceChildren();
-
 	path.forEach((nodeId, index) => {
 		const nodeData = nodes.find(n => n.id === nodeId);
 		if (!nodeData) return;
 		const
 			isLast = index === path.length - 1,
 			span = document.createElement('span');
-
 		span.textContent = nodeData.title;
-
 		if (isLast) {
 			span.className = 'current';
 		} else {
@@ -2331,9 +2366,313 @@ function updateBreadcrumbs(centerId) {
 	});
 }
 
-function calcNodePositionPetal() {}
-function calcNodePositionStack() {}
-function calcNodePositionPhysics() {}
+function calcNodePositionPetal({ currentDepthShown, nodesByDepth, parentId, centerX, centerY, baseRadius }) {
+	for (let d = 1; d <= currentDepthShown; d++) {
+		const layerNodes = nodesByDepth[d];
+		layerNodes.sort((a, b) => {
+			if (a.node.id === parentId) return -1;
+			if (b.node.id === parentId) return 1;
+			return Bang.getEdgeWeight(a.edgeType) - Bang.getEdgeWeight(b.edgeType);
+		});
+		const groups = {};
+		layerNodes.forEach(nData => {
+			if (!groups[nData.parentId]) groups[nData.parentId] = [];
+			groups[nData.parentId].push(nData);
+		});
+		Object.entries(groups).forEach(([pId, children]) => {
+			let px = centerX,
+				py = centerY,
+				pAngle = 0,
+				isCenter = true;
+			if (d > 1) {
+				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
+				if (pData && pData.x !== undefined && pData.y !== undefined) {
+					px = pData.x;
+					py = pData.y;
+					pAngle = pData.angle || 0;
+					isCenter = false;
+				}
+			}
+			const
+				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
+				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2),
+				requiredArcLength = children.length * petalLayout.requiredArcPerChildPx,
+				sizeMultiplier = petalLayout.depthRadiusMultiplierStart + (d - 1) * petalLayout.depthRadiusMultiplierStep,
+				dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
+			children.forEach((nData, index) => {
+				const el = document.getElementById(`node-${nData.node.id}`);
+				if (!el) return;
+				const wasHidden = el.classList.contains('hidden');
+				if (wasHidden) {
+					el.style.left = `${px}px`;
+					el.style.top = `${py}px`;
+					el.style.scale = '0';
+					el.style.opacity = '0';
+					el.classList.remove('hidden');
+					void el.offsetWidth; // force layout
+				} else {
+					el.classList.remove('hidden');
+				}
+				if (nData.isOutgoing) {
+					el.classList.add('target');
+				} else {
+					el.classList.add('source');
+				}
+				if (nData.node.id === parentId) {
+					el.classList.add('parent');
+				}
+				const neighborMatches = checkTrait(nData.node.trait);
+				if (!neighborMatches) el.classList.add('ghosted');
+				let angle;
+				if (!isCenter && children.length === 1) {
+					angle = pAngle;
+				} else {
+					const divisor = isCenter ? children.length : Math.max(1, children.length - 1);
+					angle = startAngle + (index / divisor) * totalSpread;
+				}
+				nData.angle = angle;
+				const
+					nx = px + dynamicRadius * Math.cos(angle),
+					ny = py + dynamicRadius * Math.sin(angle);
+				nData.x = nx;
+				nData.y = ny;
+				const delay = (d - 1) * 100 + index * 30;
+				setTimeout(() => {
+					el.style.left = `${nx}px`;
+					el.style.top = `${ny}px`;
+					if (wasHidden) {
+						el.style.scale = '';
+						el.style.opacity = '';
+					}
+				}, delay);
+			});
+		});
+	}
+}
+
+function calcNodePositionStack({ centerId, centerNodeData, parentId, nodesByDepth, centerEl, emSize, anchorY, parentAnchorY }) {
+	layoutStackByCompositeGroup({
+		centerId,
+		centerNodeData,
+		parentId,
+		nodesByDepth,
+		centerEl,
+		emSize,
+		anchorY,
+		parentAnchorY
+	});
+}
+
+function physicsTick() {
+	if (!physicsLoopRunning || currentView !== 'physics') return;
+	let totalEnergy = 0;
+	const temperature = Math.max(physicsLayout.alpha, 0);
+	physicsNodes.forEach(n => {
+		n.fx = 0;
+		n.fy = 0;
+	});
+	if (physicsEdges && physicsEdges.length > 0) {
+		physicsEdges.forEach(edge => {
+			let nSource = physicsNodes.find(n => n.node.id === edge.source),
+				nTarget = physicsNodes.find(n => n.node.id === edge.target);
+			if (nSource && nTarget && nSource.x !== undefined && nTarget.x !== undefined) {
+				const
+					edgeType = edge.type || 'anatomy',
+					elastic = physicsLayout.linePull[edgeType] !== undefined
+						? physicsLayout.linePull[edgeType]
+						: physicsLayout.linePull['@default'],
+					dynamicElastic = (nSource.isDragging || nTarget.isDragging) ? 5.0 : elastic;
+				let dx = nTarget.x - nSource.x,
+					dy = nTarget.y - nSource.y,
+					dist = Math.sqrt(dx * dx + dy * dy);
+				if (dist === 0) {
+					dx = Math.random() * 0.1;
+					dy = Math.random() * 0.1;
+					dist = Math.sqrt(dx * dx + dy * dy);
+				}
+				const lengthVal = physicsLayout.lineLength[edgeType] !== undefined
+					? physicsLayout.lineLength[edgeType]
+					: physicsLayout.lineLength['@default'];
+				let stretch = dist - lengthVal,
+					tp = physicsLayout.targetPull !== undefined ? physicsLayout.targetPull : 1,
+					sp = physicsLayout.sourcePull !== undefined ? physicsLayout.sourcePull : 1,
+					springMult = physicsLayout.springMultiplier !== undefined ? physicsLayout.springMultiplier : 5.0,
+					pullForce = stretch * dynamicElastic * temperature * springMult;
+				const forceCap = physicsLayout.forceCap !== undefined ? physicsLayout.forceCap : 3000;
+				if (pullForce > forceCap) pullForce = forceCap;
+				if (pullForce < -forceCap) pullForce = -forceCap;
+				let pullX = -(dx / dist) * pullForce,
+					pullY = -(dy / dist) * pullForce;
+				if (!nTarget.isCenterNode) {
+					nTarget.fx += pullX * sp;
+					nTarget.fy += pullY * sp;
+				}
+				if (!nSource.isCenterNode) {
+					nSource.fx -= pullX * tp;
+					nSource.fy -= pullY * tp;
+				}
+			}
+		});
+	}
+	physicsNodes.forEach(n1 => {
+		if (n1.x === undefined || n1.y === undefined) return;
+		let gravity = physicsLayout.centerGravity !== undefined ? physicsLayout.centerGravity : 0.01;
+		n1.fx += (n1.tx - n1.x) * gravity * temperature;
+		n1.fy += (n1.ty - n1.y) * gravity * temperature;
+	});
+	physicsNodes.forEach(n1 => {
+		if (n1.x === undefined || n1.y === undefined) return;
+		physicsNodes.forEach(n2 => {
+			if (n1 === n2 || n2.x === undefined) return;
+			let rdx = n1.x - n2.x,
+				rdy = n1.y - n2.y,
+				distSq = rdx*rdx + rdy*rdy;
+			if (distSq < physicsLayout.nodeGapSq) {
+				let safeDistSq = Math.max(distSq, physicsLayout.minOverlapDistSq),
+					dist = Math.sqrt(safeDistSq),
+					force = (physicsLayout.nodeRepulsion / safeDistSq) * temperature;
+				const maxRepulsion = physicsLayout.maxRepulsion !== undefined ? physicsLayout.maxRepulsion : 1500;
+				if (force > maxRepulsion) force = maxRepulsion;
+				let edgeTaper = 1 - (dist / Math.sqrt(physicsLayout.nodeGapSq));
+				force *= Math.max(0, edgeTaper);
+				n1.fx += (rdx / dist) * force;
+				n1.fy += (rdy / dist) * force;
+			}
+		});
+	});
+	physicsNodes.forEach(n1 => {
+		if (n1.isDragging || n1.isPinned) return;
+		n1.vx = (n1.vx || 0) * physicsLayout.damping + n1.fx * physicsLayout.forceMultiplier;
+		n1.vy = (n1.vy || 0) * physicsLayout.damping + n1.fy * physicsLayout.forceMultiplier;
+		const maxV = physicsLayout.maxVelocity;
+		if (n1.vx > maxV) n1.vx = maxV; else if (n1.vx < -maxV) n1.vx = -maxV;
+		if (n1.vy > maxV) n1.vy = maxV; else if (n1.vy < -maxV) n1.vy = -maxV;
+		n1.x += n1.vx;
+		n1.y += n1.vy;
+		totalEnergy += Math.abs(n1.vx) + Math.abs(n1.vy) + (Math.abs(n1.fx) + Math.abs(n1.fy)) * physicsLayout.forceMultiplier;
+	});
+	physicsNodes.forEach(nData => {
+		const el = document.getElementById(`node-${nData.node.id}`);
+		if (el) {
+			el.classList.add('physics-on');
+			el.style.left = `${nData.x}px`;
+			el.style.top = `${nData.y}px`;
+		}
+	});
+	updateLinesOnce();
+	physicsLayout.alpha -= physicsLayout.alphaCoolDown;
+	if ((totalEnergy > physicsLayout.energyThreshold || physicsLayout.alpha > 0.95) && temperature > 0) {
+		requestAnimationFrame(physicsTick);
+	} else {
+		physicsLoopRunning = false;
+		physicsNodes.forEach(nData => {
+			document.getElementById(`node-${nData.node.id}`)?.classList.remove('physics-on');
+		});
+	}
+}
+
+function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, centerX, centerY, baseRadius, edgesToRender }) {
+	physicsNodes = [];
+	physicsEdges = edgesToRender || [];
+	physicsLayout.alpha = 1.0; // Reset simulation heat on new layout
+	physicsNodes.push({
+		node: { id: currentCenterId },
+		x: centerX,
+		y: centerY,
+		tx: centerX,
+		ty: centerY,
+		fx: 0, fy: 0, vx: 0, vy: 0,
+		isCenterNode: true,
+		isPinned: true
+	});
+	for (let d = 1; d <= currentDepthShown; d++) {
+		const layerNodes = nodesByDepth[d];
+		layerNodes.sort((a, b) => {
+			if (a.node.id === parentId) return -1;
+			if (b.node.id === parentId) return 1;
+			if (a.isOutgoing && !b.isOutgoing) return -1;
+			if (!a.isOutgoing && b.isOutgoing) return 1;
+			return Bang.getEdgeWeight(a.edgeType) - Bang.getEdgeWeight(b.edgeType);
+		});
+		const groups = {};
+		layerNodes.forEach(nData => {
+			if (!groups[nData.parentId]) groups[nData.parentId] = [];
+			groups[nData.parentId].push(nData);
+			physicsNodes.push(nData);
+		});
+		Object.entries(groups).forEach(([pId, children]) => {
+			let px = centerX, py = centerY, pAngle = 0, isCenter = true;
+			if (d > 1) {
+				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
+				if (pData && pData.tx !== undefined && pData.ty !== undefined) {
+					px = pData.tx; py = pData.ty; pAngle = pData.angle || 0; isCenter = false;
+				}
+			}
+			const
+				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
+				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2);
+			children.forEach((nData, index) => {
+				const el = document.getElementById(`node-${nData.node.id}`);
+				if (!el) return;
+				const lengthVal = physicsLayout.lineLength[nData.edgeType] !== undefined
+						? physicsLayout.lineLength[nData.edgeType]
+						: physicsLayout.lineLength['@default'],
+					requiredArcLength = children.length * petalLayout.requiredArcPerChildPx,
+					sizeMultiplier = petalLayout.depthRadiusMultiplierStart + (d - 1) * petalLayout.depthRadiusMultiplierStep,
+					startingRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread),
+					targetDynamicRadius = lengthVal,
+					wasHidden = el.classList.contains('hidden');
+				nData.dynamicRadius = targetDynamicRadius;
+				if (wasHidden) {
+					el.style.left = `${px}px`;
+					el.style.top = `${py}px`;
+					el.style.scale = '0';
+					el.style.opacity = '0';
+					el.classList.remove('hidden');
+					void el.offsetWidth; // force layout
+				} else {
+					el.classList.remove('hidden');
+				}
+				if (nData.isOutgoing) el.classList.add('target');
+				else el.classList.add('source');
+				if (nData.node.id === parentId) el.classList.add('parent');
+				if (!checkTrait(nData.node.trait)) el.classList.add('ghosted');
+				let angle;
+				if (!isCenter && children.length === 1) angle = pAngle;
+				else {
+					const divisor = isCenter ? children.length : Math.max(1, children.length - 1);
+					angle = startAngle + (index / divisor) * totalSpread;
+				}
+				nData.angle = angle;
+				let startX = px + startingRadius * Math.cos(angle),
+					startY = py + startingRadius * Math.sin(angle);
+				nData.tx = px + targetDynamicRadius * Math.cos(angle);
+				nData.ty = py + targetDynamicRadius * Math.sin(angle);
+				if (nData.x === undefined || wasHidden) {
+					nData.x = startX;
+					nData.y = startY;
+					nData.vx = 0; nData.vy = 0;
+					el.style.left = `${startX}px`;
+					el.style.top = `${startY}px`;
+				} else {
+					nData.x = parseFloat(el.style.left) || startX;
+					nData.y = parseFloat(el.style.top) || startY;
+				}
+				const delay = (d - 1) * 100 + index * 30;
+				setTimeout(() => {
+					if (wasHidden) {
+						el.style.scale = '';
+						el.style.opacity = '';
+					}
+					if (!physicsLoopRunning) {
+						physicsLoopRunning = true;
+						requestAnimationFrame(physicsTick);
+					}
+				}, delay);
+			});
+		});
+	}
+}
 
 function renderGraph(centerId) {
 	currentCenterId = centerId;
@@ -2345,10 +2684,7 @@ function renderGraph(centerId) {
 		path = getBreadcrumbPath(centerId),
 		parentId = path && path.length > 1 ? path[path.length - 2] : null,
 		centerNodeData = nodes.find(n => n.id === centerId);
-
 	updateBreadcrumbs(centerId);
-
-	// Always update the description content to avoid stale text when switching nodes.
 	nodeTitle.textContent = centerNodeData?.title || centerId;
 	nodeContent.textContent = descriptions[centerId] || '';
 	nodeLinks.replaceChildren();
@@ -2356,19 +2692,16 @@ function renderGraph(centerId) {
 		sources[centerId].forEach(source => {
 			const clone = descriptionSourceTemplate.content.cloneNode(true),
 				linkEl = clone.querySelector('a');
-
 			linkEl.href = source.url;
 			linkEl.textContent = source.title;
 			nodeLinks.append(clone);
 		});
 	}
-
 	if (descriptions[centerId]) {
 		nodeDescription.classList.add('visible');
 	} else {
 		nodeDescription.classList.remove('visible');
 	}
-
 	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1,
 		visitedNodes = new Set(),
 		visitedEdges = new Set();
@@ -2376,7 +2709,6 @@ function renderGraph(centerId) {
 	let queue = [{ id: centerId, depth: 0 }],
 		nodesByDepth = Array.from({ length: currentDepthShown + 1 }, () => []),
 		edgesToRender = [];
-
 	while (queue.length > 0) {
 		let curr = queue.shift();
 		if (curr.depth >= currentDepthShown) continue;
@@ -2385,7 +2717,6 @@ function renderGraph(centerId) {
 			const
 				neighborId = e.source === curr.id ? e.target : e.source,
 				neighborNode = nodes.find(n => n.id === neighborId);
-			// Skip processing this branch if the neighbor's trait/perspective doesn't match
 			if (neighborNode && (!checkTrait(neighborNode.trait) || !checkTypeFilter(neighborNode.type))) return;
 			if (!visitedEdges.has(e)) {
 				visitedEdges.add(e);
@@ -2421,17 +2752,14 @@ function renderGraph(centerId) {
 		el.classList.remove('target');
 	});
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
-
 	linesZoom.replaceChildren();
 	activeLineElements = [];
 	const centerEl = document.getElementById(`node-${centerId}`);
 	if (!centerEl) return;
 	centerEl.classList.remove('hidden');
 	centerEl.classList.add('current');
-
 	const centerMatches = checkTrait(centerNodeData.trait);
 	if (!centerMatches) centerEl.classList.add('ghosted');
-
 	let renderCenterY = centerY,
 		renderParentY = null;
 	if (currentView === 'stacked') {
@@ -2439,10 +2767,8 @@ function renderGraph(centerId) {
 		renderParentY = (stackLayout.parentTopEm * emSize) + (centerH / 2);
 		renderCenterY = renderParentY + centerH + (stackLayout.parentSelectedGapEm * emSize);
 	}
-
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${renderCenterY}px`;
-
 	const panAnchorY = (currentView === 'stacked' && renderParentY != null) ? renderParentY : renderCenterY;
 	if (centerId !== previousCenterId) {
 		const urlParams = new URL(window.location).searchParams;
@@ -2454,7 +2780,6 @@ function renderGraph(centerId) {
 			} else {
 				currentZoom = 1;
 			}
-
 			if (urlXY && urlParams.has('x') && urlParams.has('y')) {
 				const
 					paramX = parseFloat(urlParams.get('x')),
@@ -2471,11 +2796,9 @@ function renderGraph(centerId) {
 		}
 		previousCenterId = centerId;
 	}
-
 	applyPanZoomTransform();
-
 	if (currentView === 'stacked') {
-		layoutStackByCompositeGroup({
+		calcNodePositionStack({
 			centerId,
 			centerNodeData,
 			parentId,
@@ -2485,124 +2808,33 @@ function renderGraph(centerId) {
 			anchorY: renderCenterY,
 			parentAnchorY: renderParentY
 		});
+	} else if (currentView === 'physics') {
+		physicsLoopRunning = false; // stop any previous loop
+		calcNodePositionPhysics({
+			currentDepthShown,
+			nodesByDepth,
+			parentId,
+			centerX,
+			centerY,
+			baseRadius: petalLayout.baseRadiusPx,
+			edgesToRender
+		});
 	} else {
-		const baseRadius = petalLayout.baseRadiusPx;
-
-	for (let d = 1; d <= currentDepthShown; d++) {
-		const layerNodes = nodesByDepth[d];
-
-		layerNodes.sort((a, b) => {
-			if (a.node.id === parentId) return -1;
-			if (b.node.id === parentId) return 1;
-
-			const getW = (t) => {
-				if (!t || t === 'anatomy') return 1;
-				if (t === 'benefit') return 2;
-				if (t === 'consequence' || t === 'harm') return 3;
-				if (t === 'removed') return 4;
-				return 5;
-			};
-			return getW(a.edgeType) - getW(b.edgeType);
-		});
-
-		const groups = {};
-		layerNodes.forEach(nData => {
-			if (!groups[nData.parentId]) groups[nData.parentId] = [];
-			groups[nData.parentId].push(nData);
-		});
-
-		Object.entries(groups).forEach(([pId, children]) => {
-			let px = centerX,
-				py = centerY,
-				pAngle = 0,
-				isCenter = true;
-
-			if (d > 1) {
-				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
-				if (pData && pData.x !== undefined && pData.y !== undefined) {
-					px = pData.x;
-					py = pData.y;
-					pAngle = pData.angle || 0;
-					isCenter = false;
-				}
-			}
-
-			// Petal layout: 360° for center, partial outward fan for petals
-			const
-				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
-				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2),
-				requiredArcLength = children.length * petalLayout.requiredArcPerChildPx,
-				sizeMultiplier = petalLayout.depthRadiusMultiplierStart + (d - 1) * petalLayout.depthRadiusMultiplierStep,
-				dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
-
-			children.forEach((nData, index) => {
-				const el = document.getElementById(`node-${nData.node.id}`);
-				if (!el) return;
-
-				const wasHidden = el.classList.contains('hidden');
-				if (wasHidden) {
-					el.style.left = `${px}px`;
-					el.style.top = `${py}px`;
-					el.style.scale = '0';
-					el.style.opacity = '0';
-					el.classList.remove('hidden');
-					void el.offsetWidth; // force layout
-				} else {
-					el.classList.remove('hidden');
-				}
-
-				if (nData.isOutgoing) {
-					el.classList.add('target');
-				} else {
-					el.classList.add('source');
-				}
-
-				if (nData.node.id === parentId) {
-					el.classList.add('parent');
-				}
-
-				const neighborMatches = checkTrait(nData.node.trait);
-				if (!neighborMatches) el.classList.add('ghosted');
-
-				let angle;
-				if (!isCenter && children.length === 1) {
-					angle = pAngle;
-				} else {
-					const divisor = isCenter ? children.length : Math.max(1, children.length - 1);
-					angle = startAngle + (index / divisor) * totalSpread;
-				}
-
-				nData.angle = angle;
-
-				const
-					nx = px + dynamicRadius * Math.cos(angle),
-					ny = py + dynamicRadius * Math.sin(angle);
-
-				// Save coordinates so the next depth children can fan out from this node
-				nData.x = nx;
-				nData.y = ny;
-
-				const delay = (d - 1) * 100 + index * 30;
-				setTimeout(() => {
-					el.style.left = `${nx}px`;
-					el.style.top = `${ny}px`;
-					if (wasHidden) {
-						el.style.scale = '';
-						el.style.opacity = '';
-					}
-				}, delay);
-			});
+		calcNodePositionPetal({
+			currentDepthShown,
+			nodesByDepth,
+			parentId,
+			centerX,
+			centerY,
+			baseRadius: petalLayout.baseRadiusPx
 		});
 	}
-	}
-
 	edgesToRender.forEach(e => {
 		const
 			sourceEl = document.getElementById(`node-${e.source}`),
 			targetEl = document.getElementById(`node-${e.target}`);
 		if (!sourceEl || !targetEl) return;
 		if (sourceEl.classList.contains('hidden') || targetEl.classList.contains('hidden')) return;
-
 		const
 			pathLine = document.createElementNS('http://www.w3.org/2000/svg', 'path'),
 			edgeType = e.type || 'anatomy',
@@ -2611,33 +2843,27 @@ function renderGraph(centerId) {
 		pathLine.setAttribute('marker-mid', marker);
 		pathLine.setAttribute('marker-start', 'url(#start-marker)');
 		pathLine.setAttribute('marker-end', 'url(#end-marker)');
-
 		const
 			sourceNode = nodes.find(n => n.id === e.source) || {},
 			targetNode = nodes.find(n => n.id === e.target) || {},
 			sourceMatches = checkTrait(sourceNode.trait) && checkTypeFilter(sourceNode.type),
 			targetMatches = checkTrait(targetNode.trait) && checkTypeFilter(targetNode.type),
 			edgeMatches = checkTypeFilter(e.type);
-
 		if (!edgeMatches && (!sourceMatches || !targetMatches)) pathLine.setAttribute('opacity', '0.25');
-
 		linesZoom.append(pathLine);
-
 		activeLineElements.push({
 			line: pathLine,
 			sourceEl: sourceEl,
 			targetEl: targetEl
 		});
 	});
-
 	startLinesLoop();
 	setTimeout(() => {
 		stopLinesLoop();
 		updateLinesOnce();
 	}, 2000);
-}
+};
 
-let resizeTimeout;
 window.addEventListener('resize', () => {
 	if (nodes.length > 0) {
 		clearTimeout(resizeTimeout);
@@ -2646,7 +2872,6 @@ window.addEventListener('resize', () => {
 		}, 500);
 	}
 });
-
 window.addEventListener('hashchange', () => {
 	if (nodes.length > 0) {
 		const newId = getIdFromHash();
@@ -2654,9 +2879,6 @@ window.addEventListener('hashchange', () => {
 	}
 });
 
-const appContainer = document.getElementById('app');
-
-let panZoomRafPending = false;
 const requestPanZoomUpdate = () => {
 	if (panZoomRafPending) return;
 	panZoomRafPending = true;
@@ -2668,8 +2890,6 @@ const requestPanZoomUpdate = () => {
 };
 
 const updateVisualViewportBottomOffset = () => {
-	// On Android Chrome, the visual viewport can be shorter than window.innerHeight
-	// due to browser UI. Move the bottom bar up by the overlap.
 	const vv = window.visualViewport;
 	if (!vv) {
 		document.documentElement.style.setProperty('--vv-bottom-offset', '0px');
@@ -2685,29 +2905,22 @@ if (window.visualViewport) {
 	window.visualViewport.addEventListener('resize', updateVisualViewportBottomOffset);
 	window.visualViewport.addEventListener('scroll', updateVisualViewportBottomOffset);
 }
+
 window.addEventListener('resize', updateVisualViewportBottomOffset);
 updateVisualViewportBottomOffset();
 
 const applyPanZoomTransform = () => {
 	const
-		dpr = window.devicePixelRatio || 1,
-		roundPx = (v) => Math.round(v * dpr) / dpr,
-		tx = roundPx(panX),
-		ty = roundPx(panY),
+		tx = Bang.roundPx(panX),
+		ty = Bang.roundPx(panY),
 		z = currentZoom;
-
 	nodesZoom.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
 	linesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
 };
 
-const
-	clamp = (v, min, max) => Math.min(max, Math.max(min, v)),
-	minZoom = 0.05,
-	maxZoom = 10;
-
 const setZoomAt = (newZoom, clientX, clientY) => {
 	const
-		z = clamp(newZoom, minZoom, maxZoom),
+		z = Bang.clamp(newZoom, minZoom, maxZoom),
 		rect = appContainer.getBoundingClientRect(),
 		anchorX = clientX - rect.left,
 		anchorY = clientY - rect.top;
@@ -2722,10 +2935,9 @@ appContainer.addEventListener('wheel', (e) => {
 	e.preventDefault();
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
 	setZoomAt(currentZoom * zoomDelta, e.clientX, e.clientY);
-}, { passive: false });
-
-let isGraphPanning = false,
-	startPanX, startPanY, initialPanX, initialPanY;
+}, {
+	passive: false
+});
 
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
@@ -2753,8 +2965,6 @@ document.addEventListener('mouseup', () => {
 	}
 });
 
-// Mobile gestures: one-finger pan + two-finger pinch zoom (graph only)
-// Expose a small flag so card interactions can yield to pinch gestures.
 window.__isTouchPinching = false;
 
 const touchPointers = new Map();
@@ -2773,8 +2983,6 @@ const getTwoPointers = () => {
 	return pts.length >= 2 ? [pts[0], pts[1]] : null;
 };
 
-const dist2 = (a, b) => Math.hypot(b.x - a.x, b.y - a.y);
-
 graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.pointerType !== 'touch') return;
 	if (e.target.closest('.card')) return;
@@ -2783,7 +2991,7 @@ graphContainer.addEventListener('pointerdown', (e) => {
 	try {
 		graphContainer.setPointerCapture(e.pointerId);
 	} catch (err) {
-		// Ignore (e.g. synthetic events or unsupported pointer capture)
+		// Ignore
 	}
 	touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
@@ -2799,7 +3007,7 @@ graphContainer.addEventListener('pointerdown', (e) => {
 		touchIsPanning = false;
 		const pair = getTwoPointers();
 		if (!pair) return;
-		touchPinchStartDist = Math.max(1, dist2(pair[0], pair[1]));
+		touchPinchStartDist = Math.max(1, Bang.dist2(pair[0], pair[1]));
 		touchPinchStartZoom = currentZoom;
 		touchPinchStartPanX = panX;
 		touchPinchStartPanY = panY;
@@ -2815,9 +3023,9 @@ graphContainer.addEventListener('pointermove', (e) => {
 		const pair = getTwoPointers();
 		if (!pair) return;
 		const
-			d = Math.max(1, dist2(pair[0], pair[1])),
+			d = Math.max(1, Bang.dist2(pair[0], pair[1])),
 			ratio = d / touchPinchStartDist,
-			newZoom = clamp(touchPinchStartZoom * ratio, minZoom, maxZoom),
+			newZoom = Bang.clamp(touchPinchStartZoom * ratio, minZoom, maxZoom),
 			midClientX = (pair[0].x + pair[1].x) / 2,
 			midClientY = (pair[0].y + pair[1].y) / 2,
 			rect = appContainer.getBoundingClientRect(),
@@ -2860,8 +3068,6 @@ graphContainer.addEventListener('pointercancel', (e) => {
 	endTouchPointer(e.pointerId);
 });
 
-// TouchEvent fallback (not all mobile browsers fully support Pointer Events + touch-action)
-// Only register this fallback if Pointer Events are not available.
 if (!('PointerEvent' in window)) {
 	let touchFallbackIsPanning = false,
 		touchFallbackStartX = 0,
@@ -2895,7 +3101,7 @@ if (!('PointerEvent' in window)) {
 			touchFallbackIsPanning = false;
 			const pair = getTouchPair(e.touches);
 			if (!pair) return;
-			touchFallbackPinchStartDist = Math.max(1, dist2({ x: pair[0].clientX, y: pair[0].clientY }, { x: pair[1].clientX, y: pair[1].clientY }));
+			touchFallbackPinchStartDist = Math.max(1, Bang.dist2({ x: pair[0].clientX, y: pair[0].clientY }, { x: pair[1].clientX, y: pair[1].clientY }));
 			touchFallbackPinchStartZoom = currentZoom;
 			touchFallbackPinchStartPanX = panX;
 			touchFallbackPinchStartPanY = panY;
@@ -2910,9 +3116,9 @@ if (!('PointerEvent' in window)) {
 			const
 				a = { x: pair[0].clientX, y: pair[0].clientY },
 				b = { x: pair[1].clientX, y: pair[1].clientY },
-				d = Math.max(1, dist2(a, b)),
+				d = Math.max(1, Bang.dist2(a, b)),
 				ratio = d / Math.max(1, touchFallbackPinchStartDist),
-				newZoom = clamp(touchFallbackPinchStartZoom * ratio, minZoom, maxZoom),
+				newZoom = Bang.clamp(touchFallbackPinchStartZoom * ratio, minZoom, maxZoom),
 				midClientX = (a.x + b.x) / 2,
 				midClientY = (a.y + b.y) / 2,
 				rect = appContainer.getBoundingClientRect(),
