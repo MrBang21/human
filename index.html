@@ -133,6 +133,7 @@
 	--hue-benefit: 160;
 	--hue-harm: 20;
 	--hue-energetic: 340;
+	--hue-homologous: 280;
 	--hue-url: 240;
 
 	--trait-male: oklch(var(--node-l) var(--node-c) var(--hue-male));
@@ -860,21 +861,28 @@ svg {
 	.benefit {
 		--_hue: var(--hue-benefit);
 		--_width: .2em;
-		--_dash: 4 4;
+		--_dash: 4 6;
 	}
 
 	#arrow-harm,
 	.harm {
 		--_hue: var(--hue-harm);
 		--_width: .2em;
-		--_dash: 4 4;
+		--_dash: 6 8;
 	}
 
 	#arrow-energetic,
 	.energetic {
 		--_hue: var(--hue-energetic);
 		--_width: .15em;
-		--_dash: 6 6;
+		--_dash: 6 8;
+	}
+
+	#arrow-homologous,
+	.homologous {
+		--_hue: var(--hue-homologous);
+		--_width: .2em;
+		--_dash: 10 15;
 	}
 
 	path.edge {
@@ -1273,6 +1281,11 @@ svg {
 				<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
 			</svg> Energetic
 		</div>
+		<div class="item">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+				<path class="edge homologous" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-homologous)" />
+			</svg> Homologous
+		</div>
 		<div class="divider"></div>
 		<div class="name">Biological Traits</div>
 		<div class="item">
@@ -1328,6 +1341,9 @@ svg {
 				<marker id="arrow-energetic" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
+				<marker id="arrow-homologous" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+					<path d="M 2 5 L 4 2 L 4 4 L 6 4 L 6 2 L 8 5 L 6 8 L 6 6 L 4 6 L 4 8 Z" />
+				</marker>
 				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
 					<circle cx="5" cy="5" r="5" />
 				</marker>
@@ -1342,7 +1358,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.1 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.2 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1534,7 +1550,8 @@ const
 		'consequence': 'url(#arrow-consequence)',
 		'benefit': 'url(#arrow-benefit)',
 		'harm': 'url(#arrow-harm)',
-		'energetic': 'url(#arrow-energetic)'
+		'energetic': 'url(#arrow-energetic)',
+		'homologous': 'url(#arrow-homologous)'
 	};
 
 
