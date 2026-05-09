@@ -13,7 +13,8 @@
 					"harm",
 					"nerve",
 					"sexual",
-					"energetic"
+					"energetic",
+					"homologous"
 				]
 			},
 			{
@@ -27,7 +28,8 @@
 					"benefit",
 					"harm",
 					"nerve",
-					"sexual"
+					"sexual",
+					"homologous"
 				],
 				"default": true
 			},
@@ -62,7 +64,9 @@
 					"sexual",
 					"consequence",
 					"removed",
-					"harm"
+					"harm",
+					"benefit",
+					"homologous"
 				]
 			}
 		],
@@ -3166,11 +3170,6 @@
 			"type": "nerve"
 		},
 		{
-			"source": "male",
-			"target": "male_nervous_system",
-			"type": "nerve"
-		},
-		{
 			"source": "nervous_system",
 			"target": "peripheral_nervous_system",
 			"type": "nerve"
@@ -4924,6 +4923,76 @@
 			"source": "pelvis",
 			"target": "buttocks",
 			"type": "anatomy"
+		},
+		{
+			"source": "male_foreskin",
+			"target": "female_clitoral_hood",
+			"type": "homologous"
+		},
+		{
+			"source": "male_glans",
+			"target": "female_clitoral_glans",
+			"type": "homologous"
+		},
+		{
+			"source": "male_penis",
+			"target": "female_clitoris",
+			"type": "homologous"
+		},
+		{
+			"source": "male_scrotum",
+			"target": "female_labia_majora",
+			"type": "homologous"
+		},
+		{
+			"source": "male_shaft",
+			"target": "female_labia_minora",
+			"type": "homologous"
+		},
+		{
+			"source": "male_testes",
+			"target": "female_ovaries",
+			"type": "homologous"
+		},
+		{
+			"source": "male_cowpers_glands",
+			"target": "female_bartholin_glands",
+			"type": "homologous"
+		},
+		{
+			"source": "male_prostate",
+			"target": "female_skenes_glands",
+			"type": "homologous"
+		},
+		{
+			"source": "male_dorsal_nerve",
+			"target": "female_dorsal_nerve",
+			"type": "homologous"
+		},
+		{
+			"source": "male_pudendal_nerve",
+			"target": "female_pudendal_nerve",
+			"type": "homologous"
+		},
+		{
+			"source": "male_bulb_of_penis",
+			"target": "female_vestibular_bulbs",
+			"type": "homologous"
+		},
+		{
+			"source": "male_crura_of_penis",
+			"target": "female_crura_of_clitoris",
+			"type": "homologous"
+		},
+		{
+			"source": "male_corpora_cavernosa",
+			"target": "female_body_of_clitoris",
+			"type": "homologous"
+		},
+		{
+			"source": "male_frenulum",
+			"target": "female_fourchette",
+			"type": "homologous"
 		}
 	]
 }
