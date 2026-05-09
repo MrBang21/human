@@ -1487,13 +1487,15 @@ const
 		maxRepulsion: 10000000,
 		nodeGapSq: 1000000,
 		minOverlapDistSq: 100,
-		damping: 0.50,
-		centerGravity: 0.01,
+		damping: 0.80,
+		centerGravity: 0.001,
 		forceMultiplier: 0.06,
-		maxVelocity: 1000,
+		maxVelocity: 1000000,
 		energyThreshold: 0.015,
 		alpha: 1.0,
 		alphaCoolDown: 0.001,
+		depthLength: 0.5,
+		depthPull: 0.5,
 	},
 	edgeStyles = {
 		'root': 'url(#arrow-root)',
@@ -2478,9 +2480,10 @@ function physicsTick() {
 			if (nSource && nTarget && nSource.x !== undefined && nTarget.x !== undefined) {
 				const
 					edgeType = edge.type || 'anatomy',
-					elastic = physicsLayout.linePull[edgeType] !== undefined
+					depthMult = parseFloat(depthDropdown.value) || 1,
+					elastic = (physicsLayout.linePull[edgeType] !== undefined
 						? physicsLayout.linePull[edgeType]
-						: physicsLayout.linePull['@default'],
+						: physicsLayout.linePull['@default']) / Math.max(1, depthMult * (physicsLayout.depthPull !== undefined ? physicsLayout.depthPull : 0.5)),
 					dynamicElastic = (nSource.isDragging || nTarget.isDragging) ? 5.0 : elastic;
 				let dx = nTarget.x - nSource.x,
 					dy = nTarget.y - nSource.y,
@@ -2490,9 +2493,9 @@ function physicsTick() {
 					dy = Math.random() * 0.1;
 					dist = Math.sqrt(dx * dx + dy * dy);
 				}
-				const lengthVal = physicsLayout.lineLength[edgeType] !== undefined
+				const lengthVal = (physicsLayout.lineLength[edgeType] !== undefined
 					? physicsLayout.lineLength[edgeType]
-					: physicsLayout.lineLength['@default'];
+					: physicsLayout.lineLength['@default']) * Math.max(1, depthMult * (physicsLayout.depthLength !== undefined ? physicsLayout.depthLength : 0.5));
 				let stretch = dist - lengthVal,
 					tp = physicsLayout.targetPull !== undefined ? physicsLayout.targetPull : 1,
 					sp = physicsLayout.sourcePull !== undefined ? physicsLayout.sourcePull : 1,
