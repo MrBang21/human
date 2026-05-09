@@ -289,6 +289,54 @@
 			"trait": "shared"
 		},
 		{
+			"id": "upper_torso",
+			"title": "Shared Upper Torso",
+			"content": "Upper central part of the human body",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "shared"
+		},
+		{
+			"id": "lower_torso",
+			"title": "Shared Lower Torso",
+			"content": "Lower central part of the human body",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "shared"
+		},
+		{
+			"id": "male_upper_torso",
+			"title": "Male Upper Torso",
+			"content": "Upper central part of the male body",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "male"
+		},
+		{
+			"id": "male_lower_torso",
+			"title": "Male Lower Torso",
+			"content": "Lower central part of the male body",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "male"
+		},
+		{
+			"id": "female_upper_torso",
+			"title": "Female Upper Torso",
+			"content": "Upper central part of the female body",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "female"
+		},
+		{
+			"id": "female_lower_torso",
+			"title": "Female Lower Torso",
+			"content": "Lower central part of the female body",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "female"
+		},
+		{
 			"id": "male_torso",
 			"title": "Male Torso",
 			"content": "Central part of the male body",
@@ -2402,102 +2450,137 @@
 			"type": "anatomy"
 		},
 		{
+			"source": "male_torso",
+			"target": "torso",
+			"type": "anatomy"
+		},
+		{
 			"source": "female_anatomy",
 			"target": "female_torso",
 			"type": "anatomy"
 		},
 		{
-			"source": "neck",
-			"target": "torso",
+			"source": "upper_torso",
+			"target": "neck",
 			"type": "anatomy"
 		},
 		{
 			"source": "torso",
+			"target": "upper_torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "torso",
+			"target": "lower_torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "upper_torso",
 			"target": "shoulders",
 			"type": "anatomy"
 		},
 		{
-			"source": "torso",
+			"source": "upper_torso",
 			"target": "chest",
 			"type": "anatomy"
 		},
 		{
-			"source": "torso",
+			"source": "lower_torso",
 			"target": "abdomen",
 			"type": "anatomy"
 		},
 		{
-			"source": "torso",
+			"source": "upper_torso",
 			"target": "back",
 			"type": "anatomy"
 		},
 		{
-			"source": "torso",
+			"source": "lower_torso",
 			"target": "pelvis",
 			"type": "anatomy"
 		},
 		{
-			"source": "neck",
-			"target": "male_torso",
+			"source": "male_upper_torso",
+			"target": "neck",
 			"type": "anatomy"
 		},
 		{
 			"source": "male_torso",
+			"target": "male_upper_torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_torso",
+			"target": "male_lower_torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_upper_torso",
 			"target": "shoulders",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_torso",
+			"source": "male_upper_torso",
 			"target": "chest",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_torso",
+			"source": "male_lower_torso",
 			"target": "abdomen",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_torso",
+			"source": "male_upper_torso",
 			"target": "back",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_torso",
+			"source": "male_lower_torso",
 			"target": "male_pelvis",
 			"type": "anatomy"
 		},
 		{
-			"source": "neck",
-			"target": "female_torso",
+			"source": "female_upper_torso",
+			"target": "neck",
 			"type": "anatomy"
 		},
 		{
 			"source": "female_torso",
+			"target": "female_upper_torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_torso",
+			"target": "female_lower_torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_upper_torso",
 			"target": "shoulders",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_torso",
+			"source": "female_upper_torso",
 			"target": "chest",
 			"type": "anatomy"
 		},
 		{
 			"source": "female_breasts",
-			"target": "female_torso",
+			"target": "female_upper_torso",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_torso",
+			"source": "female_lower_torso",
 			"target": "abdomen",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_torso",
+			"source": "female_upper_torso",
 			"target": "back",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_torso",
+			"source": "female_lower_torso",
 			"target": "female_pelvis",
 			"type": "anatomy"
 		},
@@ -2569,6 +2652,11 @@
 		{
 			"source": "shoulders",
 			"target": "arms",
+			"type": "anatomy"
+		},
+		{
+			"source": "arms",
+			"target": "upper_arm",
 			"type": "anatomy"
 		},
 		{
@@ -2644,6 +2732,21 @@
 		{
 			"source": "genital_region",
 			"target": "male_pelvis",
+			"type": "anatomy"
+		},
+		{
+			"source": "lower_torso",
+			"target": "genital_region",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_lower_torso",
+			"target": "male_genital",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_lower_torso",
+			"target": "female_genital",
 			"type": "anatomy"
 		},
 		{
@@ -3280,6 +3383,11 @@
 			"source": "male_foreskin",
 			"target": "male_circumcision",
 			"type": "harm"
+		},
+		{
+			"source": "male_circumcision",
+			"target": "male_foreskin",
+			"type": "removed"
 		},
 		{
 			"source": "female_vulva",
@@ -4317,11 +4425,6 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "anatomy",
-			"target": "neck",
-			"type": "anatomy"
-		},
-		{
 			"source": "shared",
 			"target": "ears",
 			"type": "anatomy"
@@ -4392,7 +4495,7 @@
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
+			"source": "lower_torso",
 			"target": "buttocks",
 			"type": "anatomy"
 		},
@@ -4423,6 +4526,11 @@
 		},
 		{
 			"source": "anatomy",
+			"target": "anus",
+			"type": "anatomy"
+		},
+		{
+			"source": "anus",
 			"target": "anal_rim",
 			"type": "anatomy"
 		},
