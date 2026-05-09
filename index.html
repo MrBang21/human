@@ -417,6 +417,21 @@ body,
 	&.current.ghosted {
 		filter: grayscale(40%);
 	}
+
+	&.related {
+		--node-l: var(--selected-l);
+		--node-c: var(--selected-c);
+		z-index: 4;
+	}
+	&.unrelated {
+		opacity: 0.5;
+		filter: grayscale(100%);
+	}
+	&.hidden {
+		display: none;
+		opacity: 0;
+		pointer-events: none;
+	}
 }
 
 #top-bar {
@@ -867,6 +882,14 @@ svg {
 		stroke-linecap: round;
 		stroke-linejoin: round;
 		shape-rendering: geometricPrecision;
+		&.related {
+			stroke-width: calc(var(--_width, 2) * 1.5);
+			opacity: 1 !important;
+			filter: brightness(1.2);
+		}
+		&.unrelated {
+			opacity: 0.1;
+		}
 	}
 
 	marker,
@@ -2286,6 +2309,41 @@ function setupInteractions(card, id) {
 		}
 		endDrag();
 	});
+
+	card.addEventListener('mouseenter', () => {
+		const relatedNodes = new Set([card]);
+		const relatedEdges = new Set();
+
+		activeLineElements.forEach(item => {
+			if (item.sourceEl.id === `node-${id}` || item.targetEl.id === `node-${id}`) {
+				relatedEdges.add(item.line);
+				relatedNodes.add(item.sourceEl);
+				relatedNodes.add(item.targetEl);
+			}
+		});
+
+		document.querySelectorAll('.card').forEach(el => {
+			if (relatedNodes.has(el)) {
+				el.classList.add('related');
+			} else {
+				el.classList.add('unrelated');
+			}
+		});
+
+		activeLineElements.forEach(item => {
+			if (relatedEdges.has(item.line)) {
+				item.line.classList.add('related');
+			} else {
+				item.line.classList.add('unrelated');
+			}
+		});
+	});
+
+	card.addEventListener('mouseleave', () => {
+		document.querySelectorAll('.related, .unrelated').forEach(el => {
+			el.classList.remove('related', 'unrelated');
+		});
+	});
 }
 
 function getBreadcrumbPath(targetId) {
@@ -2777,6 +2835,8 @@ function renderGraph(centerId) {
 		el.classList.remove('parent');
 		el.classList.remove('source');
 		el.classList.remove('target');
+		el.classList.remove('related');
+		el.classList.remove('unrelated');
 	});
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
 	linesZoom.replaceChildren();
