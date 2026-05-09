@@ -552,6 +552,7 @@ select {
 		flex: 0 1 auto;
 		#search {
 			width: 100%;
+			min-width: 5em;
 		}
 		#results {
 			margin-top: .5em;
@@ -716,7 +717,7 @@ footer {
 #legend {
 	inset: auto auto 1em 1em;
 	padding: 1em;
-	.title {
+	.name {
 		font-weight: bold;
 		margin-bottom: .5em;
 		color: var(--text);
@@ -1121,8 +1122,8 @@ svg {
 		<svg class="icon" viewBox="0 0 24 24">
 			<use href=""></use>
 		</svg>
-		<h3>Title</h3>
-		<p>Content goes here...</p>
+		<h3></h3>
+		<p></p>
 	</div>
 </template>
 
@@ -1204,7 +1205,7 @@ svg {
 		<ul></ul>
 	</div>
 	<div id="legend">
-		<div class="title">Connection Types</div>
+		<div class="name">Connection Types</div>
 		<div class="item">
 			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
 				<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
@@ -1246,7 +1247,7 @@ svg {
 			</svg> Energetic
 		</div>
 		<div class="divider"></div>
-		<div class="title">Biological Traits</div>
+		<div class="name">Biological Traits</div>
 		<div class="item">
 			<div class="trait male">Aa</div> Male
 		</div>
@@ -1314,7 +1315,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.1 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1412,7 +1413,7 @@ const
 	defsHTML = document.getElementById('svg-defs').outerHTML,
 	breadcrumbs = document.getElementById('breadcrumbs'),
 	nodeDescription = document.getElementById('description'),
-	nodeTitle = nodeDescription.querySelector('h2'),
+	nodeName = nodeDescription.querySelector('h2'),
 	nodeContent = nodeDescription.querySelector('p'),
 	nodeLinks = nodeDescription.querySelector('ul'),
 	traitFilterDropdown = document.getElementById('trait-filter'),
@@ -1544,6 +1545,53 @@ const Bang = {
 			left:  { c1: { x: x01,  y: y01  }, c2: { x: x012, y: y012 } },
 			right: { c1: { x: x123, y: y123 }, c2: { x: x23,  y: y23  } },
 		};
+	},
+	extractGraph: (centerId, maxDepth, nodes, edges, checkTrait, checkTypeFilter) => {
+		let visitedNodes = new Set(),
+			visitedEdges = new Set(),
+			queue = [{ id: centerId, depth: 0 }],
+			nodesByDepth = Array.from({ length: maxDepth + 1 }, () => []),
+			edgesToRender = [];
+		visitedNodes.add(centerId);
+
+		while (queue.length > 0) {
+			let curr = queue.shift();
+			if (curr.depth >= maxDepth) continue;
+			const connected = edges.filter(e => e.source === curr.id || e.target === curr.id);
+			connected.forEach(e => {
+				const
+					neighborId = e.source === curr.id ? e.target : e.source,
+					neighborNode = nodes.find(n => n.id === neighborId);
+				if (neighborNode && (!checkTrait(neighborNode.trait) || !checkTypeFilter(neighborNode.type))) return;
+				if (!visitedEdges.has(e)) {
+					visitedEdges.add(e);
+					edgesToRender.push(e);
+				}
+				if (!visitedNodes.has(neighborId)) {
+					visitedNodes.add(neighborId);
+					if (neighborNode) {
+						queue.push({ id: neighborId, depth: curr.depth + 1 });
+						nodesByDepth[curr.depth + 1].push({
+							node: neighborNode,
+							depth: curr.depth + 1,
+							isOutgoing: e.source === curr.id,
+							edgeType: e.type || 'anatomy',
+							parentId: curr.id
+						});
+					}
+				}
+			});
+		}
+		// Connect siblings / intra-graph relationships
+		edges.forEach(e => {
+			if (visitedNodes.has(e.source) && visitedNodes.has(e.target)) {
+				if (!visitedEdges.has(e)) {
+					visitedEdges.add(e);
+					edgesToRender.push(e);
+				}
+			}
+		});
+		return { visitedNodes, visitedEdges, nodesByDepth, edgesToRender };
 	}
 };
 
@@ -1699,7 +1747,7 @@ async function loadGraphData() {
 				const opt = document.createElement('option');
 				opt.value = p.key;
 				opt.textContent = p.name;
-				if (p.title) opt.title = p.title;
+				if (p.name) opt.name = p.name;
 				typeFilterDropdown.appendChild(opt);
 			});
 			typeFilterDropdown.value = currentTypeFilter;
@@ -2033,7 +2081,7 @@ function initGraph() {
 		const
 			clone = cardTemplate.content.cloneNode(true),
 			card = clone.querySelector('.card'),
-			titleEl = clone.querySelector('h3'),
+			nameEl = clone.querySelector('h3'),
 			contentEl = clone.querySelector('p'),
 			useEl = clone.querySelector('use'),
 			nodeType = node.type || 'anatomy',
@@ -2043,7 +2091,7 @@ function initGraph() {
 		card.className = `card hidden type-${nodeType} trait-${nodeTrait} cat-${nodeCategory}`;
 		card.id = `node-${node.id}`;
 
-		titleEl.textContent = node.title;
+		nameEl.textContent = node.name;
 		contentEl.textContent = node.content;
 		useEl.setAttribute('href', `#icon-${nodeCategory}`);
 
@@ -2064,7 +2112,7 @@ searchInput.addEventListener('input', (e) => {
 
 	const matches = nodes.filter(n => {
 		const
-			matchesTerm = n.title.toLowerCase().includes(term) || n.content.toLowerCase().includes(term) || (n.aka && n.aka.toLowerCase().includes(term)),
+			matchesTerm = n.name.toLowerCase().includes(term) || n.content.toLowerCase().includes(term) || (n.aka && n.aka.toLowerCase().includes(term)),
 			matchesFilter = checkTrait(n.trait) && checkTypeFilter(n.type);
 		return matchesTerm && matchesFilter;
 	});
@@ -2078,7 +2126,7 @@ searchInput.addEventListener('input', (e) => {
 				itemEl = clone.querySelector('li');
 
 			itemEl.setAttribute('data-id', m.id);
-			clone.querySelector('.name').textContent = m.title;
+			clone.querySelector('.name').textContent = m.name;
 			clone.querySelector('.desc').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
 
 			itemEl.addEventListener('click', (ev) => {
@@ -2348,7 +2396,7 @@ function updateBreadcrumbs(centerId) {
 		const
 			isLast = index === path.length - 1,
 			span = document.createElement('span');
-		span.textContent = nodeData.title;
+		span.textContent = nodeData.name;
 		if (isLast) {
 			span.className = 'current';
 		} else {
@@ -2688,7 +2736,7 @@ function renderGraph(centerId) {
 		parentId = path && path.length > 1 ? path[path.length - 2] : null,
 		centerNodeData = nodes.find(n => n.id === centerId);
 	updateBreadcrumbs(centerId);
-	nodeTitle.textContent = centerNodeData?.title || centerId;
+	nodeName.textContent = centerNodeData?.name || centerId;
 	nodeContent.textContent = descriptions[centerId] || '';
 	nodeLinks.replaceChildren();
 	if (sources[centerId]) {
@@ -2696,7 +2744,7 @@ function renderGraph(centerId) {
 			const clone = descriptionSourceTemplate.content.cloneNode(true),
 				linkEl = clone.querySelector('a');
 			linkEl.href = source.url;
-			linkEl.textContent = source.title;
+			linkEl.textContent = source.name;
 			nodeLinks.append(clone);
 		});
 	}
@@ -2705,41 +2753,17 @@ function renderGraph(centerId) {
 	} else {
 		nodeDescription.classList.remove('visible');
 	}
-	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1,
-		visitedNodes = new Set(),
-		visitedEdges = new Set();
-	visitedNodes.add(centerId);
-	let queue = [{ id: centerId, depth: 0 }],
-		nodesByDepth = Array.from({ length: currentDepthShown + 1 }, () => []),
-		edgesToRender = [];
-	while (queue.length > 0) {
-		let curr = queue.shift();
-		if (curr.depth >= currentDepthShown) continue;
-		const connected = edges.filter(e => e.source === curr.id || e.target === curr.id);
-		connected.forEach(e => {
-			const
-				neighborId = e.source === curr.id ? e.target : e.source,
-				neighborNode = nodes.find(n => n.id === neighborId);
-			if (neighborNode && (!checkTrait(neighborNode.trait) || !checkTypeFilter(neighborNode.type))) return;
-			if (!visitedEdges.has(e)) {
-				visitedEdges.add(e);
-				edgesToRender.push(e);
-			}
-			if (!visitedNodes.has(neighborId)) {
-				visitedNodes.add(neighborId);
-				if (neighborNode) {
-					queue.push({ id: neighborId, depth: curr.depth + 1 });
-					nodesByDepth[curr.depth + 1].push({
-						node: neighborNode,
-						depth: curr.depth + 1,
-						isOutgoing: e.source === curr.id,
-						edgeType: e.type || 'anatomy',
-						parentId: curr.id
-					});
-				}
-			}
-		});
-	}
+	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1;
+
+	let { visitedNodes, visitedEdges, nodesByDepth, edgesToRender } = Bang.extractGraph(
+		centerId,
+		currentDepthShown,
+		nodes,
+		edges,
+		checkTrait,
+		checkTypeFilter
+	);
+
 	if (parentId) {
 		const pIdx = nodesByDepth[1].findIndex(item => item.node.id === parentId);
 		if (pIdx > 0) {
