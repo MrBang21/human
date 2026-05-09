@@ -8,12 +8,12 @@
 					"root",
 					"anatomy",
 					"consequence",
-					"energetic",
 					"removed",
 					"benefit",
 					"harm",
 					"nerve",
-					"sexual"
+					"sexual",
+					"energetic"
 				]
 			},
 			{
@@ -44,17 +44,6 @@
 					"harm",
 					"nerve",
 					"sexual"
-				]
-			},
-			{
-				"key": "consequence",
-				"name": "Consequence",
-				"items": [
-					"root",
-					"consequence",
-					"removed",
-					"harm",
-					"nerve"
 				]
 			},
 			{
@@ -1904,7 +1893,7 @@
 			"content": "Vasocongestion and engorgement of penile erectile tissue triggered by nitric oxide and pelvic nerves",
 			"type": "anatomy",
 			"category": "sexual",
-			"trait": "male"
+			"trait": "female"
 		},
 		{
 			"id": "female_lubrication",
@@ -2139,14 +2128,6 @@
 			"trait": "male"
 		},
 		{
-			"id": "male_dorsal_nerve_zone",
-			"name": "Dorsal Nerve Zone",
-			"content": "Top shaft nerve pathway, sensitive region",
-			"type": "anatomy",
-			"category": "sexual",
-			"trait": "male"
-		},
-		{
 			"id": "male_scrotal_raphe",
 			"name": "Scrotal Raphe",
 			"content": "Central seam of scrotum",
@@ -2262,7 +2243,7 @@
 			"id": "male_nervous_system",
 			"name": "Male Nervous System",
 			"content": "Neurological pathways governing responses and autonomic control of the male genitalia and reproductive tract.",
-			"type": "anatomy",
+			"type": "nerve",
 			"category": "nerve",
 			"trait": "male"
 		},
@@ -2270,7 +2251,7 @@
 			"id": "female_nervous_system",
 			"name": "Female Nervous System",
 			"content": "Neurological pathways governing responses and autonomic control of the female genitalia and reproductive tract.",
-			"type": "anatomy",
+			"type": "nerve",
 			"category": "nerve",
 			"trait": "female"
 		},
@@ -2278,7 +2259,7 @@
 			"id": "male_pudendal_nerve",
 			"name": "Male Pudendal Nerve",
 			"content": "Main somatic nerve of the male perineum, branching into the dorsal penile nerve. Vital for sensation and ejaculation.",
-			"type": "anatomy",
+			"type": "nerve",
 			"category": "nerve",
 			"trait": "male"
 		},
@@ -2286,7 +2267,7 @@
 			"id": "female_pudendal_nerve",
 			"name": "Female Pudendal Nerve",
 			"content": "Main nerve of the female perineum, branching into the dorsal clitoral nerve. Vital for clitoral sensation.",
-			"type": "anatomy",
+			"type": "nerve",
 			"category": "nerve",
 			"trait": "female"
 		},
@@ -2294,7 +2275,7 @@
 			"id": "male_pelvic_nerves",
 			"name": "Male Pelvic Nerves",
 			"content": "Autonomic nerves supplying male pelvic organs (prostate, seminal vesicles), controlling cellular erection pathways.",
-			"type": "anatomy",
+			"type": "nerve",
 			"category": "nerve",
 			"trait": "male"
 		},
@@ -2302,7 +2283,7 @@
 			"id": "female_pelvic_nerves",
 			"name": "Female Pelvic Nerves",
 			"content": "Autonomic nerves supplying female pelvic organs (vagina, cervix, clitoris), driving engorgement and lubrication.",
-			"type": "anatomy",
+			"type": "nerve",
 			"category": "nerve",
 			"trait": "female"
 		},
@@ -2324,6 +2305,26 @@
 		}
 	],
 	"edges": [
+		{
+			"source": "male_pudendal_nerve",
+			"target": "pudendal_nerve",
+			"type": "nerve"
+		},
+		{
+			"source": "female_pudendal_nerve",
+			"target": "pudendal_nerve",
+			"type": "nerve"
+		},
+		{
+			"source": "male_nervous_system",
+			"target": "nervous_system",
+			"type": "nerve"
+		},
+		{
+			"source": "female_nervous_system",
+			"target": "nervous_system",
+			"type": "nerve"
+		},
 		{
 			"source": "human",
 			"target": "shared",
@@ -3165,6 +3166,11 @@
 			"type": "nerve"
 		},
 		{
+			"source": "male",
+			"target": "male_nervous_system",
+			"type": "nerve"
+		},
+		{
 			"source": "nervous_system",
 			"target": "peripheral_nervous_system",
 			"type": "nerve"
@@ -3423,6 +3429,16 @@
 			"source": "female_clitoral_glans",
 			"target": "female_dorsal_nerve",
 			"type": "nerve"
+		},
+		{
+			"source": "female_dorsal_nerve",
+			"target": "female_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "female_body_of_clitoris",
+			"target": "female_dorsal_nerve",
+			"type": "anatomy"
 		},
 		{
 			"source": "female_clitoral_glans",
@@ -4415,7 +4431,7 @@
 			"type": "sexual"
 		},
 		{
-			"source": "male_dorsal_nerve_zone",
+			"source": "male_dorsal_nerve",
 			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
@@ -4686,7 +4702,7 @@
 		},
 		{
 			"source": "male_penis",
-			"target": "male_dorsal_nerve_zone",
+			"target": "male_dorsal_nerve",
 			"type": "anatomy"
 		},
 		{
