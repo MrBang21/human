@@ -19,7 +19,6 @@
 			{
 				"key": "anatomy",
 				"name": "Anatomy",
-				"title": "Anatomical perspectives",
 				"items": [
 					"root",
 					"anatomy",
@@ -35,7 +34,6 @@
 			{
 				"key": "energetic",
 				"name": "Energetic",
-				"title": "Spiritual, yogic, and energetic perspectives",
 				"items": [
 					"root",
 					"energetic",
@@ -158,7 +156,7 @@
 		"areola": "The specialized, pigmented skin surrounding the nipple. It contains sensory nerve fibers and sebaceous glands (Montgomery glands) that secrete lubricating and protective fluids. The areolar area is a prominent erogenous zone.",
 		"pudendal_nerve": "The major somatic nerve of the perineum, it emerges from the sacral plexus and carries sensory, motor, and autonomic fibers to the genital region. It innervates the clitoris, penis, perineum, and external anal sphincter, heavily mediating the tactile sensory aspect of sexual pleasure.",
 		"male_penis": "The principal male reproductive and intromittent organ. It is comprised of a root attached to the pelvic bone, a pendulous shaft containing three columns of erectile tissue (corpora cavernosa and corpus spongiosum), and the highly sensitive glans at the tip. During arousal, these tissues engorge with blood to produce an erection.",
-		"male_root": "The foundational base of the penis situated internally against the pelvic floor. It provides structural stability and anchors the erectile bodies (crura and bulb) to the pubic arch.",
+		"male_penile_root": "The foundational base of the penis situated internally against the pelvic floor. It provides structural stability and anchors the erectile bodies (crura and bulb) to the pubic arch.",
 		"male_shaft": "The cylindrical main body of the penis, covered by loose, highly mobile skin that facilitates the gliding mechanism during intercourse. It houses the urethra and the main erectile columns.",
 		"male_glans": "The acorn-shaped distal end of the penis. Covered by the prepuce in its intact state, the glans is dominated by free nerve endings sensitive to deep pressure and temperature, playing a crucial role in the ejaculatory reflex.",
 		"male_corona": "The raised ridge situated at the back edge of the glans penis where it meets the shaft. The corona is exceptionally sensitive to localized friction and pressure during sexual intercourse.",
@@ -189,44 +187,44 @@
 		"male_foreskin": [
 			{
 				"url": "https://www.youtube.com/watch?v=IpBTp45bfxs",
-				"title": "Not So Vestigial: The Anatomy and Functions of Male Foreskin by Stephanie Welch BA, MA, LMT"
+				"name": "Not So Vestigial: The Anatomy and Functions of Male Foreskin by Stephanie Welch BA, MA, LMT"
 			}
 		],
 		"male_circumcision": [
 			{
 				"url": "https://www.youtube.com/watch?v=HUdNTT7ny-8",
-				"title": "Circumcision The Whole Story"
+				"name": "Circumcision The Whole Story"
 			}
 		],
 		"female_clitoris": [
 			{
 				"url": "https://pubmed.ncbi.nlm.nih.gov/21941661/",
-				"title": "Anatomy of the Clitoris: Revision and Clarifications about the Anatomical Terms for the Clitoris Proposed (without Scientific Bases) by Helen O'Connell, Emmanuele Jannini, and Odile Buisson"
+				"name": "Anatomy of the Clitoris: Revision and Clarifications about the Anatomical Terms for the Clitoris Proposed (without Scientific Bases) by Helen O'Connell, Emmanuele Jannini, and Odile Buisson"
 			}
 		],
 		"female_g_spot": [
 			{
 				"url": "https://pubmed.ncbi.nlm.nih.gov/25740385/",
-				"title": "Clinical anatomy of the G-spot"
+				"name": "Clinical anatomy of the G-spot"
 			}
 		],
 		"male_prostate": [
 			{
 				"url": "https://www.kenhub.com/en/library/anatomy/the-prostate-gland",
-				"title": "Prostate gland: Anatomy, function and clinical relations"
+				"name": "Prostate gland: Anatomy, function and clinical relations"
 			}
 		],
 		"pudendal_nerve": [
 			{
 				"url": "https://www.kenhub.com/en/library/anatomy/pudendal-nerve",
-				"title": "Pudendal nerve: Anatomy and clinical notes"
+				"name": "Pudendal nerve: Anatomy and clinical notes"
 			}
 		]
 	},
 	"nodes": [
 		{
 			"id": "human",
-			"title": "Human",
+			"name": "Human",
 			"content": "Homo sapiens",
 			"type": "root",
 			"category": "region",
@@ -234,7 +232,7 @@
 		},
 		{
 			"id": "shared",
-			"title": "Biological Shared Characteristics",
+			"name": "Shared Characteristics",
 			"content": "Biological characteristics shared across all genders",
 			"type": "root",
 			"category": "region",
@@ -242,7 +240,7 @@
 		},
 		{
 			"id": "female",
-			"title": "Female",
+			"name": "Female",
 			"content": "Biological female characteristics",
 			"type": "root",
 			"category": "region",
@@ -250,7 +248,7 @@
 		},
 		{
 			"id": "male",
-			"title": "Male",
+			"name": "Male",
 			"content": "Biological male characteristics",
 			"type": "root",
 			"category": "region",
@@ -258,7 +256,7 @@
 		},
 		{
 			"id": "anatomy",
-			"title": "Shared Anatomy",
+			"name": "Shared Anatomy",
 			"content": "Physical structures common to all humans",
 			"type": "anatomy",
 			"category": "region",
@@ -266,7 +264,7 @@
 		},
 		{
 			"id": "female_anatomy",
-			"title": "Female Anatomy",
+			"name": "Female Anatomy",
 			"content": "Physical structures specific to anatomical females",
 			"type": "anatomy",
 			"category": "region",
@@ -274,7 +272,7 @@
 		},
 		{
 			"id": "male_anatomy",
-			"title": "Male Anatomy",
+			"name": "Male Anatomy",
 			"content": "Physical structures specific to anatomical males",
 			"type": "anatomy",
 			"category": "region",
@@ -282,55 +280,55 @@
 		},
 		{
 			"id": "torso",
-			"title": "Shared Torso",
+			"name": "Shared Torso",
 			"content": "Central part of the human body",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "shared"
 		},
 		{
-			"id": "upper_torso",
-			"title": "Shared Upper Torso",
+			"id": "thorax",
+			"name": "Thorax",
 			"content": "Upper central part of the human body",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "shared"
 		},
 		{
-			"id": "lower_torso",
-			"title": "Shared Lower Torso",
+			"id": "pelvis",
+			"name": "Pelvis",
 			"content": "Lower central part of the human body",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "shared"
 		},
 		{
-			"id": "male_upper_torso",
-			"title": "Male Upper Torso",
+			"id": "male_thorax",
+			"name": "Male Thorax",
 			"content": "Upper central part of the male body",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "male"
 		},
 		{
-			"id": "male_lower_torso",
-			"title": "Male Lower Torso",
+			"id": "male_pelvis",
+			"name": "Male Pelvis",
 			"content": "Lower central part of the male body",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "male"
 		},
 		{
-			"id": "female_upper_torso",
-			"title": "Female Upper Torso",
+			"id": "female_thorax",
+			"name": "Female Thorax",
 			"content": "Upper central part of the female body",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "female"
 		},
 		{
-			"id": "female_lower_torso",
-			"title": "Female Lower Torso",
+			"id": "female_pelvis",
+			"name": "Female Pelvis",
 			"content": "Lower central part of the female body",
 			"type": "anatomy",
 			"category": "region",
@@ -338,7 +336,7 @@
 		},
 		{
 			"id": "male_torso",
-			"title": "Male Torso",
+			"name": "Male Torso",
 			"content": "Central part of the male body",
 			"type": "anatomy",
 			"category": "region",
@@ -346,7 +344,7 @@
 		},
 		{
 			"id": "female_torso",
-			"title": "Female Torso",
+			"name": "Female Torso",
 			"content": "Central part of the female body",
 			"type": "anatomy",
 			"category": "region",
@@ -354,7 +352,7 @@
 		},
 		{
 			"id": "chest",
-			"title": "Chest",
+			"name": "Chest",
 			"content": "Pectoral region of the torso",
 			"type": "anatomy",
 			"category": "region",
@@ -362,7 +360,7 @@
 		},
 		{
 			"id": "abdomen",
-			"title": "Abdomen",
+			"name": "Abdomen",
 			"content": "Belly region of the torso",
 			"type": "anatomy",
 			"category": "region",
@@ -370,7 +368,7 @@
 		},
 		{
 			"id": "stomach",
-			"title": "Stomach",
+			"name": "Stomach",
 			"content": "Organ of digestion in the abdomen",
 			"type": "anatomy",
 			"category": "organ",
@@ -378,7 +376,7 @@
 		},
 		{
 			"id": "liver",
-			"title": "Liver",
+			"name": "Liver",
 			"content": "Large organ involved in metabolism and detoxification",
 			"type": "anatomy",
 			"category": "organ",
@@ -386,7 +384,7 @@
 		},
 		{
 			"id": "pancreas",
-			"title": "Pancreas",
+			"name": "Pancreas",
 			"content": "Glandular organ producing digestive enzymes and hormones",
 			"type": "anatomy",
 			"category": "organ",
@@ -394,7 +392,7 @@
 		},
 		{
 			"id": "small_intestine",
-			"title": "Small Intestine",
+			"name": "Small Intestine",
 			"content": "Part of the gastrointestinal tract where most nutrient absorption occurs",
 			"type": "anatomy",
 			"category": "organ",
@@ -402,7 +400,7 @@
 		},
 		{
 			"id": "large_intestine",
-			"title": "Large Intestine",
+			"name": "Large Intestine",
 			"content": "Final part of the digestive system",
 			"type": "anatomy",
 			"category": "organ",
@@ -410,7 +408,7 @@
 		},
 		{
 			"id": "back",
-			"title": "Back",
+			"name": "Back",
 			"content": "Posterior side of the torso",
 			"type": "anatomy",
 			"category": "region",
@@ -418,7 +416,7 @@
 		},
 		{
 			"id": "spine",
-			"title": "Spine",
+			"name": "Spine",
 			"content": "Vertebral column enclosing the spinal cord",
 			"type": "anatomy",
 			"category": "organ",
@@ -426,7 +424,7 @@
 		},
 		{
 			"id": "buttocks",
-			"title": "Buttocks",
+			"name": "Buttocks",
 			"content": "Fleshy parts at the posterior of the pelvic region",
 			"type": "anatomy",
 			"category": "region",
@@ -434,7 +432,7 @@
 		},
 		{
 			"id": "perineum",
-			"title": "Perineum",
+			"name": "Perineum",
 			"content": "Sensitive area between the genitals and the anus",
 			"type": "anatomy",
 			"category": "region",
@@ -442,7 +440,7 @@
 		},
 		{
 			"id": "neck",
-			"title": "Neck",
+			"name": "Neck",
 			"content": "Connects head to torso, highly sensitive to touch",
 			"type": "anatomy",
 			"category": "region",
@@ -450,7 +448,7 @@
 		},
 		{
 			"id": "head",
-			"title": "Head",
+			"name": "Head",
 			"content": "Upper part of the body",
 			"type": "anatomy",
 			"category": "region",
@@ -458,7 +456,7 @@
 		},
 		{
 			"id": "face",
-			"title": "Face",
+			"name": "Face",
 			"content": "Anterior part of the head",
 			"type": "anatomy",
 			"category": "region",
@@ -466,7 +464,7 @@
 		},
 		{
 			"id": "eyes",
-			"title": "Eyes",
+			"name": "Eyes",
 			"content": "Organs of vision",
 			"type": "anatomy",
 			"category": "organ",
@@ -474,7 +472,7 @@
 		},
 		{
 			"id": "nose",
-			"title": "Nose",
+			"name": "Nose",
 			"content": "Organ of smell and breathing",
 			"type": "anatomy",
 			"category": "organ",
@@ -482,7 +480,7 @@
 		},
 		{
 			"id": "mouth",
-			"title": "Mouth",
+			"name": "Mouth",
 			"content": "Oral cavity",
 			"type": "anatomy",
 			"category": "organ",
@@ -490,7 +488,7 @@
 		},
 		{
 			"id": "ears",
-			"title": "Ears",
+			"name": "Ears",
 			"content": "Rich in nerve endings, highly sensitive to touch and breath",
 			"type": "anatomy",
 			"category": "organ",
@@ -498,7 +496,7 @@
 		},
 		{
 			"id": "lips",
-			"title": "Lips",
+			"name": "Lips",
 			"content": "Sensitive areas around the mouth",
 			"type": "anatomy",
 			"category": "organ",
@@ -506,7 +504,7 @@
 		},
 		{
 			"id": "shoulders",
-			"title": "Shoulders",
+			"name": "Shoulders",
 			"content": "Joint connecting arms to torso",
 			"type": "anatomy",
 			"category": "region",
@@ -514,7 +512,7 @@
 		},
 		{
 			"id": "arms",
-			"title": "Arms",
+			"name": "Arms",
 			"content": "Upper limbs",
 			"type": "anatomy",
 			"category": "region",
@@ -522,7 +520,7 @@
 		},
 		{
 			"id": "upper_arm",
-			"title": "Upper Arm",
+			"name": "Upper Arm",
 			"content": "Region from shoulder to elbow",
 			"type": "anatomy",
 			"category": "region",
@@ -530,7 +528,7 @@
 		},
 		{
 			"id": "elbow",
-			"title": "Elbow",
+			"name": "Elbow",
 			"content": "Hinge joint of the arm",
 			"type": "anatomy",
 			"category": "region",
@@ -538,7 +536,7 @@
 		},
 		{
 			"id": "forearm",
-			"title": "Forearm",
+			"name": "Forearm",
 			"content": "Region from elbow to wrist",
 			"type": "anatomy",
 			"category": "region",
@@ -546,7 +544,7 @@
 		},
 		{
 			"id": "wrist",
-			"title": "Wrist",
+			"name": "Wrist",
 			"content": "Joint connecting forearm to hand",
 			"type": "anatomy",
 			"category": "region",
@@ -554,7 +552,7 @@
 		},
 		{
 			"id": "hands",
-			"title": "Hands",
+			"name": "Hands",
 			"content": "Prehensile multi-fingered organ",
 			"type": "anatomy",
 			"category": "region",
@@ -562,7 +560,7 @@
 		},
 		{
 			"id": "fingers",
-			"title": "Fingers",
+			"name": "Fingers",
 			"content": "Digits of the hand",
 			"type": "anatomy",
 			"category": "region",
@@ -570,7 +568,7 @@
 		},
 		{
 			"id": "legs",
-			"title": "Legs",
+			"name": "Legs",
 			"content": "Lower limbs used for locomotion",
 			"type": "anatomy",
 			"category": "region",
@@ -578,7 +576,7 @@
 		},
 		{
 			"id": "thighs",
-			"title": "Thighs",
+			"name": "Thighs",
 			"content": "Upper leg from hip to knee",
 			"type": "anatomy",
 			"category": "region",
@@ -586,7 +584,7 @@
 		},
 		{
 			"id": "inner_thighs",
-			"title": "Inner Thighs",
+			"name": "Inner Thighs",
 			"content": "Sensitive skin highly reactive proximal to the genitals",
 			"type": "anatomy",
 			"category": "region",
@@ -594,7 +592,7 @@
 		},
 		{
 			"id": "knee",
-			"title": "Knee",
+			"name": "Knee",
 			"content": "Hinge joint of the leg",
 			"type": "anatomy",
 			"category": "region",
@@ -602,7 +600,7 @@
 		},
 		{
 			"id": "lower_leg",
-			"title": "Lower Leg",
+			"name": "Lower Leg",
 			"content": "Region from knee to ankle",
 			"type": "anatomy",
 			"category": "region",
@@ -610,7 +608,7 @@
 		},
 		{
 			"id": "ankle",
-			"title": "Ankle",
+			"name": "Ankle",
 			"content": "Joint connecting leg to foot",
 			"type": "anatomy",
 			"category": "region",
@@ -618,7 +616,7 @@
 		},
 		{
 			"id": "feet",
-			"title": "Feet",
+			"name": "Feet",
 			"content": "Terminal organ of the leg",
 			"type": "anatomy",
 			"category": "region",
@@ -626,7 +624,7 @@
 		},
 		{
 			"id": "toes",
-			"title": "Toes",
+			"name": "Toes",
 			"content": "Digits of the foot",
 			"type": "anatomy",
 			"category": "region",
@@ -634,15 +632,15 @@
 		},
 		{
 			"id": "groin",
-			"title": "Groin",
+			"name": "Groin",
 			"content": "Junction between torso and legs, highly sensitive area",
 			"type": "anatomy",
 			"category": "region",
 			"trait": "shared"
 		},
 		{
-			"id": "genital_region",
-			"title": "Genital Region",
+			"id": "genital",
+			"name": "Genital",
 			"content": "Area containing the reproductive organs",
 			"type": "anatomy",
 			"category": "region",
@@ -650,47 +648,23 @@
 		},
 		{
 			"id": "prepuce",
-			"title": "Prepuce",
+			"name": "Prepuce",
 			"content": "Retractable double-layered fold of tissue and mucous membrane covering the glans/clitoris",
 			"type": "anatomy",
 			"category": "organ",
 			"trait": "shared"
 		},
 		{
-			"id": "pelvis",
-			"title": "Pelvis",
-			"content": "Basin-shaped structure connecting spine to legs",
-			"type": "anatomy",
-			"category": "region",
-			"trait": "shared"
-		},
-		{
 			"id": "pelvic_floor_muscles",
-			"title": "Pelvic Floor Muscles",
+			"name": "Pelvic Floor Muscles",
 			"content": "Group of muscles forming the pelvic diaphragm, contributing to orgasmic contractions",
 			"type": "anatomy",
 			"category": "organ",
 			"trait": "shared"
 		},
 		{
-			"id": "male_pelvis",
-			"title": "Male Pelvis",
-			"content": "Bony basin and cavity containing the male reproductive and internal genital organs",
-			"type": "anatomy",
-			"category": "region",
-			"trait": "male"
-		},
-		{
-			"id": "female_pelvis",
-			"title": "Female Pelvis",
-			"content": "Wider bony basin adapted for childbirth, containing the female reproductive organs",
-			"type": "anatomy",
-			"category": "region",
-			"trait": "female"
-		},
-		{
 			"id": "rectum",
-			"title": "Rectum",
+			"name": "Rectum",
 			"content": "Final straight portion of the large intestine. In males, the anterior wall sits against the prostate.",
 			"type": "anatomy",
 			"category": "organ",
@@ -698,7 +672,7 @@
 		},
 		{
 			"id": "anus",
-			"title": "Anus",
+			"name": "Anus",
 			"content": "Terminal opening of the digestive tract, rich in sensory nerve endings",
 			"type": "anatomy",
 			"category": "organ",
@@ -706,7 +680,7 @@
 		},
 		{
 			"id": "female_breasts",
-			"title": "Breasts",
+			"name": "Breasts",
 			"content": "Prominent tissue overlying the pectoral region",
 			"type": "anatomy",
 			"category": "organ",
@@ -714,7 +688,7 @@
 		},
 		{
 			"id": "nipples",
-			"title": "Nipples",
+			"name": "Nipples",
 			"content": "Central projection on the chest/breast",
 			"type": "anatomy",
 			"category": "organ",
@@ -722,7 +696,7 @@
 		},
 		{
 			"id": "areola",
-			"title": "Areola",
+			"name": "Areola",
 			"content": "Pigmented area surrounding the nipple",
 			"type": "anatomy",
 			"category": "organ",
@@ -730,7 +704,7 @@
 		},
 		{
 			"id": "female_mammary_glands",
-			"title": "Mammary Glands",
+			"name": "Mammary Glands",
 			"content": "Glands responsible for lactation",
 			"type": "anatomy",
 			"category": "organ",
@@ -738,7 +712,7 @@
 		},
 		{
 			"id": "male_genital",
-			"title": "Male Genitalia",
+			"name": "Male Genitalia",
 			"content": "External and internal male reproductive and sexual organs",
 			"type": "anatomy",
 			"category": "organ",
@@ -746,7 +720,7 @@
 		},
 		{
 			"id": "female_genital",
-			"title": "Female Genitalia",
+			"name": "Female Genitalia",
 			"content": "External and internal female reproductive and sexual organs",
 			"type": "anatomy",
 			"category": "organ",
@@ -754,7 +728,7 @@
 		},
 		{
 			"id": "male_reproductive_system",
-			"title": "Male Reproductive System",
+			"name": "Male Reproductive System",
 			"content": "Produces, stores, and delivers sperm and semen",
 			"type": "anatomy",
 			"category": "organ",
@@ -762,7 +736,7 @@
 		},
 		{
 			"id": "female_reproductive_system",
-			"title": "Female Reproductive System",
+			"name": "Female Reproductive System",
 			"content": "Produces ova, supports fertilization and fetal development",
 			"type": "anatomy",
 			"category": "organ",
@@ -770,7 +744,7 @@
 		},
 		{
 			"id": "male_penis",
-			"title": "Penis",
+			"name": "Penis",
 			"aka": "Phallus, cock",
 			"content": "Primary male reproductive organ",
 			"type": "anatomy",
@@ -778,8 +752,8 @@
 			"trait": "male"
 		},
 		{
-			"id": "male_root",
-			"title": "Penile Root",
+			"id": "male_penile_root",
+			"name": "Penile Root",
 			"content": "Base of the penis attached to the pelvic region",
 			"type": "anatomy",
 			"category": "organ",
@@ -787,7 +761,7 @@
 		},
 		{
 			"id": "male_shaft",
-			"title": "Penile Shaft",
+			"name": "Penile Shaft",
 			"content": "Main body of the penis",
 			"type": "anatomy",
 			"category": "organ",
@@ -795,7 +769,7 @@
 		},
 		{
 			"id": "male_glans",
-			"title": "Glans",
+			"name": "Glans",
 			"content": "The acorn-shaped head of the penis, innervated primarily by deep-pressure and temperature receptors.",
 			"type": "anatomy",
 			"category": "organ",
@@ -803,7 +777,7 @@
 		},
 		{
 			"id": "male_corpora_cavernosa",
-			"title": "Corpora Cavernosa",
+			"name": "Corpora Cavernosa",
 			"content": "Two parallel columns of erectile tissue in the shaft",
 			"type": "anatomy",
 			"category": "organ",
@@ -811,7 +785,7 @@
 		},
 		{
 			"id": "male_corpus_spongiosum",
-			"title": "Corpus Spongiosum",
+			"name": "Corpus Spongiosum",
 			"content": "Lower column of erectile tissue containing the urethra",
 			"type": "anatomy",
 			"category": "organ",
@@ -819,7 +793,7 @@
 		},
 		{
 			"id": "male_bulb_of_penis",
-			"title": "Bulb of Penis",
+			"name": "Bulb of Penis",
 			"content": "Proximal expansion of the corpus spongiosum at the penile root",
 			"type": "anatomy",
 			"category": "organ",
@@ -827,7 +801,7 @@
 		},
 		{
 			"id": "male_crura_of_penis",
-			"title": "Crura of Penis",
+			"name": "Crura of Penis",
 			"content": "Legs of the corpora cavernosa anchored to the pelvic bones",
 			"type": "anatomy",
 			"category": "organ",
@@ -835,7 +809,7 @@
 		},
 		{
 			"id": "male_urethra",
-			"title": "Male Urethra",
+			"name": "Male Urethra",
 			"content": "Duct conveying urine and semen",
 			"type": "anatomy",
 			"category": "organ",
@@ -843,7 +817,7 @@
 		},
 		{
 			"id": "female_urethra",
-			"title": "Female Urethra",
+			"name": "Female Urethra",
 			"content": "Short tube draining urine from the bladder to the urethral meatus",
 			"type": "anatomy",
 			"category": "organ",
@@ -851,7 +825,7 @@
 		},
 		{
 			"id": "meatus",
-			"title": "Meatus",
+			"name": "Meatus",
 			"content": "External urethral orifice",
 			"type": "anatomy",
 			"category": "organ",
@@ -859,7 +833,7 @@
 		},
 		{
 			"id": "male_corona",
-			"title": "Corona",
+			"name": "Corona",
 			"content": "Raised rim at the base of the glans",
 			"type": "anatomy",
 			"category": "organ",
@@ -867,7 +841,7 @@
 		},
 		{
 			"id": "male_pearly_penile_papules",
-			"title": "Pearly Penile Papules",
+			"name": "Pearly Penile Papules",
 			"content": "Normal, benign physiological dome-shaped bumps on the corona",
 			"type": "anatomy",
 			"category": "organ",
@@ -875,7 +849,7 @@
 		},
 		{
 			"id": "male_foreskin",
-			"title": "Foreskin",
+			"name": "Foreskin",
 			"aka": "Prepuce",
 			"content": "Retractable double-layered fold of smooth muscle tissue, blood vessels, neurons, and mucosa",
 			"type": "anatomy",
@@ -884,7 +858,7 @@
 		},
 		{
 			"id": "male_preputial_sphincter",
-			"title": "Preputial Sphincter",
+			"name": "Preputial Sphincter",
 			"content": "Whorl of smooth muscle functioning as a one-way valve",
 			"type": "anatomy",
 			"category": "organ",
@@ -892,23 +866,15 @@
 		},
 		{
 			"id": "male_langerhans_cells",
-			"title": "Langerhans Cells",
+			"name": "Langerhans Cells",
 			"content": "Dendritic immune cells concentrated in the prepuce",
 			"type": "anatomy",
 			"category": "organ",
 			"trait": "male"
 		},
 		{
-			"id": "male_inner_mucosa",
-			"title": "Inner Mucosa",
-			"content": "Inner lining of the foreskin",
-			"type": "anatomy",
-			"category": "organ",
-			"trait": "male"
-		},
-		{
-			"id": "male_outer_skin",
-			"title": "Outer Foreskin",
+			"id": "male_outer_foreskin",
+			"name": "Outer Foreskin",
 			"content": "Exterior skin layer of the prepuce",
 			"type": "anatomy",
 			"category": "organ",
@@ -916,7 +882,7 @@
 		},
 		{
 			"id": "male_ridged_band",
-			"title": "Ridged Band",
+			"name": "Ridged Band",
 			"content": "Highly innervated corrugated mucocutaneous junction",
 			"type": "anatomy",
 			"category": "organ",
@@ -924,7 +890,7 @@
 		},
 		{
 			"id": "male_gliding_mechanism",
-			"title": "Gliding Mechanism",
+			"name": "Gliding Mechanism",
 			"content": "Non-friction movement during intercourse",
 			"type": "anatomy",
 			"category": "organ",
@@ -932,7 +898,7 @@
 		},
 		{
 			"id": "male_frenulum",
-			"title": "Frenulum",
+			"name": "Frenulum",
 			"content": "Highly sensitive elastic band of tissue connecting prepuce to glans",
 			"type": "anatomy",
 			"category": "organ",
@@ -940,7 +906,7 @@
 		},
 		{
 			"id": "male_frenular_delta",
-			"title": "Frenular Delta",
+			"name": "Frenular Delta",
 			"content": "V-shaped highly erogenous zone",
 			"type": "anatomy",
 			"category": "sexual",
@@ -948,7 +914,7 @@
 		},
 		{
 			"id": "male_scrotum",
-			"title": "Scrotum",
+			"name": "Scrotum",
 			"content": "Sac containing the testes",
 			"type": "anatomy",
 			"category": "organ",
@@ -956,7 +922,7 @@
 		},
 		{
 			"id": "male_testes",
-			"title": "Testes",
+			"name": "Testes",
 			"aka": "Testicles, Gonads",
 			"content": "Glands where sperm and testosterone are produced",
 			"type": "anatomy",
@@ -965,7 +931,7 @@
 		},
 		{
 			"id": "male_epididymis",
-			"title": "Epididymis",
+			"name": "Epididymis",
 			"content": "Coiled tube where sperm matures and is stored",
 			"type": "anatomy",
 			"category": "organ",
@@ -973,7 +939,7 @@
 		},
 		{
 			"id": "male_vas_deferens",
-			"title": "Vas Deferens",
+			"name": "Vas Deferens",
 			"content": "Duct transporting sperm to the ejaculatory duct",
 			"type": "anatomy",
 			"category": "organ",
@@ -981,7 +947,7 @@
 		},
 		{
 			"id": "male_seminal_vesicles",
-			"title": "Seminal Vesicles",
+			"name": "Seminal Vesicles",
 			"content": "Glands providing fluid for semen",
 			"type": "anatomy",
 			"category": "organ",
@@ -989,7 +955,7 @@
 		},
 		{
 			"id": "male_prostate",
-			"title": "Prostate (P-Spot)",
+			"name": "Prostate (P-Spot)",
 			"content": "Gland producing seminal fluid, highly sensitive to stimulation",
 			"type": "anatomy",
 			"category": "organ",
@@ -997,7 +963,7 @@
 		},
 		{
 			"id": "male_cowpers_glands",
-			"title": "Cowper's Glands",
+			"name": "Cowper's Glands",
 			"content": "Bulbourethral glands producing pre-ejaculate fluid",
 			"type": "anatomy",
 			"category": "organ",
@@ -1005,7 +971,7 @@
 		},
 		{
 			"id": "male_ejaculatory_duct",
-			"title": "Ejaculatory Duct",
+			"name": "Ejaculatory Duct",
 			"content": "Paired ducts that carry sperm and seminal fluid into the urethra",
 			"type": "anatomy",
 			"category": "organ",
@@ -1013,7 +979,7 @@
 		},
 		{
 			"id": "female_vulva",
-			"title": "Vulva",
+			"name": "Vulva",
 			"content": "External female genitalia",
 			"type": "anatomy",
 			"category": "organ",
@@ -1021,7 +987,7 @@
 		},
 		{
 			"id": "female_vestibule",
-			"title": "Vaginal Vestibule",
+			"name": "Vaginal Vestibule",
 			"content": "The area enclosed by the labia minora containing the urethral and vaginal openings",
 			"type": "anatomy",
 			"category": "region",
@@ -1029,7 +995,7 @@
 		},
 		{
 			"id": "female_mons_pubis",
-			"title": "Mons Pubis",
+			"name": "Mons Pubis",
 			"content": "Fatty tissue pad over the pubic bone",
 			"type": "anatomy",
 			"category": "region",
@@ -1037,7 +1003,7 @@
 		},
 		{
 			"id": "female_vagina",
-			"title": "Vagina",
+			"name": "Vagina",
 			"content": "Internal muscular canal",
 			"type": "anatomy",
 			"category": "organ",
@@ -1045,7 +1011,7 @@
 		},
 		{
 			"id": "female_hymen",
-			"title": "Hymen (Vaginal Corona)",
+			"name": "Hymen (Vaginal Corona)",
 			"content": "Membranous tissue surrounding or partially covering the external vaginal opening",
 			"type": "anatomy",
 			"category": "organ",
@@ -1053,7 +1019,7 @@
 		},
 		{
 			"id": "female_g_spot",
-			"title": "G-Spot",
+			"name": "G-Spot",
 			"content": "Urethral Sponge, highly sensitive area on the anterior vaginal wall",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1061,7 +1027,7 @@
 		},
 		{
 			"id": "female_a_spot",
-			"title": "A-Spot",
+			"name": "A-Spot",
 			"content": "Anterior Fornix Erogenous Zone, located deep in the vagina near the cervix",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1069,7 +1035,7 @@
 		},
 		{
 			"id": "female_posterior_fornix",
-			"title": "Posterior Fornix",
+			"name": "Posterior Fornix",
 			"content": "The deep recess behind the cervix, highly responsive to deep penetration",
 			"type": "anatomy",
 			"category": "organ",
@@ -1077,7 +1043,7 @@
 		},
 		{
 			"id": "female_bartholin_glands",
-			"title": "Bartholin's Glands",
+			"name": "Bartholin's Glands",
 			"content": "Glands secreting mucus to lubricate the vestibule/vulva",
 			"type": "anatomy",
 			"category": "organ",
@@ -1085,7 +1051,7 @@
 		},
 		{
 			"id": "female_skenes_glands",
-			"title": "Skene's Glands",
+			"name": "Skene's Glands",
 			"content": "Paraurethral glands homologous to the male prostate",
 			"type": "anatomy",
 			"category": "organ",
@@ -1093,7 +1059,7 @@
 		},
 		{
 			"id": "female_clitoris",
-			"title": "Clitoris",
+			"name": "Clitoris",
 			"content": "Highly sensitive, complex erectile organ homologous to the male penis",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1101,7 +1067,7 @@
 		},
 		{
 			"id": "female_clitoral_glans",
-			"title": "Clitoral Glans",
+			"name": "Clitoral Glans",
 			"content": "The highly sensitive, externally visible tip of the clitoris",
 			"type": "anatomy",
 			"category": "organ",
@@ -1109,7 +1075,7 @@
 		},
 		{
 			"id": "female_body_of_clitoris",
-			"title": "Body of Clitoris",
+			"name": "Body of Clitoris",
 			"content": "The internal cylindrical portion of the clitoris",
 			"type": "anatomy",
 			"category": "organ",
@@ -1117,7 +1083,7 @@
 		},
 		{
 			"id": "female_crura_of_clitoris",
-			"title": "Crura of Clitoris",
+			"name": "Crura of Clitoris",
 			"content": "Internal extensions of the clitoris attached to the ischiopubic rami",
 			"type": "anatomy",
 			"category": "organ",
@@ -1125,7 +1091,7 @@
 		},
 		{
 			"id": "female_vestibular_bulbs",
-			"title": "Vestibular Bulbs",
+			"name": "Vestibular Bulbs",
 			"content": "Internal erectile tissue bulbs of the clitoris",
 			"type": "anatomy",
 			"category": "organ",
@@ -1133,7 +1099,7 @@
 		},
 		{
 			"id": "female_clitoral_hood",
-			"title": "Clitoral Hood",
+			"name": "Clitoral Hood",
 			"aka": "Prepuce",
 			"content": "Tissue covering the clitoris, homologous to the foreskin",
 			"type": "anatomy",
@@ -1142,7 +1108,7 @@
 		},
 		{
 			"id": "female_labia_majora",
-			"title": "Labia Majora",
+			"name": "Labia Majora",
 			"content": "Outer folds, homologous to the scrotum",
 			"type": "anatomy",
 			"category": "organ",
@@ -1150,7 +1116,7 @@
 		},
 		{
 			"id": "female_labia_minora",
-			"title": "Labia Minora",
+			"name": "Labia Minora",
 			"content": "Inner folds of the vulva",
 			"type": "anatomy",
 			"category": "organ",
@@ -1158,7 +1124,7 @@
 		},
 		{
 			"id": "female_uterus",
-			"title": "Uterus",
+			"name": "Uterus",
 			"content": "Muscular organ where a fetus develops (Womb)",
 			"type": "anatomy",
 			"category": "organ",
@@ -1166,7 +1132,7 @@
 		},
 		{
 			"id": "female_cervix",
-			"title": "Cervix",
+			"name": "Cervix",
 			"content": "The lower, narrow portion of the uterus connecting to the vagina",
 			"type": "anatomy",
 			"category": "organ",
@@ -1174,7 +1140,7 @@
 		},
 		{
 			"id": "female_fallopian_tubes",
-			"title": "Fallopian Tubes",
+			"name": "Fallopian Tubes",
 			"content": "Tubes that transport ova from the ovaries to the uterus",
 			"type": "anatomy",
 			"category": "organ",
@@ -1182,7 +1148,7 @@
 		},
 		{
 			"id": "female_ovaries",
-			"title": "Ovaries",
+			"name": "Ovaries",
 			"content": "Glands where eggs and hormones are produced",
 			"type": "anatomy",
 			"category": "organ",
@@ -1190,7 +1156,7 @@
 		},
 		{
 			"id": "male_circumcision",
-			"title": "Male Circumcision",
+			"name": "Male Circumcision",
 			"content": "Surgical excision of the male foreskin (prepuce), altering genital tissue and mechanics and carrying risks of complications.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1198,7 +1164,7 @@
 		},
 		{
 			"id": "male_circ_keratinization",
-			"title": "Keratinization",
+			"name": "Keratinization",
 			"content": "Drying and desensitization due to constant exposure",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1206,7 +1172,7 @@
 		},
 		{
 			"id": "male_circ_friction",
-			"title": "Friction",
+			"name": "Friction",
 			"content": "Increased chafing without gliding mechanism",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1214,7 +1180,7 @@
 		},
 		{
 			"id": "male_circ_scar_line",
-			"title": "Scar Line",
+			"name": "Scar Line",
 			"content": "Cicatrix where layers are surgically sutured",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1222,7 +1188,7 @@
 		},
 		{
 			"id": "male_circ_loss_of_sensitivity",
-			"title": "Loss of Sensitivity",
+			"name": "Loss of Sensitivity",
 			"content": "Reduction in fine touch perception due to tissue removal",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1230,7 +1196,7 @@
 		},
 		{
 			"id": "male_circ_meatal_stenosis",
-			"title": "Meatal Stenosis",
+			"name": "Meatal Stenosis",
 			"content": "Pathological narrowing of the urethral opening due to friction/ammonia exposure",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1238,7 +1204,7 @@
 		},
 		{
 			"id": "male_circ_skin_bridges",
-			"title": "Skin Bridges",
+			"name": "Skin Bridges",
 			"content": "Abnormal wound healing adhering shaft skin to the corona/glans",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1246,7 +1212,7 @@
 		},
 		{
 			"id": "male_circ_tight_erections",
-			"title": "Tight Erections",
+			"name": "Tight Erections",
 			"content": "Pain or curvature caused by insufficient mobile skin post-surgery",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1254,7 +1220,7 @@
 		},
 		{
 			"id": "male_circ_hygiene",
-			"title": "Simplified Hygiene",
+			"name": "Simplified Hygiene",
 			"content": "Easier washing routine",
 			"type": "benefit",
 			"category": "upgrade",
@@ -1262,7 +1228,7 @@
 		},
 		{
 			"id": "male_circ_neuroma",
-			"title": "Penile Neuroma",
+			"name": "Penile Neuroma",
 			"content": "Trapped ball of severed dorsal nerve endings embedded in scar tissue",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1270,7 +1236,7 @@
 		},
 		{
 			"id": "male_circ_botched",
-			"title": "Botched Circumcision",
+			"name": "Botched Circumcision",
 			"content": "Significant surgical error or poor outcome (deformity, injury, or need for reconstruction/revision)",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1278,7 +1244,7 @@
 		},
 		{
 			"id": "male_circ_hemorrhage",
-			"title": "Hemorrhage",
+			"name": "Hemorrhage",
 			"content": "Potential for severe bleeding; particularly dangerous in infants",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1286,7 +1252,7 @@
 		},
 		{
 			"id": "male_circ_infection_sepsis",
-			"title": "Infection / Sepsis",
+			"name": "Infection / Sepsis",
 			"content": "Wound infection can occur; severe cases can progress to systemic infection",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1294,7 +1260,7 @@
 		},
 		{
 			"id": "male_circ_glans_injury",
-			"title": "Glans Injury",
+			"name": "Glans Injury",
 			"content": "Injury to the glans (from minor trauma to severe damage in rare cases)",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1302,7 +1268,7 @@
 		},
 		{
 			"id": "male_circ_revision_surgery",
-			"title": "Revision Surgery",
+			"name": "Revision Surgery",
 			"content": "Some outcomes require corrective or revision procedures",
 			"type": "consequence",
 			"category": "surgery",
@@ -1310,7 +1276,7 @@
 		},
 		{
 			"id": "male_circ_adhesions",
-			"title": "Adhesions",
+			"name": "Adhesions",
 			"content": "Shaft skin may adhere to the glans after circumcision",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1318,7 +1284,7 @@
 		},
 		{
 			"id": "male_circ_buried_penis",
-			"title": "Buried / Trapped Penis",
+			"name": "Buried / Trapped Penis",
 			"content": "Healing patterns can obscure the shaft, sometimes requiring correction",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1326,7 +1292,7 @@
 		},
 		{
 			"id": "male_circ_infant",
-			"title": "Infant / Neonatal Circumcision",
+			"name": "Infant / Neonatal Circumcision",
 			"content": "Circumcision performed in infancy, involving pain/stress and vulnerability to complications",
 			"type": "consequence",
 			"category": "surgery",
@@ -1334,7 +1300,7 @@
 		},
 		{
 			"id": "male_circ_infant_pain_stress",
-			"title": "Infant Pain / Stress Response",
+			"name": "Infant Pain / Stress Response",
 			"content": "Acute pain and physiologic stress responses can occur; analgesia may be incomplete",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1342,7 +1308,7 @@
 		},
 		{
 			"id": "male_circ_infant_feeding_disruption",
-			"title": "Feeding Disruption",
+			"name": "Feeding Disruption",
 			"content": "Some infants may have short-term irritability or feeding disruption after painful procedures",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1350,7 +1316,7 @@
 		},
 		{
 			"id": "female_genital_cutting",
-			"title": "Female Genital Cutting (FGM/C)",
+			"name": "Female Genital Cutting (FGM/C)",
 			"content": "Non-medical ritual removal of some or all of the external female genitalia",
 			"type": "consequence",
 			"category": "surgery",
@@ -1358,7 +1324,7 @@
 		},
 		{
 			"id": "female_fgm_type_1",
-			"title": "FGM Type 1 (Clitoridectomy)",
+			"name": "FGM Type 1 (Clitoridectomy)",
 			"content": "Partial or total removal of the clitoris and/or the prepuce (clitoral hood).",
 			"type": "consequence",
 			"category": "surgery",
@@ -1366,7 +1332,7 @@
 		},
 		{
 			"id": "female_fgm_type_1a",
-			"title": "Type 1a",
+			"name": "Type 1a",
 			"content": "Removal of the clitoral hood or prepuce only.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1374,7 +1340,7 @@
 		},
 		{
 			"id": "female_fgm_type_1b",
-			"title": "Type 1b",
+			"name": "Type 1b",
 			"content": "Removal of the clitoris with the prepuce.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1382,7 +1348,7 @@
 		},
 		{
 			"id": "female_fgm_type_2",
-			"title": "FGM Type 2 (Excision)",
+			"name": "FGM Type 2 (Excision)",
 			"content": "Partial or total removal of the clitoris and the labia minora.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1390,7 +1356,7 @@
 		},
 		{
 			"id": "female_fgm_type_2a",
-			"title": "Type 2a",
+			"name": "Type 2a",
 			"content": "Removal of the labia minora only.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1398,7 +1364,7 @@
 		},
 		{
 			"id": "female_fgm_type_2b",
-			"title": "Type 2b",
+			"name": "Type 2b",
 			"content": "Partial or total removal of the clitoris and the labia minora.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1406,7 +1372,7 @@
 		},
 		{
 			"id": "female_fgm_type_2c",
-			"title": "Type 2c",
+			"name": "Type 2c",
 			"content": "Partial or total removal of the clitoris, the labia minora, and the labia majora.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1414,7 +1380,7 @@
 		},
 		{
 			"id": "female_fgm_type_3",
-			"title": "FGM Type 3 (Infibulation)",
+			"name": "FGM Type 3 (Infibulation)",
 			"content": "Narrowing of the vaginal orifice with creation of a covering seal by cutting and appositioning the labia.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1422,7 +1388,7 @@
 		},
 		{
 			"id": "female_fgm_type_3a",
-			"title": "Type 3a",
+			"name": "Type 3a",
 			"content": "Removal and repositioning of the labia minora.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1430,7 +1396,7 @@
 		},
 		{
 			"id": "female_fgm_type_3b",
-			"title": "Type 3b",
+			"name": "Type 3b",
 			"content": "Removal and repositioning of the labia majora.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1438,7 +1404,7 @@
 		},
 		{
 			"id": "female_fgm_type_4",
-			"title": "FGM Type 4",
+			"name": "FGM Type 4",
 			"content": "All other harmful procedures for non-medical purposes (pricking, piercing, incising, scraping, cauterizing).",
 			"type": "consequence",
 			"category": "surgery",
@@ -1446,7 +1412,7 @@
 		},
 		{
 			"id": "female_deinfibulation",
-			"title": "Deinfibulation",
+			"name": "Deinfibulation",
 			"content": "Surgical opening of the sealed vaginal opening created by Type 3 FGM, often to facilitate childbirth or sexual intercourse.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1454,7 +1420,7 @@
 		},
 		{
 			"id": "female_reinfibulation",
-			"title": "Reinfibulation",
+			"name": "Reinfibulation",
 			"content": "Narrowing the vaginal opening again after deinfibulation, increasing health risks.",
 			"type": "consequence",
 			"category": "surgery",
@@ -1462,7 +1428,7 @@
 		},
 		{
 			"id": "female_fgm_loss_sensitivity",
-			"title": "Loss of Sensitivity",
+			"name": "Loss of Sensitivity",
 			"content": "Drastic reduction or complete loss of primary sexual responsiveness due to glans excision.",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1470,7 +1436,7 @@
 		},
 		{
 			"id": "female_fgm_neuroma",
-			"title": "Clitoral Neuroma",
+			"name": "Clitoral Neuroma",
 			"content": "Trapped ball of severed dorsal nerve endings embedded in scar tissue following clitoral excision",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1478,7 +1444,7 @@
 		},
 		{
 			"id": "female_fgm_dyspareunia",
-			"title": "Dyspareunia",
+			"name": "Dyspareunia",
 			"content": "Severe pain during sexual intercourse due to rigid scarring and narrowed vaginal introitus.",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1486,7 +1452,7 @@
 		},
 		{
 			"id": "female_fgm_urinary_menstrual",
-			"title": "Urinary & Menstrual Obstruction",
+			"name": "Urinary & Menstrual Obstruction",
 			"content": "Retention of urine and menses causing chronic pelvic pain, hematocolpos, and recurrent severe infections.",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1494,7 +1460,7 @@
 		},
 		{
 			"id": "female_fgm_obstetric",
-			"title": "Obstetric Complications",
+			"name": "Obstetric Complications",
 			"content": "Significantly increased risk of severe tearing, prolonged labor, hemorrhage, and neonatal complications.",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1502,7 +1468,7 @@
 		},
 		{
 			"id": "male_intact_glans_protection",
-			"title": "Glans Protection",
+			"name": "Glans Protection",
 			"content": "Maintains the glans as an internal, moist mucosal organ, preventing keratinization.",
 			"type": "anatomy",
 			"category": "note",
@@ -1510,7 +1476,7 @@
 		},
 		{
 			"id": "male_intact_gliding_mechanism",
-			"title": "Natural Gliding Mechanism",
+			"name": "Natural Gliding Mechanism",
 			"content": "The mobile foreskin acts as a natural mechanical bearing. It facilitates effortless movement and protects from abrasion.",
 			"type": "anatomy",
 			"category": "note",
@@ -1518,7 +1484,7 @@
 		},
 		{
 			"id": "intact_erogenous_sensitivity",
-			"title": "Preserved Sensitivity",
+			"name": "Preserved Sensitivity",
 			"content": "Maintenance of the full complement of specialized mechanoreceptors.",
 			"type": "anatomy",
 			"category": "note",
@@ -1526,7 +1492,7 @@
 		},
 		{
 			"id": "natural_lubrication",
-			"title": "Natural Lubrication",
+			"name": "Natural Lubrication",
 			"content": "Production of natural emollients that keep the genital structures moisturized.",
 			"type": "anatomy",
 			"category": "note",
@@ -1534,7 +1500,7 @@
 		},
 		{
 			"id": "female_intact_obstetric_safety",
-			"title": "Obstetric Safety",
+			"name": "Obstetric Safety",
 			"content": "Intact, elastic vulvar and perineal tissues can stretch naturally during childbirth.",
 			"type": "anatomy",
 			"category": "note",
@@ -1542,7 +1508,7 @@
 		},
 		{
 			"id": "svadhishthana_chakra",
-			"title": "Svadhishthana Chakra",
+			"name": "Svadhishthana Chakra",
 			"content": "The second chakra, governing creativity, sexuality, emotions, and procreation.",
 			"type": "energetic",
 			"category": "note",
@@ -1550,7 +1516,7 @@
 		},
 		{
 			"id": "medhra_marma",
-			"title": "Medhra Marma Point",
+			"name": "Medhra Marma Point",
 			"content": "A vital energy point on the penis crucial for sexual energy, vitality, and immunity (Ojas).",
 			"type": "energetic",
 			"category": "note",
@@ -1558,7 +1524,7 @@
 		},
 		{
 			"id": "ojas_vitality",
-			"title": "Ojas (Vitality)",
+			"name": "Ojas (Vitality)",
 			"content": "The subtle energy representing vitality, immunity, and strength, linked to reproductive integrity.",
 			"type": "energetic",
 			"category": "note",
@@ -1566,7 +1532,7 @@
 		},
 		{
 			"id": "prana_trapping",
-			"title": "Prana Trapping / Energy Block",
+			"name": "Prana Trapping / Energy Block",
 			"content": "Improper manipulation of the reproductive marma points is believed to trap life force (prana).",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1574,7 +1540,7 @@
 		},
 		{
 			"id": "nadis",
-			"title": "Nadis (Energy Channels)",
+			"name": "Nadis (Energy Channels)",
 			"content": "Channels enabling the flow of life force, higher sensations, and consciousness.",
 			"type": "energetic",
 			"category": "note",
@@ -1582,7 +1548,7 @@
 		},
 		{
 			"id": "bioelectrical_sabotage",
-			"title": "Bioelectrical Sabotage",
+			"name": "Bioelectrical Sabotage",
 			"content": "The concept that surgical removal of specialized genital tissue disrupts natural energetic pathways.",
 			"type": "consequence",
 			"category": "downgrade",
@@ -1590,7 +1556,7 @@
 		},
 		{
 			"id": "hindu_tradition",
-			"title": "Hindu Tradition",
+			"name": "Hindu Tradition",
 			"content": "Views circumcision as strictly forbidden, recognizing the intact penis as a source of power/vitality.",
 			"type": "energetic",
 			"category": "note",
@@ -1598,7 +1564,7 @@
 		},
 		{
 			"id": "yoga_physiology",
-			"title": "Yoga Physiology",
+			"name": "Yoga Physiology",
 			"content": "Emphasizes preserving the integrity of the reproductive organs and the Sacral Chakra.",
 			"type": "energetic",
 			"category": "note",
@@ -1606,7 +1572,7 @@
 		},
 		{
 			"id": "nervous_system",
-			"title": "Nervous System",
+			"name": "Nervous System",
 			"content": "The central and peripheral networks conducting sensory signals.",
 			"type": "nerve",
 			"category": "region",
@@ -1614,7 +1580,7 @@
 		},
 		{
 			"id": "peripheral_nervous_system",
-			"title": "Peripheral Nervous System",
+			"name": "Peripheral Nervous System",
 			"content": "Connects the central nervous system to sensory organs and target tissues.",
 			"type": "nerve",
 			"category": "organ",
@@ -1622,7 +1588,7 @@
 		},
 		{
 			"id": "sensory_receptors",
-			"title": "Sensory Receptors",
+			"name": "Sensory Receptors",
 			"content": "Specialized nerve endings perceiving touch, pressure, vibration, temperature and pain.",
 			"type": "nerve",
 			"category": "organ",
@@ -1630,7 +1596,7 @@
 		},
 		{
 			"id": "nerve_endings",
-			"title": "Nerve Endings",
+			"name": "Nerve Endings",
 			"content": "High density sensory receptors",
 			"type": "anatomy",
 			"category": "organ",
@@ -1638,7 +1604,7 @@
 		},
 		{
 			"id": "free_nerve_endings",
-			"title": "Free Nerve Endings",
+			"name": "Free Nerve Endings",
 			"content": "Primary receptors for pain, temperature, and light touch. Heavily clustered in mucosal genitalia.",
 			"type": "nerve",
 			"category": "organ",
@@ -1646,7 +1612,7 @@
 		},
 		{
 			"id": "meissner_corpuscles",
-			"title": "Meissner Corpuscles",
+			"name": "Meissner Corpuscles",
 			"content": "Mechanoreceptors highly sensitive to light touch",
 			"type": "nerve",
 			"category": "organ",
@@ -1654,7 +1620,7 @@
 		},
 		{
 			"id": "pacinian_corpuscles",
-			"title": "Pacinian Corpuscles",
+			"name": "Pacinian Corpuscles",
 			"content": "Encapsulated receptors rapidly adapting to deep pressure and high-frequency vibration.",
 			"type": "nerve",
 			"category": "organ",
@@ -1662,7 +1628,7 @@
 		},
 		{
 			"id": "ruffini_endings",
-			"title": "Ruffini Endings",
+			"name": "Ruffini Endings",
 			"content": "Slowly adapting mechanoreceptors responding to sustained pressure and skin stretch.",
 			"type": "nerve",
 			"category": "organ",
@@ -1670,7 +1636,7 @@
 		},
 		{
 			"id": "krause_end_bulbs",
-			"title": "Krause End Bulbs",
+			"name": "Krause End Bulbs",
 			"content": "Bulbous mechanoreceptors often found in mucocutaneous zones (like the clitoris and glans).",
 			"type": "nerve",
 			"category": "organ",
@@ -1678,7 +1644,7 @@
 		},
 		{
 			"id": "mucocutaneous_receptors",
-			"title": "Mucocutaneous Receptors",
+			"name": "Mucocutaneous Receptors",
 			"content": "Specialized sensory organs at the transition from skin to mucosa, essential for erogenous sensation.",
 			"type": "nerve",
 			"category": "organ",
@@ -1686,7 +1652,7 @@
 		},
 		{
 			"id": "energetic_system",
-			"title": "Energetic System",
+			"name": "Energetic System",
 			"content": "The subtle body and energy centers described in traditional philosophies.",
 			"type": "energetic",
 			"category": "region",
@@ -1694,7 +1660,7 @@
 		},
 		{
 			"id": "erogenous_zones",
-			"title": "Shared Erogenous Zones",
+			"name": "Shared Erogenous Zones",
 			"content": "Areas of the human body highly sensitive to sexual stimulation",
 			"type": "sexual",
 			"category": "sexual",
@@ -1702,7 +1668,7 @@
 		},
 		{
 			"id": "male_erogenous_zones",
-			"title": "Male Erogenous Zones",
+			"name": "Male Erogenous Zones",
 			"content": "Male-specific areas highly sensitive to sexual stimulation",
 			"type": "sexual",
 			"category": "sexual",
@@ -1710,7 +1676,7 @@
 		},
 		{
 			"id": "female_erogenous_zones",
-			"title": "Female Erogenous Zones",
+			"name": "Female Erogenous Zones",
 			"content": "Female-specific areas highly sensitive to sexual stimulation",
 			"type": "sexual",
 			"category": "sexual",
@@ -1718,7 +1684,7 @@
 		},
 		{
 			"id": "climax",
-			"title": "Shared Climax",
+			"name": "Shared Climax",
 			"content": "Shared physiological peak of sexual arousal and the threshold of inevitability.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1726,7 +1692,7 @@
 		},
 		{
 			"id": "male_climax",
-			"title": "Male Climax",
+			"name": "Male Climax",
 			"content": "The peak of sexual arousal in males, often marked by the sensation of ejaculatory inevitability.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1734,7 +1700,7 @@
 		},
 		{
 			"id": "female_climax",
-			"title": "Female Climax",
+			"name": "Female Climax",
 			"content": "The peak of sexual arousal in females, immediately preceding and triggering orgasmic contractions.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1742,7 +1708,7 @@
 		},
 		{
 			"id": "neurotransmitters",
-			"title": "Oxytocin & Dopamine",
+			"name": "Oxytocin & Dopamine",
 			"content": "Brain chemicals flooded during arousal and climax causing euphoria and bonding",
 			"type": "anatomy",
 			"category": "organ",
@@ -1750,7 +1716,7 @@
 		},
 		{
 			"id": "immunological_defense",
-			"title": "Immunological Defense",
+			"name": "Immunological Defense",
 			"content": "Mucosal immunity system protecting against pathogens",
 			"type": "anatomy",
 			"category": "organ",
@@ -1758,7 +1724,7 @@
 		},
 		{
 			"id": "smegma",
-			"title": "Smegma",
+			"name": "Smegma",
 			"content": "Natural emollient composed of exfoliated epithelial cells and sebum that lubricates and protects genital folds",
 			"type": "anatomy",
 			"category": "organ",
@@ -1766,7 +1732,7 @@
 		},
 		{
 			"id": "female_orgasm",
-			"title": "Female Orgasm",
+			"name": "Female Orgasm",
 			"content": "Full orgasm experience in anatomical females.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1774,7 +1740,7 @@
 		},
 		{
 			"id": "male_orgasm",
-			"title": "Male Orgasm",
+			"name": "Male Orgasm",
 			"content": "Full orgasm experience in anatomical males.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1782,7 +1748,7 @@
 		},
 		{
 			"id": "orgasm",
-			"title": "Shared Orgasm",
+			"name": "Shared Orgasm",
 			"content": "Orgasm types and experiences possible across all genders.",
 			"type": "sexual",
 			"category": "sexual",
@@ -1790,7 +1756,7 @@
 		},
 		{
 			"id": "female_clitoral_orgasm",
-			"title": "Clitoral Orgasm",
+			"name": "Clitoral Orgasm",
 			"content": "Orgasm primarily triggered by direct or indirect clitoral stimulation",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1798,7 +1764,7 @@
 		},
 		{
 			"id": "female_vaginal_orgasm",
-			"title": "Vaginal Orgasm",
+			"name": "Vaginal Orgasm",
 			"content": "Orgasm triggered by internal vaginal stimulation",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1806,7 +1772,7 @@
 		},
 		{
 			"id": "female_blended_orgasm",
-			"title": "Blended Orgasm",
+			"name": "Blended Orgasm",
 			"content": "Simultaneous clitoral and vaginal/cervical orgasm",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1814,7 +1780,7 @@
 		},
 		{
 			"id": "female_cervical_orgasm",
-			"title": "Cervical Orgasm",
+			"name": "Cervical Orgasm",
 			"content": "Deep, full-body orgasm from stimulation of the cervix",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1822,7 +1788,7 @@
 		},
 		{
 			"id": "female_ejaculation_orgasm",
-			"title": "Female Ejaculation Orgasm",
+			"name": "Female Ejaculation Orgasm",
 			"content": "Orgasm accompanied by expulsion of fluid from the Skene's glands",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1830,7 +1796,7 @@
 		},
 		{
 			"id": "male_prostatic_orgasm",
-			"title": "Prostatic Orgasm",
+			"name": "Prostatic Orgasm",
 			"content": "Deep, wave-like orgasm from prostate (P-spot) stimulation",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1838,7 +1804,7 @@
 		},
 		{
 			"id": "male_ejaculatory_orgasm",
-			"title": "Ejaculatory Orgasm",
+			"name": "Ejaculatory Orgasm",
 			"content": "Male orgasm accompanied by rhythmic contractions and expulsion of semen",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1846,7 +1812,7 @@
 		},
 		{
 			"id": "male_dry_orgasm",
-			"title": "Dry Orgasm (Non-Ejaculatory Orgasm)",
+			"name": "Dry Orgasm (Non-Ejaculatory Orgasm)",
 			"content": "Full orgasmic contractions and intense pleasure without semen expulsion",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1854,7 +1820,7 @@
 		},
 		{
 			"id": "male_ejaculation_without_orgasm",
-			"title": "Ejaculation Without Orgasm",
+			"name": "Ejaculation Without Orgasm",
 			"content": "Physical expulsion of semen without the pleasurable orgasmic peak",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1862,7 +1828,7 @@
 		},
 		{
 			"id": "male_ejaculation",
-			"title": "Ejaculation",
+			"name": "Ejaculation",
 			"content": "Release of semen during male orgasm",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1870,7 +1836,7 @@
 		},
 		{
 			"id": "anal_orgasm",
-			"title": "Anal Orgasm",
+			"name": "Anal Orgasm",
 			"content": "Orgasm achieved through anal and rectal stimulation, possible in all genders",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1878,7 +1844,7 @@
 		},
 		{
 			"id": "multiple_orgasm",
-			"title": "Multiple Orgasm",
+			"name": "Multiple Orgasm",
 			"content": "Successive orgasms with minimal or no refractory period.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1886,7 +1852,7 @@
 		},
 		{
 			"id": "refractory_period",
-			"title": "Refractory Period",
+			"name": "Refractory Period",
 			"content": "Recovery phase after orgasm in which further sexual stimulation does not easily produce another climax",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1894,7 +1860,7 @@
 		},
 		{
 			"id": "brain",
-			"title": "Brain",
+			"name": "Brain",
 			"content": "Central organ of the nervous system; processes all sexual pleasure, arousal, and orgasm signals",
 			"type": "anatomy",
 			"category": "organ",
@@ -1902,7 +1868,7 @@
 		},
 		{
 			"id": "pudendal_nerve",
-			"title": "Pudendal Nerve",
+			"name": "Pudendal Nerve",
 			"content": "Major nerve supplying the perineum, genitals, and pelvic floor; carries most sexual sensation",
 			"type": "nerve",
 			"category": "organ",
@@ -1910,7 +1876,7 @@
 		},
 		{
 			"id": "male_dorsal_nerve",
-			"title": "Dorsal Nerve of the Penis",
+			"name": "Dorsal Nerve of the Penis",
 			"content": "Primary sensory nerve transmitting pleasure signals from the glans and prepuce",
 			"type": "nerve",
 			"category": "organ",
@@ -1918,7 +1884,7 @@
 		},
 		{
 			"id": "female_dorsal_nerve",
-			"title": "Dorsal Nerve of the Clitoris",
+			"name": "Dorsal Nerve of the Clitoris",
 			"content": "Primary sensory nerve transmitting intense pleasure signals from the clitoral glans and hood",
 			"type": "nerve",
 			"category": "organ",
@@ -1926,7 +1892,7 @@
 		},
 		{
 			"id": "pelvic_nerves",
-			"title": "Pelvic Nerves",
+			"name": "Pelvic Nerves",
 			"content": "Autonomic and somatic nerves (hypogastric, pelvic splanchnic) that control erection, lubrication, and orgasm",
 			"type": "anatomy",
 			"category": "organ",
@@ -1934,7 +1900,7 @@
 		},
 		{
 			"id": "male_penile_erection",
-			"title": "Penile Erection",
+			"name": "Penile Erection",
 			"content": "Vasocongestion and engorgement of penile erectile tissue triggered by nitric oxide and pelvic nerves",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1942,7 +1908,7 @@
 		},
 		{
 			"id": "female_lubrication",
-			"title": "Vaginal Lubrication",
+			"name": "Vaginal Lubrication",
 			"content": "Transudation of plasma fluid through vaginal walls plus Bartholin and Skene secretions during arousal",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1950,7 +1916,7 @@
 		},
 		{
 			"id": "arousal",
-			"title": "Sexual Arousal",
+			"name": "Sexual Arousal",
 			"content": "Physiological and psychological state of heightened sexual readiness common to all humans",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1958,7 +1924,7 @@
 		},
 		{
 			"id": "vasocongestion",
-			"title": "Vasocongestion",
+			"name": "Vasocongestion",
 			"content": "Increased blood flow to genital tissues producing swelling, erection, and lubrication",
 			"type": "anatomy",
 			"category": "sexual",
@@ -1966,7 +1932,7 @@
 		},
 		{
 			"id": "male_seminal_fluid",
-			"title": "Seminal Fluid",
+			"name": "Seminal Fluid",
 			"content": "Mixture of sperm and glandular secretions that forms semen; provides nourishment, motility, and pH buffering",
 			"type": "anatomy",
 			"category": "organ",
@@ -1974,7 +1940,7 @@
 		},
 		{
 			"id": "male_pre_ejaculate",
-			"title": "Pre-ejaculate",
+			"name": "Pre-ejaculate",
 			"content": "Clear Cowper's gland fluid that neutralizes urethral acidity and provides initial lubrication",
 			"type": "anatomy",
 			"category": "organ",
@@ -1982,7 +1948,7 @@
 		},
 		{
 			"id": "female_ejaculate",
-			"title": "Female Ejaculate",
+			"name": "Female Ejaculate",
 			"content": "Fluid expelled from the Skene's glands during sexual climax in some females",
 			"type": "anatomy",
 			"category": "organ",
@@ -1990,7 +1956,7 @@
 		},
 		{
 			"id": "skin_mucosa",
-			"title": "Skin and Mucosa",
+			"name": "Skin and Mucosa",
 			"content": "Outer protective layer and inner moist linings; sensitivity varies dramatically between keratinized and mucosal tissue",
 			"type": "anatomy",
 			"category": "organ",
@@ -1998,7 +1964,7 @@
 		},
 		{
 			"id": "endocrine_system",
-			"title": "Endocrine System",
+			"name": "Endocrine System",
 			"content": "Hormones (testosterone, estrogen, progesterone, oxytocin) that regulate libido, arousal, and orgasm",
 			"type": "anatomy",
 			"category": "organ",
@@ -2006,7 +1972,7 @@
 		},
 		{
 			"id": "sexual_response_cycle",
-			"title": "Sexual Response Cycle",
+			"name": "Sexual Response Cycle",
 			"content": "Excitement \u2192 Plateau \u2192 Orgasm \u2192 Resolution (Masters & Johnson model, applies to all genders)",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2014,7 +1980,7 @@
 		},
 		{
 			"id": "myotonia",
-			"title": "Myotonia",
+			"name": "Myotonia",
 			"content": "Increased muscle tension throughout the body during the plateau phase",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2022,7 +1988,7 @@
 		},
 		{
 			"id": "plateau_phase",
-			"title": "Plateau Phase",
+			"name": "Plateau Phase",
 			"content": "Sustained high arousal with maximal vasocongestion and rhythmic breathing",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2030,7 +1996,7 @@
 		},
 		{
 			"id": "male_refractory_period_length",
-			"title": "Male Refractory Period",
+			"name": "Male Refractory Period",
 			"content": "Typical 15\u201330 minutes (longer with age) during which another erection/orgasm is difficult",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2038,7 +2004,7 @@
 		},
 		{
 			"id": "female_refractory_period",
-			"title": "Female Refractory Period",
+			"name": "Female Refractory Period",
 			"content": "Often minimal or absent, enabling multiple orgasms in quick succession",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2046,7 +2012,7 @@
 		},
 		{
 			"id": "female_clitoral_erection",
-			"title": "Clitoral Erection",
+			"name": "Clitoral Erection",
 			"content": "Engorgement of the clitoral body, crura, and vestibular bulbs during arousal",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2054,7 +2020,7 @@
 		},
 		{
 			"id": "male_circumcision_complications",
-			"title": "Circumcision Complications",
+			"name": "Circumcision Complications",
 			"content": "Bleeding, infection, scarring, adhesions, meatal stenosis, pain/neuroma, glans injury, revision surgery; rarely death.",
 			"type": "consequence",
 			"category": "surgery",
@@ -2062,7 +2028,7 @@
 		},
 		{
 			"id": "female_genital_cutting_complications",
-			"title": "FGM/C Complications",
+			"name": "FGM/C Complications",
 			"content": "Potential adverse outcomes such as severe bleeding, infection, and long-term health issues",
 			"type": "consequence",
 			"category": "surgery",
@@ -2070,7 +2036,7 @@
 		},
 		{
 			"id": "psychological_trauma",
-			"title": "Psychological Trauma",
+			"name": "Psychological Trauma",
 			"content": "Long-term mental and emotional health consequences of non-consensual genital surgery",
 			"type": "consequence",
 			"category": "downgrade",
@@ -2078,7 +2044,7 @@
 		},
 		{
 			"id": "tongue",
-			"title": "Tongue",
+			"name": "Tongue",
 			"content": "Sensitive muscular organ contributing to tactile sensation",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2086,7 +2052,7 @@
 		},
 		{
 			"id": "chest_surface",
-			"title": "Chest Surface",
+			"name": "Chest Surface",
 			"content": "Upper torso skin, responsive to touch and pressure",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2094,7 +2060,7 @@
 		},
 		{
 			"id": "lower_back",
-			"title": "Lower Back",
+			"name": "Lower Back",
 			"content": "Area above buttocks, sensitive to touch",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2102,7 +2068,7 @@
 		},
 		{
 			"id": "gluteal_fold",
-			"title": "Gluteal Fold",
+			"name": "Gluteal Fold",
 			"content": "Fold beneath buttocks, sensitive to touch",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2110,7 +2076,7 @@
 		},
 		{
 			"id": "anal_rim",
-			"title": "Anal Rim",
+			"name": "Anal Rim",
 			"content": "Outer edge of anus, dense nerve endings",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2118,7 +2084,7 @@
 		},
 		{
 			"id": "inguinal_crease",
-			"title": "Inguinal Crease",
+			"name": "Inguinal Crease",
 			"content": "Groin fold between thigh and pelvis",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2126,7 +2092,7 @@
 		},
 		{
 			"id": "wrists",
-			"title": "Wrists",
+			"name": "Wrists",
 			"content": "Thin skin and exposed nerves, sensitive",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2134,7 +2100,7 @@
 		},
 		{
 			"id": "behind_knees",
-			"title": "Behind Knees",
+			"name": "Behind Knees",
 			"content": "Popliteal area, nerve dense",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2142,7 +2108,7 @@
 		},
 		{
 			"id": "scalp",
-			"title": "Scalp",
+			"name": "Scalp",
 			"content": "Nerve-rich skin on head, sensitive to touch",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2150,7 +2116,7 @@
 		},
 		{
 			"id": "male_frenulum_delta",
-			"title": "Frenulum Delta",
+			"name": "Frenulum Delta",
 			"content": "Highly innervated junction area of frenulum",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2158,23 +2124,15 @@
 		},
 		{
 			"id": "male_inner_foreskin",
-			"title": "Inner Foreskin",
+			"name": "Inner Foreskin",
 			"content": "Mucosal inner layer, highly sensitive",
 			"type": "anatomy",
 			"category": "sexual",
 			"trait": "male"
 		},
 		{
-			"id": "male_outer_foreskin",
-			"title": "Outer Foreskin",
-			"content": "External skin layer, touch responsive",
-			"type": "anatomy",
-			"category": "sexual",
-			"trait": "male"
-		},
-		{
 			"id": "male_meatus",
-			"title": "Meatus",
+			"name": "Meatus",
 			"content": "Urethral opening, highly sensitive",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2182,7 +2140,7 @@
 		},
 		{
 			"id": "male_dorsal_nerve_zone",
-			"title": "Dorsal Nerve Zone",
+			"name": "Dorsal Nerve Zone",
 			"content": "Top shaft nerve pathway, sensitive region",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2190,7 +2148,7 @@
 		},
 		{
 			"id": "male_scrotal_raphe",
-			"title": "Scrotal Raphe",
+			"name": "Scrotal Raphe",
 			"content": "Central seam of scrotum",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2198,23 +2156,15 @@
 		},
 		{
 			"id": "male_pubic_mound",
-			"title": "Pubic Mound",
+			"name": "Pubic Mound",
 			"content": "Fatty area above penis",
 			"type": "anatomy",
 			"category": "sexual",
 			"trait": "male"
 		},
 		{
-			"id": "male_bulb",
-			"title": "Bulb of Penis",
-			"content": "Internal erectile base structure",
-			"type": "anatomy",
-			"category": "sexual",
-			"trait": "male"
-		},
-		{
 			"id": "female_clitoral_body",
-			"title": "Clitoral Body",
+			"name": "Clitoral Body",
 			"content": "Internal erectile structure",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2222,7 +2172,7 @@
 		},
 		{
 			"id": "female_clitoral_crura",
-			"title": "Clitoral Crura",
+			"name": "Clitoral Crura",
 			"content": "Internal legs of clitoris along pelvis",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2230,7 +2180,7 @@
 		},
 		{
 			"id": "female_clitoral_bulbs",
-			"title": "Clitoral Bulbs",
+			"name": "Clitoral Bulbs",
 			"content": "Erectile tissue beside vaginal opening",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2238,7 +2188,7 @@
 		},
 		{
 			"id": "female_urethral_sponge",
-			"title": "Urethral Sponge",
+			"name": "Urethral Sponge",
 			"content": "Tissue surrounding urethra involved in sensation",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2246,7 +2196,7 @@
 		},
 		{
 			"id": "female_skene_glands",
-			"title": "Skene's Glands",
+			"name": "Skene's Glands",
 			"content": "Paraurethral glands linked to fluid release",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2254,7 +2204,7 @@
 		},
 		{
 			"id": "female_skene_ducts",
-			"title": "Skene's Ducts",
+			"name": "Skene's Ducts",
 			"content": "Ducts near urethra releasing secretions",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2262,7 +2212,7 @@
 		},
 		{
 			"id": "female_u_spot",
-			"title": "U-Spot",
+			"name": "U-Spot",
 			"content": "Area around urethral opening",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2270,7 +2220,7 @@
 		},
 		{
 			"id": "female_vaginal_rugae",
-			"title": "Vaginal Rugae",
+			"name": "Vaginal Rugae",
 			"content": "Internal folds increasing sensation",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2278,7 +2228,7 @@
 		},
 		{
 			"id": "female_anterior_fornix",
-			"title": "Anterior Fornix",
+			"name": "Anterior Fornix",
 			"content": "Upper vaginal front recess",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2286,7 +2236,7 @@
 		},
 		{
 			"id": "female_fourchette",
-			"title": "Fourchette",
+			"name": "Fourchette",
 			"content": "Rear junction of labia",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2294,7 +2244,7 @@
 		},
 		{
 			"id": "male_lubrication",
-			"title": "Pre-ejaculate (Cowper's fluid)",
+			"name": "Pre-ejaculate (Cowper's fluid)",
 			"content": "Secretion from the bulbourethral (Cowper's) glands that lubricates the urethra and neutralizes acidity during arousal.",
 			"type": "anatomy",
 			"category": "sexual",
@@ -2302,31 +2252,15 @@
 		},
 		{
 			"id": "male_bulbourethral_glands",
-			"title": "Bulbourethral (Cowper's) Glands",
+			"name": "Bulbourethral (Cowper's) Glands",
 			"content": "Pea-sized glands beneath prostate that produce pre-ejaculate during arousal.",
 			"type": "anatomy",
 			"category": "organ",
 			"trait": "male"
 		},
 		{
-			"id": "male_genital_erogenous_zones",
-			"content": "Specific regions of the male genitalia that are highly sensitive and capable of eliciting strong sexual arousal.",
-			"title": "Male Genital Erogenous Zones",
-			"type": "sexual",
-			"category": "sexual",
-			"trait": "male"
-		},
-		{
-			"id": "female_genital_erogenous_zones",
-			"content": "Specific regions of the female genitalia that are highly sensitive and capable of eliciting strong sexual arousal.",
-			"title": "Female Genital Erogenous Zones",
-			"type": "sexual",
-			"category": "sexual",
-			"trait": "female"
-		},
-		{
 			"id": "male_nervous_system",
-			"title": "Male Nervous System",
+			"name": "Male Nervous System",
 			"content": "Neurological pathways governing responses and autonomic control of the male genitalia and reproductive tract.",
 			"type": "anatomy",
 			"category": "nerve",
@@ -2334,7 +2268,7 @@
 		},
 		{
 			"id": "female_nervous_system",
-			"title": "Female Nervous System",
+			"name": "Female Nervous System",
 			"content": "Neurological pathways governing responses and autonomic control of the female genitalia and reproductive tract.",
 			"type": "anatomy",
 			"category": "nerve",
@@ -2342,7 +2276,7 @@
 		},
 		{
 			"id": "male_pudendal_nerve",
-			"title": "Male Pudendal Nerve",
+			"name": "Male Pudendal Nerve",
 			"content": "Main somatic nerve of the male perineum, branching into the dorsal penile nerve. Vital for sensation and ejaculation.",
 			"type": "anatomy",
 			"category": "nerve",
@@ -2350,7 +2284,7 @@
 		},
 		{
 			"id": "female_pudendal_nerve",
-			"title": "Female Pudendal Nerve",
+			"name": "Female Pudendal Nerve",
 			"content": "Main nerve of the female perineum, branching into the dorsal clitoral nerve. Vital for clitoral sensation.",
 			"type": "anatomy",
 			"category": "nerve",
@@ -2358,7 +2292,7 @@
 		},
 		{
 			"id": "male_pelvic_nerves",
-			"title": "Male Pelvic Nerves",
+			"name": "Male Pelvic Nerves",
 			"content": "Autonomic nerves supplying male pelvic organs (prostate, seminal vesicles), controlling cellular erection pathways.",
 			"type": "anatomy",
 			"category": "nerve",
@@ -2366,10 +2300,26 @@
 		},
 		{
 			"id": "female_pelvic_nerves",
-			"title": "Female Pelvic Nerves",
+			"name": "Female Pelvic Nerves",
 			"content": "Autonomic nerves supplying female pelvic organs (vagina, cervix, clitoris), driving engorgement and lubrication.",
 			"type": "anatomy",
 			"category": "nerve",
+			"trait": "female"
+		},
+		{
+			"id": "male_abdomen",
+			"name": "Male Abdomen",
+			"content": "The abdominal region of the male body.",
+			"type": "anatomy",
+			"category": "region",
+			"trait": "male"
+		},
+		{
+			"id": "female_abdomen",
+			"name": "Female Abdomen",
+			"content": "The abdominal region of the female body.",
+			"type": "anatomy",
+			"category": "region",
 			"trait": "female"
 		}
 	],
@@ -2455,143 +2405,128 @@
 			"type": "anatomy"
 		},
 		{
+			"source": "female_torso",
+			"target": "torso",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_thorax",
+			"target": "thorax",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_thorax",
+			"target": "thorax",
+			"type": "anatomy"
+		},
+		{
 			"source": "female_anatomy",
 			"target": "female_torso",
 			"type": "anatomy"
 		},
 		{
-			"source": "upper_torso",
+			"source": "thorax",
 			"target": "neck",
 			"type": "anatomy"
 		},
 		{
 			"source": "torso",
-			"target": "upper_torso",
+			"target": "thorax",
 			"type": "anatomy"
 		},
 		{
 			"source": "torso",
-			"target": "lower_torso",
-			"type": "anatomy"
-		},
-		{
-			"source": "upper_torso",
-			"target": "shoulders",
-			"type": "anatomy"
-		},
-		{
-			"source": "upper_torso",
-			"target": "chest",
-			"type": "anatomy"
-		},
-		{
-			"source": "lower_torso",
-			"target": "abdomen",
-			"type": "anatomy"
-		},
-		{
-			"source": "upper_torso",
-			"target": "back",
-			"type": "anatomy"
-		},
-		{
-			"source": "lower_torso",
 			"target": "pelvis",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_upper_torso",
+			"source": "thorax",
+			"target": "shoulders",
+			"type": "anatomy"
+		},
+		{
+			"source": "thorax",
+			"target": "chest",
+			"type": "anatomy"
+		},
+		{
+			"source": "thorax",
+			"target": "back",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_thorax",
 			"target": "neck",
 			"type": "anatomy"
 		},
 		{
 			"source": "male_torso",
-			"target": "male_upper_torso",
+			"target": "male_thorax",
 			"type": "anatomy"
 		},
 		{
 			"source": "male_torso",
-			"target": "male_lower_torso",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_upper_torso",
-			"target": "shoulders",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_upper_torso",
-			"target": "chest",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_lower_torso",
-			"target": "abdomen",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_upper_torso",
-			"target": "back",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_lower_torso",
 			"target": "male_pelvis",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_upper_torso",
+			"source": "male_thorax",
+			"target": "shoulders",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_thorax",
+			"target": "chest",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_thorax",
+			"target": "back",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_thorax",
 			"target": "neck",
 			"type": "anatomy"
 		},
 		{
 			"source": "female_torso",
-			"target": "female_upper_torso",
+			"target": "female_thorax",
 			"type": "anatomy"
 		},
 		{
 			"source": "female_torso",
-			"target": "female_lower_torso",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_upper_torso",
-			"target": "shoulders",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_upper_torso",
-			"target": "chest",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_breasts",
-			"target": "female_upper_torso",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_lower_torso",
-			"target": "abdomen",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_upper_torso",
-			"target": "back",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_lower_torso",
 			"target": "female_pelvis",
 			"type": "anatomy"
 		},
 		{
-			"source": "areola",
+			"source": "female_thorax",
+			"target": "shoulders",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_thorax",
 			"target": "chest",
 			"type": "anatomy"
 		},
 		{
-			"source": "nipples",
-			"target": "chest",
+			"source": "female_thorax",
+			"target": "female_breasts",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_thorax",
+			"target": "back",
+			"type": "anatomy"
+		},
+		{
+			"source": "chest",
+			"target": "areola",
+			"type": "anatomy"
+		},
+		{
+			"source": "chest",
+			"target": "nipples",
 			"type": "anatomy"
 		},
 		{
@@ -2600,13 +2535,13 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "areola",
-			"target": "female_breasts",
+			"source": "female_breasts",
+			"target": "areola",
 			"type": "anatomy"
 		},
 		{
-			"source": "nipples",
-			"target": "female_breasts",
+			"source": "female_breasts",
+			"target": "nipples",
 			"type": "anatomy"
 		},
 		{
@@ -2625,8 +2560,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "ears",
-			"target": "head",
+			"source": "head",
+			"target": "ears",
 			"type": "anatomy"
 		},
 		{
@@ -2640,8 +2575,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "mouth",
-			"target": "face",
+			"source": "face",
+			"target": "mouth",
 			"type": "anatomy"
 		},
 		{
@@ -2715,48 +2650,28 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "genital_region",
-			"target": "pelvis",
-			"type": "anatomy"
-		},
-		{
-			"source": "genital_region",
-			"target": "prepuce",
-			"type": "anatomy"
-		},
-		{
 			"source": "male_pelvis",
 			"target": "groin",
 			"type": "anatomy"
 		},
 		{
-			"source": "genital_region",
-			"target": "male_pelvis",
+			"source": "pelvis",
+			"target": "genital",
 			"type": "anatomy"
 		},
 		{
-			"source": "lower_torso",
-			"target": "genital_region",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_lower_torso",
+			"source": "male_pelvis",
 			"target": "male_genital",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_lower_torso",
+			"source": "female_pelvis",
 			"target": "female_genital",
 			"type": "anatomy"
 		},
 		{
 			"source": "female_pelvis",
 			"target": "groin",
-			"type": "anatomy"
-		},
-		{
-			"source": "genital_region",
-			"target": "female_pelvis",
 			"type": "anatomy"
 		},
 		{
@@ -2770,8 +2685,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "thighs",
-			"target": "legs",
+			"source": "legs",
+			"target": "thighs",
 			"type": "anatomy"
 		},
 		{
@@ -2805,63 +2720,58 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "buttocks",
-			"target": "pelvis",
+			"source": "male_pelvis",
+			"target": "buttocks",
 			"type": "anatomy"
 		},
 		{
-			"source": "buttocks",
-			"target": "male_pelvis",
+			"source": "female_pelvis",
+			"target": "buttocks",
 			"type": "anatomy"
 		},
 		{
-			"source": "buttocks",
-			"target": "female_pelvis",
+			"source": "pelvis",
+			"target": "perineum",
 			"type": "anatomy"
 		},
 		{
-			"source": "perineum",
-			"target": "pelvis",
+			"source": "male_pelvis",
+			"target": "perineum",
 			"type": "anatomy"
 		},
 		{
-			"source": "perineum",
-			"target": "male_pelvis",
+			"source": "female_pelvis",
+			"target": "perineum",
 			"type": "anatomy"
 		},
 		{
-			"source": "perineum",
-			"target": "female_pelvis",
+			"source": "pelvis",
+			"target": "pelvic_floor_muscles",
 			"type": "anatomy"
 		},
 		{
-			"source": "pelvic_floor_muscles",
-			"target": "pelvis",
+			"source": "male_pelvis",
+			"target": "pelvic_floor_muscles",
 			"type": "anatomy"
 		},
 		{
-			"source": "pelvic_floor_muscles",
-			"target": "male_pelvis",
+			"source": "female_pelvis",
+			"target": "pelvic_floor_muscles",
 			"type": "anatomy"
 		},
 		{
-			"source": "pelvic_floor_muscles",
-			"target": "female_pelvis",
+			"source": "pelvis",
+			"target": "rectum",
 			"type": "anatomy"
 		},
 		{
-			"source": "rectum",
-			"target": "pelvis",
+			"source": "male_pelvis",
+			"target": "rectum",
 			"type": "anatomy"
 		},
 		{
-			"source": "rectum",
-			"target": "male_pelvis",
-			"type": "anatomy"
-		},
-		{
-			"source": "rectum",
-			"target": "female_pelvis",
+			"source": "female_pelvis",
+			"target": "rectum",
 			"type": "anatomy"
 		},
 		{
@@ -2875,8 +2785,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "rectum",
+			"source": "rectum",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -2915,63 +2825,33 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "male_genital",
-			"target": "male_pelvis",
-			"type": "anatomy"
-		},
-		{
-			"source": "genital_region",
+			"source": "genital",
 			"target": "male_genital",
 			"type": "anatomy"
 		},
 		{
 			"source": "male_pelvis",
-			"target": "male_root",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_scrotum",
-			"target": "male_pelvis",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_prostate",
-			"target": "male_pelvis",
+			"target": "male_scrotum",
 			"type": "anatomy"
 		},
 		{
 			"source": "male_pelvis",
-			"target": "male_crura_of_penis",
+			"target": "male_prostate",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_pelvis",
-			"target": "male_bulb_of_penis",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_genital",
-			"target": "female_pelvis",
-			"type": "anatomy"
-		},
-		{
-			"source": "genital_region",
+			"source": "genital",
 			"target": "female_genital",
 			"type": "anatomy"
 		},
 		{
-			"source": "female_uterus",
-			"target": "female_pelvis",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_ovaries",
-			"target": "female_pelvis",
+			"source": "female_pelvis",
+			"target": "female_uterus",
 			"type": "anatomy"
 		},
 		{
 			"source": "female_pelvis",
-			"target": "female_crura_of_clitoris",
+			"target": "female_ovaries",
 			"type": "anatomy"
 		},
 		{
@@ -3091,7 +2971,7 @@
 		},
 		{
 			"source": "male_penis",
-			"target": "male_root",
+			"target": "male_penile_root",
 			"type": "anatomy"
 		},
 		{
@@ -3115,12 +2995,12 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "male_root",
+			"source": "male_penile_root",
 			"target": "male_bulb_of_penis",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_root",
+			"source": "male_penile_root",
 			"target": "male_crura_of_penis",
 			"type": "anatomy"
 		},
@@ -3176,12 +3056,12 @@
 		},
 		{
 			"source": "male_foreskin",
-			"target": "male_outer_skin",
+			"target": "male_outer_foreskin",
 			"type": "anatomy"
 		},
 		{
 			"source": "male_foreskin",
-			"target": "male_inner_mucosa",
+			"target": "male_inner_foreskin",
 			"type": "anatomy"
 		},
 		{
@@ -3245,7 +3125,7 @@
 			"type": "nerve"
 		},
 		{
-			"source": "male_inner_mucosa",
+			"source": "male_inner_foreskin",
 			"target": "nerve_endings",
 			"type": "anatomy"
 		},
@@ -3350,7 +3230,7 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "male_inner_mucosa",
+			"source": "male_inner_foreskin",
 			"target": "smegma",
 			"type": "anatomy"
 		},
@@ -3550,109 +3430,104 @@
 			"type": "benefit"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "neck",
+			"source": "neck",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "ears",
+			"source": "ears",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "inner_thighs",
+			"source": "inner_thighs",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "perineum",
+			"source": "perineum",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "lips",
+			"source": "lips",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "nipples",
+			"source": "nipples",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "areola",
+			"source": "areola",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "anus",
+			"source": "anus",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_clitoral_glans",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_clitoral_hood",
+			"source": "female_clitoral_glans",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_labia_minora",
+			"source": "female_clitoral_hood",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_g_spot",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_a_spot",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_glans",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_foreskin",
+			"source": "female_labia_minora",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_frenulum",
+			"source": "female_g_spot",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_inner_mucosa",
+			"source": "female_a_spot",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_frenular_delta",
-			"type": "anatomy"
+			"source": "male_glans",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "male_foreskin",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "male_frenulum",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "male_frenular_delta",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
 			"source": "male_prostate",
-			"target": "male_genital_erogenous_zones",
-			"type": "anatomy"
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
 			"source": "male_scrotum",
-			"target": "male_genital_erogenous_zones",
-			"type": "anatomy"
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_ridged_band",
-			"type": "anatomy"
+			"source": "male_ridged_band",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
 			"source": "male_erogenous_zones",
@@ -3665,54 +3540,54 @@
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "meissner_corpuscles",
+			"source": "meissner_corpuscles",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "nerve_endings",
+			"source": "nerve_endings",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "pelvic_floor_muscles",
+			"source": "pelvic_floor_muscles",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "intact_erogenous_sensitivity",
+			"source": "intact_erogenous_sensitivity",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "natural_lubrication",
+			"source": "natural_lubrication",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_gliding_mechanism",
-			"type": "anatomy"
+			"source": "male_gliding_mechanism",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_intact_glans_protection",
-			"type": "anatomy"
+			"source": "male_intact_glans_protection",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_intact_gliding_mechanism",
-			"type": "anatomy"
+			"source": "male_intact_gliding_mechanism",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_skenes_glands",
-			"type": "anatomy"
+			"source": "female_skenes_glands",
+			"target": "female_erogenous_zones",
+			"type": "sexual"
 		},
 		{
 			"source": "female_vagina",
-			"target": "female_genital_erogenous_zones",
-			"type": "anatomy"
+			"target": "female_erogenous_zones",
+			"type": "sexual"
 		},
 		{
 			"source": "erogenous_zones",
@@ -3722,12 +3597,12 @@
 		{
 			"source": "male_erogenous_zones",
 			"target": "male_climax",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "female_erogenous_zones",
 			"target": "female_climax",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "climax",
@@ -3737,72 +3612,72 @@
 		{
 			"source": "male_climax",
 			"target": "male_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "female_climax",
 			"target": "female_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "climax",
 			"target": "neurotransmitters",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_climax",
 			"target": "neurotransmitters",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "female_climax",
 			"target": "neurotransmitters",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
-			"source": "female_orgasm",
-			"target": "female_clitoral_orgasm",
-			"type": "anatomy"
+			"source": "female_clitoral_orgasm",
+			"target": "female_orgasm",
+			"type": "sexual"
 		},
 		{
-			"source": "female_orgasm",
-			"target": "female_vaginal_orgasm",
-			"type": "anatomy"
+			"source": "female_vaginal_orgasm",
+			"target": "female_orgasm",
+			"type": "sexual"
 		},
 		{
-			"source": "female_orgasm",
-			"target": "female_blended_orgasm",
-			"type": "anatomy"
+			"source": "female_blended_orgasm",
+			"target": "female_orgasm",
+			"type": "sexual"
 		},
 		{
-			"source": "female_orgasm",
-			"target": "female_cervical_orgasm",
-			"type": "anatomy"
+			"source": "female_cervical_orgasm",
+			"target": "female_orgasm",
+			"type": "sexual"
 		},
 		{
-			"source": "female_orgasm",
-			"target": "female_ejaculation_orgasm",
-			"type": "anatomy"
+			"source": "female_ejaculation_orgasm",
+			"target": "female_orgasm",
+			"type": "sexual"
 		},
 		{
-			"source": "female_orgasm",
-			"target": "multiple_orgasm",
-			"type": "anatomy"
+			"source": "multiple_orgasm",
+			"target": "female_orgasm",
+			"type": "sexual"
 		},
 		{
-			"source": "male_orgasm",
-			"target": "male_prostatic_orgasm",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_ejaculatory_orgasm",
+			"source": "male_prostatic_orgasm",
 			"target": "male_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_orgasm",
-			"target": "male_dry_orgasm",
-			"type": "anatomy"
+			"target": "male_ejaculatory_orgasm",
+			"type": "sexual"
+		},
+		{
+			"source": "male_dry_orgasm",
+			"target": "male_orgasm",
+			"type": "sexual"
 		},
 		{
 			"source": "anal_orgasm",
@@ -3810,59 +3685,59 @@
 			"type": "sexual"
 		},
 		{
-			"source": "orgasm",
-			"target": "multiple_orgasm",
+			"source": "multiple_orgasm",
+			"target": "orgasm",
 			"type": "sexual"
 		},
 		{
 			"source": "anus",
 			"target": "anal_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_ejaculation",
 			"target": "male_ejaculatory_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_ejaculation",
 			"target": "male_ejaculation_without_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_erogenous_zones",
 			"target": "male_ejaculation_without_orgasm",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_erogenous_zones",
 			"target": "male_ejaculation",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "male_ejaculation",
 			"target": "neurotransmitters",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_orgasm",
-			"target": "multiple_orgasm",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_orgasm",
-			"target": "refractory_period",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_orgasm",
-			"target": "refractory_period",
-			"type": "anatomy"
+			"type": "sexual"
 		},
 		{
 			"source": "multiple_orgasm",
-			"target": "refractory_period",
-			"type": "anatomy"
+			"target": "male_orgasm",
+			"type": "sexual"
+		},
+		{
+			"source": "refractory_period",
+			"target": "male_orgasm",
+			"type": "sexual"
+		},
+		{
+			"source": "refractory_period",
+			"target": "female_orgasm",
+			"type": "sexual"
+		},
+		{
+			"source": "refractory_period",
+			"target": "multiple_orgasm",
+			"type": "sexual"
 		},
 		{
 			"source": "male_circumcision",
@@ -3996,12 +3871,12 @@
 		},
 		{
 			"source": "male_circumcision",
-			"target": "male_outer_skin",
+			"target": "male_outer_foreskin",
 			"type": "removed"
 		},
 		{
 			"source": "male_circumcision",
-			"target": "male_inner_mucosa",
+			"target": "male_inner_foreskin",
 			"type": "removed"
 		},
 		{
@@ -4025,7 +3900,7 @@
 			"type": "removed"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
+			"source": "male_erogenous_zones",
 			"target": "male_circ_friction",
 			"type": "consequence"
 		},
@@ -4035,23 +3910,23 @@
 			"type": "consequence"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
+			"source": "male_erogenous_zones",
 			"target": "male_circ_loss_of_sensitivity",
 			"type": "consequence"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
+			"source": "male_erogenous_zones",
 			"target": "male_circ_neuroma",
 			"type": "consequence"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
+			"source": "male_erogenous_zones",
 			"target": "male_circ_tight_erections",
 			"type": "consequence"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "psychological_trauma",
+			"source": "psychological_trauma",
+			"target": "erogenous_zones",
 			"type": "consequence"
 		},
 		{
@@ -4280,23 +4155,23 @@
 			"type": "consequence"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_fgm_loss_sensitivity",
+			"source": "female_fgm_loss_sensitivity",
+			"target": "female_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_fgm_dyspareunia",
+			"source": "female_fgm_dyspareunia",
+			"target": "female_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_fgm_urinary_menstrual",
+			"source": "female_fgm_urinary_menstrual",
+			"target": "female_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_fgm_neuroma",
+			"source": "female_fgm_neuroma",
+			"target": "female_erogenous_zones",
 			"type": "consequence"
 		},
 		{
@@ -4310,18 +4185,18 @@
 			"type": "consequence"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "brain",
+			"source": "brain",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "pudendal_nerve",
+			"source": "pudendal_nerve",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "pelvic_nerves",
+			"source": "pelvic_nerves",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4395,137 +4270,62 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "shared",
+			"source": "mouth",
 			"target": "lips",
 			"type": "anatomy"
 		},
 		{
-			"source": "anatomy",
-			"target": "lips",
-			"type": "anatomy"
+			"source": "tongue",
+			"target": "erogenous_zones",
+			"type": "sexual"
 		},
 		{
-			"source": "shared",
+			"source": "mouth",
 			"target": "tongue",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "tongue",
+			"source": "chest_surface",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "tongue",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "neck",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "ears",
-			"type": "anatomy"
-		},
-		{
-			"source": "anatomy",
-			"target": "ears",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "nipples",
-			"type": "anatomy"
-		},
-		{
-			"source": "anatomy",
-			"target": "nipples",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "areola",
-			"type": "anatomy"
-		},
-		{
-			"source": "anatomy",
-			"target": "areola",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
+			"source": "chest",
 			"target": "chest_surface",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "chest_surface",
+			"source": "lower_back",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "chest_surface",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
+			"source": "back",
 			"target": "lower_back",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "lower_back",
+			"source": "buttocks",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "lower_back",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "buttocks",
-			"type": "anatomy"
-		},
-		{
-			"source": "erogenous_zones",
-			"target": "buttocks",
+			"source": "gluteal_fold",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "lower_torso",
-			"target": "buttocks",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
+			"source": "buttocks",
 			"target": "gluteal_fold",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "gluteal_fold",
+			"source": "anal_rim",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "gluteal_fold",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "anal_rim",
-			"type": "anatomy"
-		},
-		{
-			"source": "erogenous_zones",
-			"target": "anal_rim",
-			"type": "sexual"
-		},
-		{
-			"source": "anatomy",
+			"source": "pelvis",
 			"target": "anus",
 			"type": "anatomy"
 		},
@@ -4535,118 +4335,88 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "shared",
-			"target": "perineum",
-			"type": "anatomy"
-		},
-		{
-			"source": "anatomy",
-			"target": "perineum",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
-			"target": "inguinal_crease",
-			"type": "anatomy"
-		},
-		{
-			"source": "erogenous_zones",
-			"target": "inguinal_crease",
+			"source": "inguinal_crease",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
+			"source": "pelvis",
 			"target": "inguinal_crease",
 			"type": "anatomy"
 		},
 		{
-			"source": "shared",
+			"source": "thighs",
 			"target": "inner_thighs",
 			"type": "anatomy"
 		},
 		{
-			"source": "anatomy",
-			"target": "inner_thighs",
-			"type": "anatomy"
+			"source": "wrists",
+			"target": "erogenous_zones",
+			"type": "sexual"
 		},
 		{
-			"source": "shared",
+			"source": "forearm",
 			"target": "wrists",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "wrists",
+			"source": "behind_knees",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "wrists",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
+			"source": "knee",
 			"target": "behind_knees",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "behind_knees",
+			"source": "scalp",
+			"target": "erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "behind_knees",
-			"type": "anatomy"
-		},
-		{
-			"source": "shared",
+			"source": "head",
 			"target": "scalp",
 			"type": "anatomy"
 		},
 		{
-			"source": "erogenous_zones",
-			"target": "scalp",
+			"source": "male_corona",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
-			"target": "scalp",
-			"type": "anatomy"
-		},
-		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_corona",
+			"source": "male_frenulum_delta",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_frenulum_delta",
+			"source": "male_inner_foreskin",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_inner_foreskin",
+			"source": "male_outer_foreskin",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_outer_foreskin",
-			"type": "sexual"
-		},
-		{
-			"source": "male_genital_erogenous_zones",
+			"source": "male_urethra",
 			"target": "male_meatus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_meatus",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_shaft",
+			"source": "male_shaft",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_dorsal_nerve_zone",
+			"source": "male_dorsal_nerve_zone",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4655,8 +4425,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_scrotal_raphe",
+			"source": "male_scrotal_raphe",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4665,8 +4435,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_testes",
+			"source": "male_testes",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4675,43 +4445,38 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_pubic_mound",
+			"source": "male_pubic_mound",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
 			"source": "male_genital",
-			"target": "male_bulb",
+			"target": "male_bulb_of_penis",
 			"type": "anatomy"
 		},
 		{
-			"source": "male_genital_erogenous_zones",
-			"target": "male_bulb",
+			"source": "male_bulb_of_penis",
+			"target": "male_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital",
-			"target": "female_breasts",
-			"type": "anatomy"
-		},
-		{
-			"source": "female_erogenous_zones",
-			"target": "female_breasts",
+			"source": "female_breasts",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_clitoral_body",
+			"source": "female_clitoral_body",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_clitoral_crura",
+			"source": "female_clitoral_crura",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_clitoral_bulbs",
+			"source": "female_clitoral_bulbs",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4725,8 +4490,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_urethral_sponge",
+			"source": "female_urethral_sponge",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4735,8 +4500,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_skene_glands",
+			"source": "female_skene_glands",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4745,8 +4510,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_skene_ducts",
+			"source": "female_skene_ducts",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4755,8 +4520,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_u_spot",
+			"source": "female_u_spot",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4765,8 +4530,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_vaginal_rugae",
+			"source": "female_vaginal_rugae",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4775,8 +4540,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_anterior_fornix",
+			"source": "female_anterior_fornix",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4790,8 +4555,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_posterior_fornix",
+			"source": "female_posterior_fornix",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4800,23 +4565,23 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_cervix",
+			"source": "female_cervix",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_labia_majora",
+			"source": "female_labia_majora",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_vestibule",
+			"source": "female_vestibule",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_fourchette",
+			"source": "female_fourchette",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4825,8 +4590,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_bartholin_glands",
+			"source": "female_bartholin_glands",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4835,8 +4600,8 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "female_genital_erogenous_zones",
-			"target": "female_mons_pubis",
+			"source": "female_mons_pubis",
+			"target": "female_erogenous_zones",
 			"type": "sexual"
 		},
 		{
@@ -4875,7 +4640,7 @@
 			"type": "sexual"
 		},
 		{
-			"source": "anatomy",
+			"source": "female_vagina",
 			"target": "natural_lubrication",
 			"type": "anatomy"
 		},
@@ -4891,6 +4656,11 @@
 		},
 		{
 			"source": "male_penis",
+			"target": "male_frenulum_delta",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_frenulum",
 			"target": "male_frenulum_delta",
 			"type": "anatomy"
 		},
@@ -4978,16 +4748,6 @@
 			"source": "female_reproductive_system",
 			"target": "female_vagina",
 			"type": "anatomy"
-		},
-		{
-			"source": "male_erogenous_zones",
-			"target": "male_genital_erogenous_zones",
-			"type": "sexual"
-		},
-		{
-			"source": "female_erogenous_zones",
-			"target": "female_genital_erogenous_zones",
-			"type": "sexual"
 		},
 		{
 			"source": "male_penis",
@@ -5118,6 +4878,36 @@
 			"source": "female_pudendal_nerve",
 			"target": "female_dorsal_nerve",
 			"type": "nerve"
+		},
+		{
+			"source": "torso",
+			"target": "abdomen",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_torso",
+			"target": "male_abdomen",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_torso",
+			"target": "female_abdomen",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_pelvis",
+			"target": "male_penis",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_pelvis",
+			"target": "female_clitoris",
+			"type": "anatomy"
+		},
+		{
+			"source": "pelvis",
+			"target": "buttocks",
+			"type": "anatomy"
 		}
 	]
 }
