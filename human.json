@@ -4935,11 +4935,6 @@
 			"type": "homologous"
 		},
 		{
-			"source": "male_penis",
-			"target": "female_clitoris",
-			"type": "homologous"
-		},
-		{
 			"source": "male_scrotum",
 			"target": "female_labia_majora",
 			"type": "homologous"
