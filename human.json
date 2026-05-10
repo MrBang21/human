@@ -166,6 +166,11 @@
 		"female_uterus": "The hollow, pear-shaped muscular organ where a fetus develops during pregnancy. During intense sexual arousal and orgasm, the uterus undergoes rhythmic contractions, contributing significantly to the physiological sensation of climax.",
 		"female_ovaries": "The pair of primary female reproductive glands responsible for producing ova (eggs) and synthesizing key hormones like estrogen and progesterone, dictating the menstrual cycle and overall anatomical sexual health.",
 		"female_vestibule": "The smoothly lined space enclosed by the labia minora that houses the urethral and vaginal openings. It contains the Bartholin's and Skene's glands (which provide natural lubrication) and is exceptionally sensitive to localized touch.",
+		"merkel_cells": "Merkel discs are slowly adapting mechanoreceptors concentrated in areas of fine tactile discrimination, including fingertips, palms, and genitalia. They respond to sustained pressure and texture, contributing to the richness of touch-based sexual sensation.",
+		"sacral_spinal_cord": "The sacral spinal cord (S1-S5 segments) contains the reflex centers and neural nuclei that mediate sexual response, including the lumbosacral sympathetic chain and the sacral parasympathetic outflow. It houses the dorsal penile nerve nucleus and pudendal nerve nuclei, which coordinate sensory processing and motor output for sexual reflexes like ejaculation and orgasm.",
+		"sacral_plexus": "The sacral plexus is a neural network formed by the integration of sacral spinal nerve roots (S1-S4) with lumbosacral trunk fibers. It gives rise to the major somatic and autonomic nerves of the pelvis and genital region, including the pudendal nerve and pelvic splanchnic nerves that innervate sexual structures.",
+		"ejaculatory_reflex": "The ejaculatory reflex is a two-phase spinal reflex triggered by threshold stimulation of the glans penis or urethra, mediated through the pudendal nerve and sacral spinal segments (S2-S4). The emission phase involves rhythmic contractions of the prostate, seminal vesicles, and vas deferens to propel semen into the prostatic urethra, followed by the expulsion phase where bulbospongiosus muscle contractions forcefully expel semen.",
+		"orgasmic_reflex": "The orgasmic reflex is a rhythmic motor response characterized by stereotyped contractions of the pelvic floor, bulbospongiosus, and ischiocavernosus muscles at intervals of approximately 0.8 seconds. It is mediated by spinal reflex circuits in the sacral cord (S2-S4) in response to sensory input from the pudendal and pelvic nerves, and is partially modulated by higher brain centers. The reflex may occur with or without conscious sensation.",
 		"male_bulb_of_penis": "The enlarged proximal section of the corpus spongiosum at the base of the penis, situated deep in the perineum. The surrounding bulbospongiosus muscle rhythmically compresses it during ejaculation to expel semen out of the urethra.",
 		"male_crura_of_penis": "The two internal, root-like extensions of the corpora cavernosa that anchor the penis firmly to the pubic bone arch. They play a critical structural role during a full erection.",
 		"climax": "The physiological peak or threshold of sexual arousal. Although often used interchangeably with 'orgasm', climax technically refers to the point of maximum sexual tension and physiological buildup - the absolute precipice before the reflex of orgasm is triggered.",
@@ -479,6 +484,36 @@
 			{
 				"url": "https://www.kenhub.com/en/library/anatomy/pudendal-nerve",
 				"name": "Pudendal nerve: Anatomy and clinical notes"
+			}
+		],
+		"merkel_cells": [
+			{
+				"url": "https://pubmed.ncbi.nlm.nih.gov/2909820/",
+				"name": "Touch and the Somatosensory System: Merkel Cell-Neurite Complexes"
+			}
+		],
+		"sacral_spinal_cord": [
+			{
+				"url": "https://www.kenhub.com/en/library/anatomy/spinal-cord-anatomy",
+				"name": "Spinal Cord Anatomy and Segments"
+			}
+		],
+		"sacral_plexus": [
+			{
+				"url": "https://www.kenhub.com/en/library/anatomy/the-sacral-plexus",
+				"name": "Sacral Plexus: Anatomy and Clinical Significance"
+			}
+		],
+		"ejaculatory_reflex": [
+			{
+				"url": "https://pubmed.ncbi.nlm.nih.gov/17568779/",
+				"name": "Neurophysiology of Ejaculation"
+			}
+		],
+		"orgasmic_reflex": [
+			{
+				"url": "https://pubmed.ncbi.nlm.nih.gov/15277599/",
+				"name": "The Physiology of Orgasm"
 			}
 		]
 	},
@@ -2566,6 +2601,46 @@
 			"type": "anatomy",
 			"category": "region",
 			"trait": "female"
+		},
+		{
+			"id": "merkel_cells",
+			"name": "Merkel Discs",
+			"content": "Mechanoreceptors responding to sustained pressure and texture",
+			"type": "nerve",
+			"category": "organ",
+			"trait": "shared"
+		},
+		{
+			"id": "sacral_spinal_cord",
+			"name": "Sacral Spinal Cord",
+			"content": "The lowest segment of the spinal cord containing reflex centers for sexual response",
+			"type": "nerve",
+			"category": "organ",
+			"trait": "shared"
+		},
+		{
+			"id": "sacral_plexus",
+			"name": "Sacral Plexus",
+			"content": "Neural network giving rise to pudendal and pelvic nerves",
+			"type": "nerve",
+			"category": "organ",
+			"trait": "shared"
+		},
+		{
+			"id": "ejaculatory_reflex",
+			"name": "Ejaculatory Reflex",
+			"content": "Spinal reflex producing rhythmic contractions and semen expulsion",
+			"type": "sexual",
+			"category": "organ",
+			"trait": "male"
+		},
+		{
+			"id": "orgasmic_reflex",
+			"name": "Orgasmic Reflex",
+			"content": "Spinal reflex producing rhythmic pelvic floor contractions",
+			"type": "sexual",
+			"category": "organ",
+			"trait": "shared"
 		}
 	],
 	"edges": [
@@ -5263,6 +5338,61 @@
 			"source": "male_frenulum",
 			"target": "female_fourchette",
 			"type": "homologous"
+		},
+		{
+			"source": "sacral_spinal_cord",
+			"target": "pudendal_nerve",
+			"type": "nerve"
+		},
+		{
+			"source": "sacral_spinal_cord",
+			"target": "pelvic_nerves",
+			"type": "nerve"
+		},
+		{
+			"source": "sacral_plexus",
+			"target": "pudendal_nerve",
+			"type": "nerve"
+		},
+		{
+			"source": "sacral_plexus",
+			"target": "pelvic_nerves",
+			"type": "nerve"
+		},
+		{
+			"source": "merkel_cells",
+			"target": "sensory_receptors",
+			"type": "nerve"
+		},
+		{
+			"source": "pudendal_nerve",
+			"target": "ejaculatory_reflex",
+			"type": "nerve"
+		},
+		{
+			"source": "pelvic_nerves",
+			"target": "orgasmic_reflex",
+			"type": "nerve"
+		},
+		{
+			"source": "male_glans",
+			"target": "ejaculatory_reflex",
+			"type": "sexual"
+		},
+		{
+			"source": "ejaculatory_reflex",
+			"target": "male_ejaculation",
+			"type": "sexual"
+		},
+		{
+			"source": "orgasmic_reflex",
+			"target": "female_orgasm",
+			"type": "sexual"
+		},
+		{
+			"source": "orgasmic_reflex",
+			"target": "male_orgasm",
+			"type": "sexual"
 		}
 	]
 }
