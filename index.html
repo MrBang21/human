@@ -139,14 +139,6 @@
 	--hue-homologous: 280;
 	--hue-url: 240;
 
-	--icon-male: oklch(var(--icon-l) var(--icon-c) var(--hue-male));
-	--icon-female: oklch(var(--icon-l) var(--icon-c) var(--hue-female));
-	--icon-shared: oklch(var(--icon-l) var(--icon-c) var(--hue-shared));
-
-	--trait-male: oklch(var(--node-l) var(--node-c) var(--hue-male));
-	--trait-female: oklch(var(--node-l) var(--node-c) var(--hue-female));
-	--trait-shared: oklch(var(--node-l) var(--node-c) var(--hue-shared));
-
 	--url: oklch(var(--accent-l) var(--accent-c) var(--hue-url));
 	--url-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url));
 
@@ -805,14 +797,13 @@ footer {
 		text-align: center;
 		margin-right: 1em;
 		&.male {
-			color: var(--trait-male);
-			color: #f00;
+			color: oklch(var(--icon-l) var(--icon-c) var(--hue-male));
 		}
 		&.female {
-			color: var(--trait-female);
+			color: oklch(var(--icon-l) var(--icon-c) var(--hue-female));
 		}
 		&.shared {
-			color: var(--trait-shared);
+			color: oklch(var(--icon-l) var(--icon-c) var(--hue-shared));
 		}
 	}
 }
@@ -1370,7 +1361,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.3 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.4 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
