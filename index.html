@@ -126,13 +126,13 @@
 
 	--hue-root: 140;
 	--hue-anatomy: 200;
-	--hue-nerve: 90;
+	--hue-nerve: 160;
 	--hue-sexual: 320;
 	--hue-removed: 20;
 	--hue-consequence: 60;
 	--hue-benefit: 160;
 	--hue-harm: 20;
-	--hue-energetic: 340;
+	--hue-energetic: 300;
 	--hue-homologous: 280;
 	--hue-url: 240;
 
@@ -1358,7 +1358,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.2 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.3 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1415,34 +1415,83 @@ svg {
 	</g>
 </svg>
 <script>
+"use strict";
 let
 	nodes = [],
 	edges = [],
 	descriptions = {},
 	sources = {},
 	filters = {},
-	currentCenterId = '',
-	previousCenterId = null,
-	currentTraitFilter = 'all',
-	currentTypeFilter = 'all',
-	currentView = 'petal',
-	currentZoom = 1,
-	panX = 0,
-	panY = 0,
+	previous = {
+		centerId: '',
+	},
+	current = {
+		centerId: '',
+		traitFilter: 'all',
+		typeFilter: 'all',
+		view: 'petal',
+		zoom: 1,
+	},
 	activeMobilePanel = null,
 	activeLineElements = [],
-	animationLoopRunning = false,
-	linesLoopScheduled = false,
 	resizeTimeout = null,
-	panZoomRafPending = false,
-	physicsLoopRunning = false,
-	physicsNodes = [],
-	physicsEdges = [],
-	isGraphPanning = false,
-	startPanX,
-	startPanY,
-	initialPanX,
-	initialPanY;
+	physics = {
+		nodes: [],
+		edges: [],
+	},
+	panState = {
+		isPanning: false,
+		start: { x: 0, y: 0 },
+		initial: { x: 0, y: 0 },
+	},
+	locked = {
+		node: null,
+		nodes: new Set(),
+		edges: new Set(),
+	},
+	keyPress = {
+		count: {
+			ctrl: 0,
+		},
+		last: {
+			ctrl: 0,
+		}
+	},
+	pan = { x: 0, y: 0 },
+	startPan = { x: 0, y: 0 },
+	initialPan = { x: 0, y: 0 },
+	is = {
+		animationLoopRunning: false,
+		linesLoopScheduled: false,
+		graphPanning: false,
+		touchPanning: false,
+		touchPinching: false,
+		touchFallbackPanning: false,
+		panZoomRafPending: false,
+		physicsLoopRunning: false,
+	},
+	touch = {
+		start: { x: 0, y: 0 },
+		initial: { x: 0, y: 0 },
+		pinch: {
+			start: {
+				distance: 0,
+				zoom: 1,
+				pan: { x: 0, y: 0 },
+			},
+		},
+		fallback: {
+			start: { x: 0, y: 0 },
+			initial: { x: 0, y: 0 },
+			pinch: {
+				start: {
+					distance: 0,
+					zoom: 1,
+					pan: { x: 0, y: 0 },
+				},
+			},
+		}
+	};
 
 const
 	urlXY = false,
@@ -1471,13 +1520,14 @@ const
 	mobileBar = document.getElementById('mobile-bar'),
 	minZoom = 0.05,
 	maxZoom = 10,
+	touchPointers = new Map(),
 	mobilePanels = [
 		'search',
 		'filters',
 		'legend',
 		'info'
 	],
-	stackLayout = {
+	stackOptions = {
 		paddingXEm: 2,
 		gapXEm: 1.5,
 		gapYEm: 2.0,
@@ -1489,7 +1539,7 @@ const
 		parentTopEm: 1,
 		parentSelectedGapEm: 2,
 	},
-	petalLayout = {
+	petalOptions = {
 		baseRadiusPx: 400,
 		requiredArcPerChildPx: 100,
 		depthRadiusMultiplierStart: 1.0,
@@ -1498,7 +1548,7 @@ const
 		centerStartAngleRad: -Math.PI / 2,
 		petalTotalSpreadRad: Math.PI * 0.8,
 	},
-	physicsLayout = {
+	physicsOptions = {
 		linePull: {
 			'@default': 0.5,
 			'root': 0.5,
@@ -1525,21 +1575,21 @@ const
 		},
 		sourcePull: 0.8,
 		targetPull: 0.2,
-		springMultiplier: 2,
-		forceCap: 1000,
-		nodeRepulsion: 3000000,
+		springMultiplier: 1.5,
+		forceCap: 3000,
+		nodeRepulsion: 1000000,
 		maxRepulsion: 10000000,
-		nodeGapSq: 1000000,
-		minOverlapDistSq: 100,
-		damping: 0.80,
-		centerGravity: 0.001,
-		forceMultiplier: 0.06,
-		maxVelocity: 1000000,
+		nodeGapSq: 100000,
+		minOverlapDistSq: 1000,
+		damping: 0.60,
+		centerGravity: 0.01,
+		forceMultiplier: 0.05,
+		maxVelocity: 100,
 		energyThreshold: 0.015,
 		alpha: 1.0,
 		alphaCoolDown: 0.001,
-		depthLength: 0.8,
-		depthPull: 0.5,
+		depthLength: 1,
+		depthPull: 0.8,
 	},
 	edgeStyles = {
 		'root': 'url(#arrow-root)',
@@ -1597,7 +1647,6 @@ const Bang = {
 			nodesByDepth = Array.from({ length: maxDepth + 1 }, () => []),
 			edgesToRender = [];
 		visitedNodes.add(centerId);
-
 		while (queue.length > 0) {
 			let curr = queue.shift();
 			if (curr.depth >= maxDepth) continue;
@@ -1725,51 +1774,47 @@ function updateLinesOnce() {
 }
 
 function updateLinesLoop() {
-	linesLoopScheduled = false;
+	is.linesLoopScheduled = false;
 	updateLinesOnce();
-	if (!animationLoopRunning) return;
-	linesLoopScheduled = true;
+	if (!is.animationLoopRunning) return;
+	is.linesLoopScheduled = true;
 	requestAnimationFrame(updateLinesLoop);
 }
 
 function startLinesLoop() {
-	if (animationLoopRunning) return;
-	animationLoopRunning = true;
-	if (!linesLoopScheduled) {
-		linesLoopScheduled = true;
+	if (is.animationLoopRunning) return;
+	is.animationLoopRunning = true;
+	if (!is.linesLoopScheduled) {
+		is.linesLoopScheduled = true;
 		requestAnimationFrame(updateLinesLoop);
 	}
 }
 
 function stopLinesLoop() {
-	animationLoopRunning = false;
+	is.animationLoopRunning = false;
 }
 
 const checkTrait = (t) => {
 	const tr = t || 'shared';
-	if (currentTraitFilter === 'all') return true;
-
+	if (current.traitFilter === 'all') return true;
 	if (filters && filters.traits) {
-		const traitFilter = filters.traits.find(p => p.key === currentTraitFilter);
+		const traitFilter = filters.traits.find(p => p.key === current.traitFilter);
 		if (traitFilter && traitFilter.items) {
 			return traitFilter.items.includes(tr);
 		}
 	}
-
 	return true;
 };
 
 const checkTypeFilter = (type) => {
 	const ty = type || 'anatomy';
-	if (currentTypeFilter === 'all') return true;
-
+	if (current.typeFilter === 'all') return true;
 	if (filters && filters.types) {
-		const perspective = filters.types.find(p => p.key === currentTypeFilter);
+		const perspective = filters.types.find(p => p.key === current.typeFilter);
 		if (perspective && perspective.items) {
 			return perspective.items.includes(ty);
 		}
 	}
-
 	return true;
 };
 
@@ -1778,13 +1823,11 @@ async function loadGraphData() {
 		const response = await fetch('human.json');
 		if (!response.ok) throw new Error('Network response was not ok');
 		const data = await response.json();
-
 		nodes = data.nodes;
 		edges = data.edges;
 		descriptions = data.descriptions || {};
 		sources = data.sources || {};
 		filters = data.filters || {};
-
 		if (filters.types) {
 			typeFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
 			filters.types.forEach(p => {
@@ -1794,9 +1837,8 @@ async function loadGraphData() {
 				if (p.name) opt.name = p.name;
 				typeFilterDropdown.appendChild(opt);
 			});
-			typeFilterDropdown.value = currentTypeFilter;
+			typeFilterDropdown.value = current.typeFilter;
 		}
-
 		if (filters.traits) {
 			traitFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
 			filters.traits.forEach(t => {
@@ -1805,9 +1847,8 @@ async function loadGraphData() {
 				opt.textContent = t.name;
 				traitFilterDropdown.appendChild(opt);
 			});
-			traitFilterDropdown.value = currentTraitFilter;
+			traitFilterDropdown.value = current.traitFilter;
 		}
-
 		document.getElementById('loading').style.display = 'none';
 		initGraph();
 	} catch (error) {
@@ -1819,11 +1860,11 @@ function updateUrlState(id) {
 	const url = new URL(window.location);
 	url.hash = id;
 	url.searchParams.set('d', depthDropdown.value);
-	url.searchParams.set('t', currentTraitFilter);
-	url.searchParams.set('p', currentTypeFilter);
-	if (currentView === 'stacked') {
+	url.searchParams.set('t', current.traitFilter);
+	url.searchParams.set('p', current.typeFilter);
+	if (current.view === 'stacked') {
 		url.searchParams.set('v', 'stacked');
-	} else if (currentView === 'physics') {
+	} else if (current.view === 'physics') {
 		url.searchParams.set('v', 'physics');
 	} else {
 		url.searchParams.delete('v');
@@ -1845,13 +1886,13 @@ function updateUrlPanZoom() {
 	panZoomTimeout = setTimeout(() => {
 		const url = new URL(window.location);
 		if (urlZ) {
-			url.searchParams.set('z', currentZoom.toFixed(2));
+			url.searchParams.set('z', current.zoom.toFixed(2));
 		} else {
 			url.searchParams.delete('z');
 		}
 		if (urlXY) {
-			url.searchParams.set('x', (panX / window.innerWidth).toFixed(4));
-			url.searchParams.set('y', (panY / window.innerHeight).toFixed(4));
+			url.searchParams.set('x', (pan.x / window.innerWidth).toFixed(4));
+			url.searchParams.set('y', (pan.y / window.innerHeight).toFixed(4));
 		} else {
 			url.searchParams.delete('x');
 			url.searchParams.delete('y');
@@ -1861,9 +1902,9 @@ function updateUrlPanZoom() {
 }
 
 traitFilterDropdown.addEventListener('change', (e) => {
-	currentTraitFilter = e.target.value;
-	updateUrlState(currentCenterId);
-	renderGraph(currentCenterId);
+	current.traitFilter = e.target.value;
+	updateUrlState(current.centerId);
+	renderGraph(current.centerId);
 	if (searchInput.value) {
 		searchInput.dispatchEvent(new Event('input'));
 	}
@@ -1871,9 +1912,9 @@ traitFilterDropdown.addEventListener('change', (e) => {
 });
 
 typeFilterDropdown.addEventListener('change', (e) => {
-	currentTypeFilter = e.target.value;
-	updateUrlState(currentCenterId);
-	renderGraph(currentCenterId);
+	current.typeFilter = e.target.value;
+	updateUrlState(current.centerId);
+	renderGraph(current.centerId);
 	if (searchInput.value) {
 		searchInput.dispatchEvent(new Event('input'));
 	}
@@ -1881,15 +1922,15 @@ typeFilterDropdown.addEventListener('change', (e) => {
 });
 
 depthDropdown.addEventListener('change', (e) => {
-	updateUrlState(currentCenterId);
-	renderGraph(currentCenterId);
+	updateUrlState(current.centerId);
+	renderGraph(current.centerId);
 	e.target.blur();
 });
 
 viewSelect.addEventListener('change', (e) => {
-	currentView = e.target.value;
-	updateUrlState(currentCenterId);
-	renderGraph(currentCenterId);
+	current.view = e.target.value;
+	updateUrlState(current.centerId);
+	renderGraph(current.centerId);
 	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
 	e.target.blur();
 });
@@ -1913,12 +1954,12 @@ const layoutStackByCompositeGroup = ({
 }) => {
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
 	const
-		paddingX = stackLayout.paddingXEm * emSize,
-		gapX = stackLayout.gapXEm * emSize,
-		gapY = stackLayout.gapYEm * emSize,
-		groupGapX = stackLayout.groupGapXEm * emSize,
-		rowGapY = stackLayout.rowGapYEm * emSize,
-		labelToBlockGap = stackLayout.labelToBlockGapEm * emSize,
+		paddingX = stackOptions.paddingXEm * emSize,
+		gapX = stackOptions.gapXEm * emSize,
+		gapY = stackOptions.gapYEm * emSize,
+		groupGapX = stackOptions.groupGapXEm * emSize,
+		rowGapY = stackOptions.rowGapYEm * emSize,
+		labelToBlockGap = stackOptions.labelToBlockGapEm * emSize,
 		sizeSample = centerEl || document.querySelector('.card'),
 		measuredW = sizeSample?.offsetWidth || 0,
 		measuredH = sizeSample?.offsetHeight || 0,
@@ -1962,8 +2003,8 @@ const layoutStackByCompositeGroup = ({
 		}
 	}
 	const
-		maxColsInGroup = stackLayout.maxColsInGroup,
-		groupsStartGapY = stackLayout.groupsStartGapYEm * emSize;
+		maxColsInGroup = stackOptions.maxColsInGroup,
+		groupsStartGapY = stackOptions.groupsStartGapYEm * emSize;
 	let yCursor = centerY + (cardH / 2) + groupsStartGapY,
 		rowX = paddingX,
 		rowY = yCursor,
@@ -1980,7 +2021,6 @@ const layoutStackByCompositeGroup = ({
 			el.style.left = `${currentLeft + deltaX}px`;
 		});
 	};
-
 	const flushRow = () => {
 		if (!rowHasItems) return;
 		if (rowBlocks.length) {
@@ -2002,7 +2042,6 @@ const layoutStackByCompositeGroup = ({
 		rowMaxH = 0;
 		rowHasItems = false;
 	};
-
 	groupEntries.forEach(([key, items]) => {
 		const
 			count = items.length,
@@ -2012,11 +2051,9 @@ const layoutStackByCompositeGroup = ({
 			blockH = (rows * cardH) + ((rows - 1) * gapY),
 			totalH = labelToBlockGap + blockH,
 			isSmallGroup = count < 4;
-
 		let blockLeft,
 			blockTop,
 			rowBlockEls = [];
-
 		if (isSmallGroup) {
 			// Pack small groups on the same line, with extra spacing between them.
 			const maxX = window.innerWidth - paddingX;
@@ -2039,24 +2076,19 @@ const layoutStackByCompositeGroup = ({
 			rowMaxH = 0;
 			rowHasItems = false;
 		}
-
 		items.forEach((item, idx) => {
 			const
 				nodeId = item.node.id,
 				el = document.getElementById(`node-${nodeId}`);
 			if (!el) return;
-
 			el.classList.remove('hidden');
 			el.classList.remove('current');
-
 			if (item.meta?.isOutgoing) {
 				el.classList.add('target');
 			} else {
 				el.classList.add('source');
 			}
-
 			if (!checkTrait(item.node.trait)) el.classList.add('ghosted');
-
 			const
 				row = Math.floor(idx / cols),
 				col = idx % cols,
@@ -2066,12 +2098,10 @@ const layoutStackByCompositeGroup = ({
 			el.style.top = `${y}px`;
 			rowBlockEls.push(el);
 		});
-
 		if (isSmallGroup) {
 			rowBlocks.push({ left: blockLeft, width: blockW, elements: rowBlockEls });
 		}
 	});
-
 	flushRow();
 };
 
@@ -2085,42 +2115,37 @@ function initGraph() {
 		url = new URL(window.location),
 		initialDepth = url.searchParams.get('d') || url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
-
 	let initialView = url.searchParams.get('v') || url.searchParams.get('view');
 	if (!initialView && url.searchParams.get('stack') === '1') {
 		initialView = 'stacked';
 	}
 	if (initialView && viewSelect.querySelector(`option[value="${initialView}"]`)) {
-		currentView = initialView;
+		current.view = initialView;
 		viewSelect.value = initialView;
 	}
-
 	const initialTrait = url.searchParams.get('t') || url.searchParams.get('trait');
 	if (initialTrait) {
 		traitFilterDropdown.value = initialTrait;
-		currentTraitFilter = initialTrait;
+		current.traitFilter = initialTrait;
 	} else if (filters && filters.traits) {
 		const defaultTrait = filters.traits.find(t => t.default);
 		if (defaultTrait) {
-			currentTraitFilter = defaultTrait.name.toLowerCase();
-			traitFilterDropdown.value = currentTraitFilter;
+			current.traitFilter = defaultTrait.name.toLowerCase();
+			traitFilterDropdown.value = current.traitFilter;
 		}
 	}
-
 	const initialType = url.searchParams.get('p') || url.searchParams.get('perspective');
 	if (initialType) {
 		typeFilterDropdown.value = initialType;
-		currentTypeFilter = initialType;
+		current.typeFilter = initialType;
 	} else if (filters && filters.types) {
 		const defaultType = filters.types.find(t => t.default);
 		if (defaultType) {
-			currentTypeFilter = defaultType.name.toLowerCase();
-			typeFilterDropdown.value = currentTypeFilter;
+			current.typeFilter = defaultType.name.toLowerCase();
+			typeFilterDropdown.value = current.typeFilter;
 		}
 	}
-
-	currentCenterId = getIdFromHash();
-
+	current.centerId = getIdFromHash();
 	nodes.forEach(node => {
 		const
 			clone = cardTemplate.content.cloneNode(true),
@@ -2131,19 +2156,15 @@ function initGraph() {
 			nodeType = node.type || 'anatomy',
 			nodeTrait = node.trait || 'shared',
 			nodeCategory = node.category || 'other';
-
 		card.className = `card hidden type-${nodeType} trait-${nodeTrait} cat-${nodeCategory}`;
 		card.id = `node-${node.id}`;
-
 		nameEl.textContent = node.name;
 		contentEl.textContent = node.content;
 		useEl.setAttribute('href', `#icon-${nodeCategory}`);
-
 		setupInteractions(card, node.id);
 		nodesZoom.append(clone);
 	});
-
-	renderGraph(currentCenterId);
+	renderGraph(current.centerId);
 	updateLinesOnce();
 }
 
@@ -2153,26 +2174,21 @@ searchInput.addEventListener('input', (e) => {
 		searchResults.style.display = 'none';
 		return;
 	}
-
 	const matches = nodes.filter(n => {
 		const
 			matchesTerm = n.name.toLowerCase().includes(term) || n.content.toLowerCase().includes(term) || (n.aka && n.aka.toLowerCase().includes(term)),
 			matchesFilter = checkTrait(n.trait) && checkTypeFilter(n.type);
 		return matchesTerm && matchesFilter;
 	});
-
 	searchResults.replaceChildren();
-
 	if (matches.length > 0) {
 		matches.forEach(m => {
 			const
 				clone = searchResultTemplate.content.cloneNode(true),
 				itemEl = clone.querySelector('li');
-
 			itemEl.setAttribute('data-id', m.id);
 			clone.querySelector('.name').textContent = m.name;
 			clone.querySelector('.desc').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
-
 			itemEl.addEventListener('click', (ev) => {
 				ev.preventDefault();
 				const id = itemEl.getAttribute('data-id');
@@ -2181,7 +2197,6 @@ searchInput.addEventListener('input', (e) => {
 				searchInput.value = '';
 				searchResults.style.display = 'none';
 			});
-
 			searchResults.append(clone);
 		});
 		searchResults.style.display = 'block';
@@ -2189,11 +2204,9 @@ searchInput.addEventListener('input', (e) => {
 		const
 			clone = searchResultTemplate.content.cloneNode(true),
 			itemEl = clone.querySelector('li');
-
 		clone.querySelector('.name').textContent = 'No results found for this trait';
 		clone.querySelector('.desc').textContent = '';
 		itemEl.style.cursor = 'default';
-
 		searchResults.append(clone);
 		searchResults.style.display = 'block';
 	}
@@ -2211,7 +2224,6 @@ function setupInteractions(card, id) {
 		startX, startY,
 		initialLeft, initialTop,
 		moveThresholdPx = 3;
-
 	const
 		startDrag = (clientX, clientY, pointerType = 'mouse') => {
 			isDragging = true;
@@ -2227,8 +2239,8 @@ function setupInteractions(card, id) {
 		updateDrag = (clientX, clientY) => {
 			if (!isDragging) return;
 			const
-				dx = (clientX - startX) / currentZoom,
-				dy = (clientY - startY) / currentZoom;
+				dx = (clientX - startX) / current.zoom,
+				dy = (clientY - startY) / current.zoom;
 			if (Math.abs(clientX - startX) > moveThresholdPx || Math.abs(clientY - startY) > moveThresholdPx) {
 				hasMoved = true;
 			}
@@ -2237,17 +2249,17 @@ function setupInteractions(card, id) {
 				newTop = Bang.roundPx(initialTop + dy);
 			card.style.left = `${newLeft}px`;
 			card.style.top = `${newTop}px`;
-			if (currentView === 'physics' && typeof physicsNodes !== 'undefined') {
-				const nd = physicsNodes.find(n => n.node.id === id);
+			if (current.view === 'physics' && typeof physics.nodes !== 'undefined') {
+				const nd = physics.nodes.find(n => n.node.id === id);
 				if (nd) {
 					nd.x = newLeft;
 					nd.y = newTop;
 					nd.vx = 0;
 					nd.vy = 0;
 					nd.isDragging = true;
-					physicsLayout.alpha = 1.0;
-					if (!physicsLoopRunning) {
-						physicsLoopRunning = true;
+					physicsOptions.alpha = 1.0;
+					if (!is.physicsLoopRunning) {
+						is.physicsLoopRunning = true;
 						requestAnimationFrame(physicsTick);
 					}
 				}
@@ -2259,22 +2271,22 @@ function setupInteractions(card, id) {
 			card.classList.remove('dragging');
 			stopLinesLoop();
 			updateLinesOnce();
-			if (currentView === 'physics' && typeof physicsNodes !== 'undefined') {
-				const nd = physicsNodes.find(n => n.node.id === id);
+			if (current.view === 'physics' && typeof physics.nodes !== 'undefined') {
+				const nd = physics.nodes.find(n => n.node.id === id);
 				if (nd) {
 					nd.isDragging = false;
 					if (hasMoved) {
 						nd.isPinned = true;
 					}
-					physicsLayout.alpha = 1.0;
-					if (!physicsLoopRunning) {
-						physicsLoopRunning = true;
+					physicsOptions.alpha = 1.0;
+					if (!is.physicsLoopRunning) {
+						is.physicsLoopRunning = true;
 						requestAnimationFrame(physicsTick);
 					}
 				}
 			}
 			if (!hasMoved) {
-				if (currentCenterId !== id) {
+				if (current.centerId !== id) {
 					updateUrlState(id);
 				}
 				renderGraph(id);
@@ -2330,11 +2342,13 @@ function setupInteractions(card, id) {
 		}
 		endDrag();
 	});
-
 	card.addEventListener('mouseenter', () => {
-		const relatedNodes = new Set([card]);
-		const relatedEdges = new Set();
-
+		// Skip if another node is locked
+		if (locked.node !== null && locked.node !== id) return;
+		const
+			relatedNodes = new Set([card]),
+			relatedEdges = new Set();
+		// Add connected nodes and edges
 		activeLineElements.forEach(item => {
 			if (item.sourceEl.id === `node-${id}` || item.targetEl.id === `node-${id}`) {
 				relatedEdges.add(item.line);
@@ -2342,7 +2356,24 @@ function setupInteractions(card, id) {
 				relatedNodes.add(item.targetEl);
 			}
 		});
-
+		// Add siblings (nodes with same parent)
+		const currentNode = nodes.find(n => n.id === id);
+		if (currentNode && currentNode.parentId) {
+			const siblings = nodes.filter(n => n.parentId === currentNode.parentId && n.id !== id);
+			siblings.forEach(sibling => {
+				const siblingEl = document.getElementById(`node-${sibling.id}`);
+				if (siblingEl) relatedNodes.add(siblingEl);
+			});
+		}
+		// Include edges that connect the related node cluster (hovered node, direct relatives, siblings)
+		activeLineElements.forEach(item => {
+			if (relatedNodes.has(item.sourceEl) && relatedNodes.has(item.targetEl)) {
+				relatedEdges.add(item.line);
+			}
+		});
+		// Store for potential locking
+		card._relatedNodes = relatedNodes;
+		card._relatedEdges = relatedEdges;
 		document.querySelectorAll('.card').forEach(el => {
 			if (relatedNodes.has(el)) {
 				el.classList.add('related');
@@ -2350,7 +2381,6 @@ function setupInteractions(card, id) {
 				el.classList.add('unrelated');
 			}
 		});
-
 		activeLineElements.forEach(item => {
 			if (relatedEdges.has(item.line)) {
 				item.line.classList.add('related');
@@ -2359,8 +2389,9 @@ function setupInteractions(card, id) {
 			}
 		});
 	});
-
 	card.addEventListener('mouseleave', () => {
+		// Don't clear if this node or any node is locked
+		if (locked.node !== null) return;
 		document.querySelectorAll('.related, .unrelated').forEach(el => {
 			el.classList.remove('related', 'unrelated');
 		});
@@ -2523,10 +2554,10 @@ function calcNodePositionPetal({ currentDepthShown, nodesByDepth, parentId, cent
 				}
 			}
 			const
-				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
-				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2),
-				requiredArcLength = children.length * petalLayout.requiredArcPerChildPx,
-				sizeMultiplier = petalLayout.depthRadiusMultiplierStart + (d - 1) * petalLayout.depthRadiusMultiplierStep,
+				totalSpread = isCenter ? petalOptions.centerTotalSpreadRad : petalOptions.petalTotalSpreadRad,
+				startAngle = isCenter ? petalOptions.centerStartAngleRad : pAngle - (totalSpread / 2),
+				requiredArcLength = children.length * petalOptions.requiredArcPerChildPx,
+				sizeMultiplier = petalOptions.depthRadiusMultiplierStart + (d - 1) * petalOptions.depthRadiusMultiplierStep,
 				dynamicRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread);
 			children.forEach((nData, index) => {
 				const el = document.getElementById(`node-${nData.node.id}`);
@@ -2593,24 +2624,26 @@ function calcNodePositionStack({ centerId, centerNodeData, parentId, nodesByDept
 }
 
 function physicsTick() {
-	if (!physicsLoopRunning || currentView !== 'physics') return;
+	if (!is.physicsLoopRunning || current.view !== 'physics') return;
 	let totalEnergy = 0;
-	const temperature = Math.max(physicsLayout.alpha, 0);
-	physicsNodes.forEach(n => {
+	const temperature = Math.max(physicsOptions.alpha, 0);
+	physics.nodes.forEach(n => {
 		n.fx = 0;
 		n.fy = 0;
 	});
-	if (physicsEdges && physicsEdges.length > 0) {
-		physicsEdges.forEach(edge => {
-			let nSource = physicsNodes.find(n => n.node.id === edge.source),
-				nTarget = physicsNodes.find(n => n.node.id === edge.target);
+	if (physics.edges && physics.edges.length > 0) {
+		physics.edges.forEach(edge => {
+			let nSource = physics.nodes.find(n => n.node.id === edge.source),
+				nTarget = physics.nodes.find(n => n.node.id === edge.target);
 			if (nSource && nTarget && nSource.x !== undefined && nTarget.x !== undefined) {
 				const
 					edgeType = edge.type || 'anatomy',
-					depthMult = parseFloat(depthDropdown.value) || 1,
-					elastic = (physicsLayout.linePull[edgeType] !== undefined
-						? physicsLayout.linePull[edgeType]
-						: physicsLayout.linePull['@default']) / Math.max(1, depthMult * (physicsLayout.depthPull !== undefined ? physicsLayout.depthPull : 0.5)),
+					targetDepth = (nTarget.depth !== undefined ? nTarget.depth : 1) || 1,
+					depthMult = Math.max(1, targetDepth * (physicsOptions.depthLength !== undefined ? physicsOptions.depthLength : 0.5)),
+					depthPullMult = Math.max(1, targetDepth * (physicsOptions.depthPull !== undefined ? physicsOptions.depthPull : 0.5)),
+					elastic = (physicsOptions.linePull[edgeType] !== undefined
+						? physicsOptions.linePull[edgeType]
+						: physicsOptions.linePull['@default']) / depthPullMult,
 					dynamicElastic = (nSource.isDragging || nTarget.isDragging) ? 5.0 : elastic;
 				let dx = nTarget.x - nSource.x,
 					dy = nTarget.y - nSource.y,
@@ -2620,15 +2653,15 @@ function physicsTick() {
 					dy = Math.random() * 0.1;
 					dist = Math.sqrt(dx * dx + dy * dy);
 				}
-				const lengthVal = (physicsLayout.lineLength[edgeType] !== undefined
-					? physicsLayout.lineLength[edgeType]
-					: physicsLayout.lineLength['@default']) * Math.max(1, depthMult * (physicsLayout.depthLength !== undefined ? physicsLayout.depthLength : 0.5));
+				const lengthVal = (physicsOptions.lineLength[edgeType] !== undefined
+					? physicsOptions.lineLength[edgeType]
+					: physicsOptions.lineLength['@default']) * depthMult;
 				let stretch = dist - lengthVal,
-					tp = physicsLayout.targetPull !== undefined ? physicsLayout.targetPull : 1,
-					sp = physicsLayout.sourcePull !== undefined ? physicsLayout.sourcePull : 1,
-					springMult = physicsLayout.springMultiplier !== undefined ? physicsLayout.springMultiplier : 5.0,
+					tp = physicsOptions.targetPull !== undefined ? physicsOptions.targetPull : 1,
+					sp = physicsOptions.sourcePull !== undefined ? physicsOptions.sourcePull : 1,
+					springMult = physicsOptions.springMultiplier !== undefined ? physicsOptions.springMultiplier : 5.0,
 					pullForce = stretch * dynamicElastic * temperature * springMult;
-				const forceCap = physicsLayout.forceCap !== undefined ? physicsLayout.forceCap : 3000;
+				const forceCap = physicsOptions.forceCap !== undefined ? physicsOptions.forceCap : 3000;
 				if (pullForce > forceCap) pullForce = forceCap;
 				if (pullForce < -forceCap) pullForce = -forceCap;
 				let pullX = -(dx / dist) * pullForce,
@@ -2644,44 +2677,44 @@ function physicsTick() {
 			}
 		});
 	}
-	physicsNodes.forEach(n1 => {
+	physics.nodes.forEach(n1 => {
 		if (n1.x === undefined || n1.y === undefined) return;
-		let gravity = physicsLayout.centerGravity !== undefined ? physicsLayout.centerGravity : 0.01;
+		let gravity = physicsOptions.centerGravity !== undefined ? physicsOptions.centerGravity : 0.01;
 		n1.fx += (n1.tx - n1.x) * gravity * temperature;
 		n1.fy += (n1.ty - n1.y) * gravity * temperature;
 	});
-	physicsNodes.forEach(n1 => {
+	physics.nodes.forEach(n1 => {
 		if (n1.x === undefined || n1.y === undefined) return;
-		physicsNodes.forEach(n2 => {
+		physics.nodes.forEach(n2 => {
 			if (n1 === n2 || n2.x === undefined) return;
 			let rdx = n1.x - n2.x,
 				rdy = n1.y - n2.y,
 				distSq = rdx*rdx + rdy*rdy;
-			if (distSq < physicsLayout.nodeGapSq) {
-				let safeDistSq = Math.max(distSq, physicsLayout.minOverlapDistSq),
+			if (distSq < physicsOptions.nodeGapSq) {
+				let safeDistSq = Math.max(distSq, physicsOptions.minOverlapDistSq),
 					dist = Math.sqrt(safeDistSq),
-					force = (physicsLayout.nodeRepulsion / safeDistSq) * temperature;
-				const maxRepulsion = physicsLayout.maxRepulsion !== undefined ? physicsLayout.maxRepulsion : 1500;
+					force = (physicsOptions.nodeRepulsion / safeDistSq) * temperature;
+				const maxRepulsion = physicsOptions.maxRepulsion !== undefined ? physicsOptions.maxRepulsion : 1500;
 				if (force > maxRepulsion) force = maxRepulsion;
-				let edgeTaper = 1 - (dist / Math.sqrt(physicsLayout.nodeGapSq));
+				let edgeTaper = 1 - (dist / Math.sqrt(physicsOptions.nodeGapSq));
 				force *= Math.max(0, edgeTaper);
 				n1.fx += (rdx / dist) * force;
 				n1.fy += (rdy / dist) * force;
 			}
 		});
 	});
-	physicsNodes.forEach(n1 => {
+	physics.nodes.forEach(n1 => {
 		if (n1.isDragging || n1.isPinned) return;
-		n1.vx = (n1.vx || 0) * physicsLayout.damping + n1.fx * physicsLayout.forceMultiplier;
-		n1.vy = (n1.vy || 0) * physicsLayout.damping + n1.fy * physicsLayout.forceMultiplier;
-		const maxV = physicsLayout.maxVelocity;
+		n1.vx = (n1.vx || 0) * physicsOptions.damping + n1.fx * physicsOptions.forceMultiplier;
+		n1.vy = (n1.vy || 0) * physicsOptions.damping + n1.fy * physicsOptions.forceMultiplier;
+		const maxV = physicsOptions.maxVelocity;
 		if (n1.vx > maxV) n1.vx = maxV; else if (n1.vx < -maxV) n1.vx = -maxV;
 		if (n1.vy > maxV) n1.vy = maxV; else if (n1.vy < -maxV) n1.vy = -maxV;
 		n1.x += n1.vx;
 		n1.y += n1.vy;
-		totalEnergy += Math.abs(n1.vx) + Math.abs(n1.vy) + (Math.abs(n1.fx) + Math.abs(n1.fy)) * physicsLayout.forceMultiplier;
+		totalEnergy += Math.abs(n1.vx) + Math.abs(n1.vy) + (Math.abs(n1.fx) + Math.abs(n1.fy)) * physicsOptions.forceMultiplier;
 	});
-	physicsNodes.forEach(nData => {
+	physics.nodes.forEach(nData => {
 		const el = document.getElementById(`node-${nData.node.id}`);
 		if (el) {
 			el.classList.add('physics-on');
@@ -2690,30 +2723,31 @@ function physicsTick() {
 		}
 	});
 	updateLinesOnce();
-	physicsLayout.alpha -= physicsLayout.alphaCoolDown;
-	if ((totalEnergy > physicsLayout.energyThreshold || physicsLayout.alpha > 0.95) && temperature > 0) {
+	physicsOptions.alpha -= physicsOptions.alphaCoolDown;
+	if ((totalEnergy > physicsOptions.energyThreshold || physicsOptions.alpha > 0.95) && temperature > 0) {
 		requestAnimationFrame(physicsTick);
 	} else {
-		physicsLoopRunning = false;
-		physicsNodes.forEach(nData => {
+		is.physicsLoopRunning = false;
+		physics.nodes.forEach(nData => {
 			document.getElementById(`node-${nData.node.id}`)?.classList.remove('physics-on');
 		});
 	}
 }
 
 function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, centerX, centerY, baseRadius, edgesToRender }) {
-	physicsNodes = [];
-	physicsEdges = edgesToRender || [];
-	physicsLayout.alpha = 1.0; // Reset simulation heat on new layout
-	physicsNodes.push({
-		node: { id: currentCenterId },
+	physics.nodes = [],
+	physics.edges = edgesToRender || [];
+	physicsOptions.alpha = 1.0; // Reset simulation heat on new layout
+	physics.nodes.push({
+		node: { id: current.centerId },
 		x: centerX,
 		y: centerY,
 		tx: centerX,
 		ty: centerY,
 		fx: 0, fy: 0, vx: 0, vy: 0,
 		isCenterNode: true,
-		isPinned: true
+		isPinned: true,
+		depth: 0
 	});
 	for (let d = 1; d <= currentDepthShown; d++) {
 		const layerNodes = nodesByDepth[d];
@@ -2728,7 +2762,8 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 		layerNodes.forEach(nData => {
 			if (!groups[nData.parentId]) groups[nData.parentId] = [];
 			groups[nData.parentId].push(nData);
-			physicsNodes.push(nData);
+			nData.depth = d;
+			physics.nodes.push(nData);
 		});
 		Object.entries(groups).forEach(([pId, children]) => {
 			let px = centerX, py = centerY, pAngle = 0, isCenter = true;
@@ -2739,16 +2774,16 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 				}
 			}
 			const
-				totalSpread = isCenter ? petalLayout.centerTotalSpreadRad : petalLayout.petalTotalSpreadRad,
-				startAngle = isCenter ? petalLayout.centerStartAngleRad : pAngle - (totalSpread / 2);
+				totalSpread = isCenter ? petalOptions.centerTotalSpreadRad : petalOptions.petalTotalSpreadRad,
+				startAngle = isCenter ? petalOptions.centerStartAngleRad : pAngle - (totalSpread / 2);
 			children.forEach((nData, index) => {
 				const el = document.getElementById(`node-${nData.node.id}`);
 				if (!el) return;
-				const lengthVal = physicsLayout.lineLength[nData.edgeType] !== undefined
-						? physicsLayout.lineLength[nData.edgeType]
-						: physicsLayout.lineLength['@default'],
-					requiredArcLength = children.length * petalLayout.requiredArcPerChildPx,
-					sizeMultiplier = petalLayout.depthRadiusMultiplierStart + (d - 1) * petalLayout.depthRadiusMultiplierStep,
+				const lengthVal = physicsOptions.lineLength[nData.edgeType] !== undefined
+						? physicsOptions.lineLength[nData.edgeType]
+						: physicsOptions.lineLength['@default'],
+					requiredArcLength = children.length * petalOptions.requiredArcPerChildPx,
+					sizeMultiplier = petalOptions.depthRadiusMultiplierStart + (d - 1) * petalOptions.depthRadiusMultiplierStep,
 					startingRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread),
 					targetDynamicRadius = lengthVal,
 					wasHidden = el.classList.contains('hidden');
@@ -2794,8 +2829,8 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 						el.style.scale = '';
 						el.style.opacity = '';
 					}
-					if (!physicsLoopRunning) {
-						physicsLoopRunning = true;
+					if (!is.physicsLoopRunning) {
+						is.physicsLoopRunning = true;
 						requestAnimationFrame(physicsTick);
 					}
 				}, delay);
@@ -2805,8 +2840,14 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 }
 
 function renderGraph(centerId) {
-	currentCenterId = centerId;
-	currentView = viewSelect?.value || 'petal';
+	const isNewCenterNode = current.centerId !== centerId;
+	if (isNewCenterNode) {
+		locked.node = null;
+		locked.nodes = new Set();
+		locked.edges = new Set();
+	}
+	current.centerId = centerId;
+	current.view = viewSelect?.value || 'petal';
 	const
 		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
 		centerX = window.innerWidth / 2,
@@ -2832,9 +2873,8 @@ function renderGraph(centerId) {
 	} else {
 		nodeDescription.classList.remove('visible');
 	}
-	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1;
-
-	let { visitedNodes, visitedEdges, nodesByDepth, edgesToRender } = Bang.extractGraph(
+	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1,
+	{ visitedNodes, visitedEdges, nodesByDepth, edgesToRender } = Bang.extractGraph(
 		centerId,
 		currentDepthShown,
 		nodes,
@@ -2842,7 +2882,6 @@ function renderGraph(centerId) {
 		checkTrait,
 		checkTypeFilter
 	);
-
 	if (parentId) {
 		const pIdx = nodesByDepth[1].findIndex(item => item.node.id === parentId);
 		if (pIdx > 0) {
@@ -2870,42 +2909,42 @@ function renderGraph(centerId) {
 	if (!centerMatches) centerEl.classList.add('ghosted');
 	let renderCenterY = centerY,
 		renderParentY = null;
-	if (currentView === 'stacked') {
+	if (current.view === 'stacked') {
 		const centerH = centerEl.offsetHeight || (7.5 * emSize);
-		renderParentY = (stackLayout.parentTopEm * emSize) + (centerH / 2);
-		renderCenterY = renderParentY + centerH + (stackLayout.parentSelectedGapEm * emSize);
+		renderParentY = (stackOptions.parentTopEm * emSize) + (centerH / 2);
+		renderCenterY = renderParentY + centerH + (stackOptions.parentSelectedGapEm * emSize);
 	}
 	centerEl.style.left = `${centerX}px`;
 	centerEl.style.top = `${renderCenterY}px`;
-	const panAnchorY = (currentView === 'stacked' && renderParentY != null) ? renderParentY : renderCenterY;
-	if (centerId !== previousCenterId) {
+	const panAnchorY = (current.view === 'stacked' && renderParentY != null) ? renderParentY : renderCenterY;
+	if (centerId !== previous.centerId) {
 		const urlParams = new URL(window.location).searchParams;
-		if (!previousCenterId) {
+		if (!previous.centerId) {
 			if (urlZ && urlParams.has('z')) {
-				currentZoom = parseFloat(urlParams.get('z')) || 1;
+				current.zoom = parseFloat(urlParams.get('z')) || 1;
 			} else if (urlZ && urlParams.has('zoom')) {
-				currentZoom = parseFloat(urlParams.get('zoom')) || 1;
+				current.zoom = parseFloat(urlParams.get('zoom')) || 1;
 			} else {
-				currentZoom = 1;
+				current.zoom = 1;
 			}
 			if (urlXY && urlParams.has('x') && urlParams.has('y')) {
 				const
 					paramX = parseFloat(urlParams.get('x')),
 					paramY = parseFloat(urlParams.get('y'));
-				panX = !isNaN(paramX) ? paramX * window.innerWidth : centerX * (1 - currentZoom);
-				panY = !isNaN(paramY) ? paramY * window.innerHeight : panAnchorY * (1 - currentZoom);
+				pan.x = !isNaN(paramX) ? paramX * window.innerWidth : centerX * (1 - current.zoom);
+				pan.y = !isNaN(paramY) ? paramY * window.innerHeight : panAnchorY * (1 - current.zoom);
 			} else {
-				panX = centerX * (1 - currentZoom);
-				panY = panAnchorY * (1 - currentZoom);
+				pan.x = centerX * (1 - current.zoom);
+				pan.y = panAnchorY * (1 - current.zoom);
 			}
 		} else {
-			panX = centerX * (1 - currentZoom);
-			panY = panAnchorY * (1 - currentZoom);
+			pan.x = centerX * (1 - current.zoom);
+			pan.y = panAnchorY * (1 - current.zoom);
 		}
-		previousCenterId = centerId;
+		previous.centerId = centerId;
 	}
 	applyPanZoomTransform();
-	if (currentView === 'stacked') {
+	if (current.view === 'stacked') {
 		calcNodePositionStack({
 			centerId,
 			centerNodeData,
@@ -2916,15 +2955,15 @@ function renderGraph(centerId) {
 			anchorY: renderCenterY,
 			parentAnchorY: renderParentY
 		});
-	} else if (currentView === 'physics') {
-		physicsLoopRunning = false; // stop any previous loop
+	} else if (current.view === 'physics') {
+		is.physicsLoopRunning = false; // stop any previous loop
 		calcNodePositionPhysics({
 			currentDepthShown,
 			nodesByDepth,
 			parentId,
 			centerX,
 			centerY,
-			baseRadius: petalLayout.baseRadiusPx,
+			baseRadius: petalOptions.baseRadiusPx,
 			edgesToRender
 		});
 	} else {
@@ -2934,7 +2973,7 @@ function renderGraph(centerId) {
 			parentId,
 			centerX,
 			centerY,
-			baseRadius: petalLayout.baseRadiusPx
+			baseRadius: petalOptions.baseRadiusPx
 		});
 	}
 	edgesToRender.forEach(e => {
@@ -2976,22 +3015,22 @@ window.addEventListener('resize', () => {
 	if (nodes.length > 0) {
 		clearTimeout(resizeTimeout);
 		resizeTimeout = setTimeout(() => {
-			renderGraph(currentCenterId);
+			renderGraph(current.centerId);
 		}, 500);
 	}
 });
 window.addEventListener('hashchange', () => {
 	if (nodes.length > 0) {
 		const newId = getIdFromHash();
-		if (newId !== currentCenterId) renderGraph(newId);
+		if (newId !== current.centerId) renderGraph(newId);
 	}
 });
 
 const requestPanZoomUpdate = () => {
-	if (panZoomRafPending) return;
-	panZoomRafPending = true;
+	if (is.panZoomRafPending) return;
+	is.panZoomRafPending = true;
 	requestAnimationFrame(() => {
-		panZoomRafPending = false;
+		is.panZoomRafPending = false;
 		applyPanZoomTransform();
 		updateUrlPanZoom();
 	});
@@ -3019,9 +3058,9 @@ updateVisualViewportBottomOffset();
 
 const applyPanZoomTransform = () => {
 	const
-		tx = Bang.roundPx(panX),
-		ty = Bang.roundPx(panY),
-		z = currentZoom;
+		tx = Bang.roundPx(pan.x),
+		ty = Bang.roundPx(pan.y),
+		z = current.zoom;
 	nodesZoom.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
 	linesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
 };
@@ -3032,9 +3071,9 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 		rect = appContainer.getBoundingClientRect(),
 		anchorX = clientX - rect.left,
 		anchorY = clientY - rect.top;
-	panX = anchorX - (anchorX - panX) * (z / currentZoom);
-	panY = anchorY - (anchorY - panY) * (z / currentZoom);
-	currentZoom = z;
+	pan.x = anchorX - (anchorX - pan.x) * (z / current.zoom);
+	pan.y = anchorY - (anchorY - pan.y) * (z / current.zoom);
+	current.zoom = z;
 	requestPanZoomUpdate();
 };
 
@@ -3042,7 +3081,7 @@ appContainer.addEventListener('wheel', (e) => {
 	if (e.target.closest('#results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
 	e.preventDefault();
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
-	setZoomAt(currentZoom * zoomDelta, e.clientX, e.clientY);
+	setZoomAt(current.zoom * zoomDelta, e.clientX, e.clientY);
 }, {
 	passive: false
 });
@@ -3050,41 +3089,88 @@ appContainer.addEventListener('wheel', (e) => {
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
 	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#results') || e.target.closest('footer')) return;
-	isGraphPanning = true;
-	startPanX = e.clientX;
-	startPanY = e.clientY;
-	initialPanX = panX;
-	initialPanY = panY;
+	is.graphPanning = true;
+	startPan.x = e.clientX;
+	startPan.y = e.clientY;
+	initialPan.x = pan.x;
+	initialPan.y = pan.y;
 	appContainer.style.cursor = 'grabbing';
 });
 
 document.addEventListener('mousemove', (e) => {
-	if (isGraphPanning) {
-		panX = initialPanX + (e.clientX - startPanX);
-		panY = initialPanY + (e.clientY - startPanY);
+	if (is.graphPanning) {
+		pan.x = initialPan.x + (e.clientX - startPan.x);
+		pan.y = initialPan.y + (e.clientY - startPan.y);
 		requestPanZoomUpdate();
 	}
 });
 
 document.addEventListener('mouseup', () => {
-	if (isGraphPanning) {
-		isGraphPanning = false;
+	if (is.graphPanning) {
+		is.graphPanning = false;
 		appContainer.style.cursor = '';
 	}
 });
 
-window.__isTouchPinching = false;
+document.addEventListener('keydown', (e) => {
+	const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+	if (!isCtrlOrCmd) return;
+	console.log('Ctrl/Cmd key pressed');
+	const now = Date.now();
+	if (now - keyPress.last.ctrl > 300) {
+		keyPress.count.ctrl = 0; // Reset if more than 300ms passed
+	}
+	keyPress.last.ctrl = now;
+	keyPress.count.ctrl++;
+	if (keyPress.count.ctrl === 2) {
+		keyPress.count.ctrl = 0; // Reset count
+		// Find currently hovered card
+		const hoveredCard = document.querySelector('.card:hover');
+		if (!hoveredCard) return;
+		const nodeId = hoveredCard.getAttribute('id');
+		if (!nodeId) return;
+		// Toggle lock
+		if (locked.node === nodeId) {
+			console.log('Unlocking hover lock for node:', nodeId);
+			// Unlock
+			locked.node = null;
+			locked.nodes = new Set();
+			locked.edges = new Set();
+			document.querySelectorAll('.related, .unrelated').forEach(el => {
+				el.classList.remove('related', 'unrelated');
+			});
+		} else {
+			console.log('Locking hover lock for node:', nodeId);
+			// Lock current hover
+			locked.node = nodeId;
+			locked.nodes = hoveredCard._relatedNodes || new Set();
+			locked.edges = hoveredCard._relatedEdges || new Set();
+			// If there was a previous lock, show the new related items
+			if (locked.nodes && locked.edges) {
+				document.querySelectorAll('.card').forEach(el => {
+					if (locked.nodes.has(el)) {
+						el.classList.add('related');
+						el.classList.remove('unrelated');
+					} else {
+						el.classList.add('unrelated');
+						el.classList.remove('related');
+					}
+				});
+				activeLineElements.forEach(item => {
+					if (locked.edges.has(item.line)) {
+						item.line.classList.add('related');
+						item.line.classList.remove('unrelated');
+					} else {
+						item.line.classList.add('unrelated');
+						item.line.classList.remove('related');
+					}
+				});
+			}
+		}
+	}
+});
 
-const touchPointers = new Map();
-let touchPanStartX = 0,
-	touchPanStartY = 0,
-	touchInitialPanX = 0,
-	touchInitialPanY = 0,
-	touchIsPanning = false,
-	touchPinchStartDist = 0,
-	touchPinchStartZoom = 1,
-	touchPinchStartPanX = 0,
-	touchPinchStartPanY = 0;
+window.__isTouchPinching = false;
 
 const getTwoPointers = () => {
 	const pts = Array.from(touchPointers.values());
@@ -3102,23 +3188,22 @@ graphContainer.addEventListener('pointerdown', (e) => {
 		// Ignore
 	}
 	touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
 	if (touchPointers.size === 1) {
 		window.__isTouchPinching = false;
-		touchIsPanning = true;
-		touchPanStartX = e.clientX;
-		touchPanStartY = e.clientY;
-		touchInitialPanX = panX;
-		touchInitialPanY = panY;
+		is.touchPanning = true;
+		touch.start.x = e.clientX;
+		touch.start.y = e.clientY;
+		touch.initial.x = pan.x;
+		touch.initial.y = pan.y;
 	} else if (touchPointers.size === 2) {
 		window.__isTouchPinching = true;
-		touchIsPanning = false;
+		is.touchPanning = false;
 		const pair = getTwoPointers();
 		if (!pair) return;
-		touchPinchStartDist = Math.max(1, Bang.dist2(pair[0], pair[1]));
-		touchPinchStartZoom = currentZoom;
-		touchPinchStartPanX = panX;
-		touchPinchStartPanY = panY;
+		touch.pinch.start.distance = Math.max(1, Bang.dist2(pair[0], pair[1]));
+		touch.pinch.start.zoom = current.zoom;
+		touch.pinch.start.pan.x = pan.x;
+		touch.pinch.start.pan.y = pan.y;
 	}
 });
 
@@ -3139,15 +3224,15 @@ graphContainer.addEventListener('pointermove', (e) => {
 			rect = appContainer.getBoundingClientRect(),
 			anchorX = midClientX - rect.left,
 			anchorY = midClientY - rect.top;
-		panX = anchorX - (anchorX - touchPinchStartPanX) * (newZoom / touchPinchStartZoom);
-		panY = anchorY - (anchorY - touchPinchStartPanY) * (newZoom / touchPinchStartZoom);
-		currentZoom = newZoom;
+		pan.x = anchorX - (anchorX - touch.pinch.start.pan.x) * (newZoom / touch.pinch.start.zoom);
+		pan.y = anchorY - (anchorY - touch.pinch.start.pan.y) * (newZoom / touch.pinch.start.zoom);
+		current.zoom = newZoom;
 		requestPanZoomUpdate();
 		return;
 	}
-	if (touchIsPanning && touchPointers.size === 1) {
-		panX = touchInitialPanX + (e.clientX - touchPanStartX);
-		panY = touchInitialPanY + (e.clientY - touchPanStartY);
+	if (is.touchPanning && touchPointers.size === 1) {
+		pan.x = touch.initial.x + (e.clientX - touch.start.x);
+		pan.y = touch.initial.y + (e.clientY - touch.start.y);
 		requestPanZoomUpdate();
 		return;
 	}
@@ -3157,10 +3242,10 @@ const endTouchPointer = (pointerId) => {
 	touchPointers.delete(pointerId);
 	if (touchPointers.size < 2) {
 		window.__isTouchPinching = false;
-		touchPinchStartDist = 0;
+		touch.pinch.start.distance = 0;
 	}
 	if (touchPointers.size === 0) {
-		touchIsPanning = false;
+		is.touchPanning = false;
 	}
 };
 
@@ -3177,15 +3262,6 @@ graphContainer.addEventListener('pointercancel', (e) => {
 });
 
 if (!('PointerEvent' in window)) {
-	let touchFallbackIsPanning = false,
-		touchFallbackStartX = 0,
-		touchFallbackStartY = 0,
-		touchFallbackInitialPanX = 0,
-		touchFallbackInitialPanY = 0,
-		touchFallbackPinchStartDist = 0,
-		touchFallbackPinchStartZoom = 1,
-		touchFallbackPinchStartPanX = 0,
-		touchFallbackPinchStartPanY = 0;
 	const getTouchPair = (touches) => {
 		if (!touches || touches.length < 2) return null;
 		return [touches[0], touches[1]];
@@ -3197,22 +3273,22 @@ if (!('PointerEvent' in window)) {
 		e.preventDefault();
 		if (e.touches.length === 1) {
 			window.__isTouchPinching = false;
-			touchFallbackIsPanning = true;
-			touchFallbackStartX = e.touches[0].clientX;
-			touchFallbackStartY = e.touches[0].clientY;
-			touchFallbackInitialPanX = panX;
-			touchFallbackInitialPanY = panY;
+			is.touch.fallbackPanning = true;
+			touch.fallback.start.x = e.touches[0].clientX;
+			touch.fallback.start.y = e.touches[0].clientY;
+			touch.fallback.initial.x = pan.x;
+			touch.fallback.initial.y = pan.y;
 			return;
 		}
 		if (e.touches.length >= 2) {
 			window.__isTouchPinching = true;
-			touchFallbackIsPanning = false;
+			is.touch.fallbackPanning = false;
 			const pair = getTouchPair(e.touches);
 			if (!pair) return;
-			touchFallbackPinchStartDist = Math.max(1, Bang.dist2({ x: pair[0].clientX, y: pair[0].clientY }, { x: pair[1].clientX, y: pair[1].clientY }));
-			touchFallbackPinchStartZoom = currentZoom;
-			touchFallbackPinchStartPanX = panX;
-			touchFallbackPinchStartPanY = panY;
+			touch.fallback.pinch.start.distance = Math.max(1, Bang.dist2({ x: pair[0].clientX, y: pair[0].clientY }, { x: pair[1].clientX, y: pair[1].clientY }));
+			touch.fallback.pinch.start.zoom = current.zoom;
+			touch.fallback.pinch.start.pan.x = pan.x;
+			touch.fallback.pinch.start.pan.y = pan.y;
 		}
 	}, { passive: false });
 	graphContainer.addEventListener('touchmove', (e) => {
@@ -3225,22 +3301,22 @@ if (!('PointerEvent' in window)) {
 				a = { x: pair[0].clientX, y: pair[0].clientY },
 				b = { x: pair[1].clientX, y: pair[1].clientY },
 				d = Math.max(1, Bang.dist2(a, b)),
-				ratio = d / Math.max(1, touchFallbackPinchStartDist),
-				newZoom = Bang.clamp(touchFallbackPinchStartZoom * ratio, minZoom, maxZoom),
+				ratio = d / Math.max(1, touch.fallback.pinch.start.distance),
+				newZoom = Bang.clamp(touch.fallback.pinch.start.zoom * ratio, minZoom, maxZoom),
 				midClientX = (a.x + b.x) / 2,
 				midClientY = (a.y + b.y) / 2,
 				rect = appContainer.getBoundingClientRect(),
 				anchorX = midClientX - rect.left,
 				anchorY = midClientY - rect.top;
-			panX = anchorX - (anchorX - touchFallbackPinchStartPanX) * (newZoom / touchFallbackPinchStartZoom);
-			panY = anchorY - (anchorY - touchFallbackPinchStartPanY) * (newZoom / touchFallbackPinchStartZoom);
-			currentZoom = newZoom;
+			pan.x = anchorX - (anchorX - touch.fallback.pinch.start.pan.x) * (newZoom / touch.fallback.pinch.start.zoom);
+			pan.y = anchorY - (anchorY - touch.fallback.pinch.start.pan.y) * (newZoom / touch.fallback.pinch.start.zoom);
+			current.zoom = newZoom;
 			requestPanZoomUpdate();
 			return;
 		}
-		if (touchFallbackIsPanning && e.touches.length === 1) {
-			panX = touchFallbackInitialPanX + (e.touches[0].clientX - touchFallbackStartX);
-			panY = touchFallbackInitialPanY + (e.touches[0].clientY - touchFallbackStartY);
+		if (is.touch.fallbackPanning && e.touches.length === 1) {
+			pan.x = touch.fallback.initial.x + (e.touches[0].clientX - touch.fallback.start.x);
+			pan.y = touch.fallback.initial.y + (e.touches[0].clientY - touch.fallback.start.y);
 			requestPanZoomUpdate();
 		}
 	}, { passive: false });
@@ -3250,13 +3326,13 @@ if (!('PointerEvent' in window)) {
 			window.__isTouchPinching = false;
 		}
 		if (!e.touches || e.touches.length === 0) {
-			touchFallbackIsPanning = false;
+			is.touch.fallbackPanning = false;
 		}
 	}, { passive: false });
 	graphContainer.addEventListener('touchcancel', (e) => {
 		e.preventDefault();
 		window.__isTouchPinching = false;
-		touchFallbackIsPanning = false;
+		is.touch.fallbackPanning = false;
 	}, { passive: false });
 }
 
