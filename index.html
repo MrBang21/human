@@ -57,7 +57,7 @@
 	--block-h: 0;
 	--block: oklch(var(--block-l) var(--block-c) var(--block-h));
 
-	--border-l: 0.5;
+	--border-l: 0.8;
 	--border-c: 0;
 	--border-h: 0;
 	--border: oklch(var(--border-l) var(--border-c) var(--border-h));
@@ -97,7 +97,10 @@
 
 	--node-l: 0.7;
 	--node-related-l: 0.75;
-	--node-c: 0.11;
+	--node-c: 0.12;
+
+	--icon-l: 0.7;
+	--icon-c: 0.14;
 
 	--selected-l: 0.8;
 	--selected-c: 0.11;
@@ -135,6 +138,10 @@
 	--hue-energetic: 300;
 	--hue-homologous: 280;
 	--hue-url: 240;
+
+	--icon-male: oklch(var(--icon-l) var(--icon-c) var(--hue-male));
+	--icon-female: oklch(var(--icon-l) var(--icon-c) var(--hue-female));
+	--icon-shared: oklch(var(--icon-l) var(--icon-c) var(--hue-shared));
 
 	--trait-male: oklch(var(--node-l) var(--node-c) var(--hue-male));
 	--trait-female: oklch(var(--node-l) var(--node-c) var(--hue-female));
@@ -178,6 +185,10 @@
 		--card-hover-l: 0.25;
 		--card-hover-c: 0;
 		--card-h: 240;
+
+		--icon-l: 0.8;
+		--icon-c: 0.15;
+
 		--shadow-l: 0.7;
 		--shadow-c: 0.1;
 
@@ -380,7 +391,7 @@ body,
 		border-radius: 50%;
 		padding: .25em;
 		corner-shape: round;
-		color: oklch(var(--node-l) var(--node-c) var(--_icon-hue));
+		color: oklch(var(--icon-l) var(--icon-c) var(--_icon-hue));
 		pointer-events: none;
 	}
 
@@ -795,6 +806,7 @@ footer {
 		margin-right: 1em;
 		&.male {
 			color: var(--trait-male);
+			color: #f00;
 		}
 		&.female {
 			color: var(--trait-female);
