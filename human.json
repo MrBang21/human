@@ -229,6 +229,7 @@
 		"male_meatus": "The male urethral opening at the glans tip, often sensitive to pressure and contact.",
 		"male_outer_foreskin": "The external cutaneous layer of the prepuce that glides over deeper penile tissues.",
 		"male_pearly_penile_papules": "Benign anatomical papules on the corona that are a normal variant, not pathology.",
+		"female_vestibular_papillomatosis": "Small, soft, flesh-coloured papillae found on the inner labia minora and vulvar vestibule. A normal anatomical variant and the female counterpart to male pearly penile papules; frequently mistaken for HPV condylomata but are entirely benign and require no treatment.",
 		"male_penile_erection": "Engorgement and rigidity of penile erectile tissue mediated by vascular and neural signaling.",
 		"male_pre_ejaculate": "Clear secretion released before ejaculation that lubricates and partially neutralizes urethral acidity.",
 		"male_preputial_sphincter": "A smooth-muscle ring-like zone at the preputial opening that helps regulate foreskin aperture.",
@@ -238,7 +239,7 @@
 		"male_scrotal_raphe": "The midline seam of the scrotum, corresponding to embryologic fusion lines.",
 		"male_urethra": "The male urethral passage that carries urine and semen and traverses penile erectile tissue.",
 		"male_vas_deferens": "The muscular duct transporting sperm from the epididymis toward ejaculatory ducts.",
-		"meatus": "The external urethral opening, a mucosal outlet that can be sensitive to tactile stimulation.",
+		"female_meatus": "The female external urethral orifice, a mucosal outlet that can be sensitive to tactile stimulation.",
 		"multiple_orgasm": "Experiencing two or more orgasmic events in one sexual episode with limited recovery time.",
 		"myotonia": "Generalized muscle tension and contraction buildup during high sexual arousal before orgasmic release.",
 		"plateau_phase": "The sustained high-arousal stage of the sexual response cycle preceding orgasm.",
@@ -247,7 +248,19 @@
 		"sexual_response_cycle": "A model of sexual physiology often described as excitement, plateau, orgasm, and resolution.",
 		"tongue": "A highly innervated muscular organ important for oral tactile stimulation and sensual contact.",
 		"vasocongestion": "Increased genital and pelvic blood flow that drives erection, swelling, and lubrication during arousal.",
-		"wrists": "Thin-skinned distal forearm region where light touch can produce heightened sensory response."
+		"wrists": "Thin-skinned distal forearm region where light touch can produce heightened sensory response.",
+		"male_coronal_sulcus": "The groove circumscribing the base of the glans penis where it meets the corona. In intact males it is protected by the overlying foreskin and retains mucosal sensitivity; in circumcised males it is permanently exposed and may undergo keratinization.",
+		"male_penile_raphe": "The midline fibrous ridge running along the ventral surface of the penile shaft, representing the embryonic urogenital fold fusion line. It is continuous with the scrotal raphe and can be erotically sensitive to light touch.",
+		"male_tunica_albuginea": "The dense, inelastic collagen sheath enveloping the corpora cavernosa. It provides the structural rigidity that enables high-pressure engorgement during erection and is a key determinant of penile shape and stiffness.",
+		"male_dartos_muscle": "A layer of smooth muscle embedded in the skin of the penis and scrotum. It contracts reflexively in response to cold or sexual arousal, tightening scrotal skin and assisting foreskin aperture regulation.",
+		"female_introitus": "The vaginal opening; the threshold entrance to the vaginal canal, bounded anteriorly by the urethral meatus and posteriorly by the fourchette. It is the site of the hymen in those for whom it is present and is richly innervated with sensory receptors responsive to stretch and touch.",
+		"female_clitoral_frenulum": "A delicate fold of mucosal skin on the underside of the clitoral glans connecting it to the inner labia minora. Anatomically homologous to the male frenulum, it is richly innervated and is often one of the most sensitive structures of the external female genitalia.",
+		"female_lateral_fornix": "The paired left and right lateral recesses of the vaginal vault where the vaginal walls meet the cervix. Together with the anterior and posterior fornices they form the continuous fornix ring around the cervix.",
+		"female_perineal_body": "The fibromuscular central tendon of the perineum situated between the posterior vaginal opening and the anterior anal margin. It is the convergence point for multiple pelvic floor muscles and plays a key role in pelvic floor support, sexual sensation, and obstetric outcomes.",
+		"male_ischiocavernosus": "A paired perineal muscle that arises from the ischial tuberosities and inserts onto the crura of the penis. During erection it compresses the crura, restricting venous outflow and maintaining penile rigidity. It also contracts rhythmically at orgasm, contributing to the pleasurable pelvic pulsations of climax.",
+		"male_bulbospongiosus": "A perineal muscle that wraps around the bulb of the penis and the proximal corpus spongiosum. It has a dual role: during erection it compresses the bulb to restrict venous outflow, and during ejaculation its rhythmic contractions forcefully expel semen along the urethra. It contracts in synchrony with the ischiocavernosus at orgasm.",
+		"female_ischiocavernosus": "A paired perineal muscle arising from the ischial tuberosities and attaching to the crura of the clitoris. Contraction compresses the crura, impedes venous drainage, and sustains clitoral erection during arousal. It participates in the rhythmic orgasmic contractions of the pelvic floor.",
+		"female_bulbospongiosus": "A perineal muscle encircling the vaginal opening and overlying the vestibular bulbs. It compresses the bulbs during arousal to increase clitoral engorgement and narrows the vaginal introitus. During orgasm its powerful rhythmic contractions produce the characteristic pulsations of the vaginal canal, contributing centrally to the physical sensation of female orgasm."
 	},
 	"sources": {
 		"male_foreskin": [
@@ -1120,12 +1133,12 @@
 			"trait": "female"
 		},
 		{
-			"id": "meatus",
-			"name": "Meatus",
-			"content": "External urethral orifice",
+			"id": "female_meatus",
+			"name": "Female Meatus",
+			"content": "Female external urethral orifice",
 			"type": "anatomy",
 			"category": "sexual",
-			"trait": "shared"
+			"trait": "female"
 		},
 		{
 			"id": "male_corona",
@@ -1142,6 +1155,14 @@
 			"type": "anatomy",
 			"category": "sexual",
 			"trait": "male"
+		},
+		{
+			"id": "female_vestibular_papillomatosis",
+			"name": "Vestibular Papillomatosis",
+			"content": "Benign normal-variant papillae of the inner labia minora and vestibule; the female counterpart to pearly penile papules",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
 		},
 		{
 			"id": "male_foreskin",
@@ -2641,6 +2662,102 @@
 			"type": "sexual",
 			"category": "organ",
 			"trait": "shared"
+		},
+		{
+			"id": "male_coronal_sulcus",
+			"name": "Coronal Sulcus",
+			"content": "The groove at the base of the glans where it meets the corona; protected by foreskin when intact",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "male"
+		},
+		{
+			"id": "male_penile_raphe",
+			"name": "Penile Raphe",
+			"content": "Midline ventral ridge of the penile shaft; embryonic fusion line continuous with the scrotal raphe",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "male"
+		},
+		{
+			"id": "male_tunica_albuginea",
+			"name": "Tunica Albuginea",
+			"content": "Dense fibrous collagen sheath enveloping the corpora cavernosa, providing structural rigidity during erection",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "male"
+		},
+		{
+			"id": "male_dartos_muscle",
+			"name": "Dartos Muscle",
+			"content": "Smooth muscle layer in penile and scrotal skin; contracts in response to temperature change and arousal",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "male"
+		},
+		{
+			"id": "female_introitus",
+			"name": "Vaginal Introitus",
+			"content": "The vaginal opening; entrance to the vaginal canal, richly innervated and sensitive to stretch and touch",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
+		},
+		{
+			"id": "female_clitoral_frenulum",
+			"name": "Clitoral Frenulum",
+			"content": "Mucosal fold on the underside of the clitoral glans connecting it to the labia minora; homologous to male frenulum",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
+		},
+		{
+			"id": "female_lateral_fornix",
+			"name": "Lateral Fornix",
+			"content": "Paired lateral recesses of the vaginal vault flanking the cervix",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
+		},
+		{
+			"id": "female_perineal_body",
+			"name": "Perineal Body",
+			"content": "Fibromuscular central tendon of the perineum between the vaginal opening and anus; convergence of pelvic floor muscles",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
+		},
+		{
+			"id": "male_ischiocavernosus",
+			"name": "Ischiocavernosus",
+			"content": "Perineal muscle compressing the penile crura to maintain erection; contracts rhythmically at orgasm",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "male"
+		},
+		{
+			"id": "male_bulbospongiosus",
+			"name": "Bulbospongiosus",
+			"content": "Perineal muscle wrapping the penile bulb; assists erection and forcefully expels semen during ejaculation",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "male"
+		},
+		{
+			"id": "female_ischiocavernosus",
+			"name": "Ischiocavernosus",
+			"content": "Perineal muscle compressing the clitoral crura to sustain clitoral erection; participates in orgasmic pelvic contractions",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
+		},
+		{
+			"id": "female_bulbospongiosus",
+			"name": "Bulbospongiosus",
+			"content": "Perineal muscle encircling the vaginal opening; compresses vestibular bulbs and produces rhythmic orgasmic vaginal contractions",
+			"type": "anatomy",
+			"category": "sexual",
+			"trait": "female"
 		}
 	],
 	"edges": [
@@ -3381,7 +3498,7 @@
 		},
 		{
 			"source": "male_glans",
-			"target": "meatus",
+			"target": "male_meatus",
 			"type": "anatomy"
 		},
 		{
@@ -3397,6 +3514,21 @@
 		{
 			"source": "male_corona",
 			"target": "male_pearly_penile_papules",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_coronal_sulcus",
+			"target": "male_pearly_penile_papules",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_labia_minora",
+			"target": "female_vestibular_papillomatosis",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_vestibule",
+			"target": "female_vestibular_papillomatosis",
 			"type": "anatomy"
 		},
 		{
@@ -3646,7 +3778,7 @@
 		},
 		{
 			"source": "female_urethra",
-			"target": "meatus",
+			"target": "female_meatus",
 			"type": "anatomy"
 		},
 		{
@@ -4340,7 +4472,7 @@
 			"type": "consequence"
 		},
 		{
-			"source": "meatus",
+			"source": "male_meatus",
 			"target": "male_circ_meatal_stenosis",
 			"type": "consequence"
 		},
@@ -5393,6 +5525,281 @@
 			"source": "orgasmic_reflex",
 			"target": "male_orgasm",
 			"type": "sexual"
+		},
+		{
+			"source": "male_glans",
+			"target": "male_coronal_sulcus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_corona",
+			"target": "male_coronal_sulcus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_foreskin",
+			"target": "male_coronal_sulcus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_coronal_sulcus",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "male_shaft",
+			"target": "male_penile_raphe",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_scrotal_raphe",
+			"target": "male_penile_raphe",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_penile_raphe",
+			"target": "male_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "male_corpora_cavernosa",
+			"target": "male_tunica_albuginea",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_tunica_albuginea",
+			"target": "male_penile_erection",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_shaft",
+			"target": "male_dartos_muscle",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_scrotum",
+			"target": "male_dartos_muscle",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_vagina",
+			"target": "female_introitus",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_vestibule",
+			"target": "female_introitus",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_hymen",
+			"target": "female_introitus",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_introitus",
+			"target": "female_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "female_clitoral_glans",
+			"target": "female_clitoral_frenulum",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_labia_minora",
+			"target": "female_clitoral_frenulum",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_clitoral_frenulum",
+			"target": "female_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "female_vagina",
+			"target": "female_lateral_fornix",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_cervix",
+			"target": "female_lateral_fornix",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_introitus",
+			"target": "female_perineal_body",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_fourchette",
+			"target": "female_perineal_body",
+			"type": "anatomy"
+		},
+		{
+			"source": "perineum",
+			"target": "female_perineal_body",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_frenular_delta",
+			"target": "female_clitoral_frenulum",
+			"type": "homologous"
+		},
+		{
+			"source": "male_meatus",
+			"target": "female_meatus",
+			"type": "homologous"
+		},
+		{
+			"source": "male_pubic_mound",
+			"target": "female_mons_pubis",
+			"type": "homologous"
+		},
+		{
+			"source": "male_corpus_spongiosum",
+			"target": "female_urethral_sponge",
+			"type": "homologous"
+		},
+		{
+			"source": "male_pearly_penile_papules",
+			"target": "female_vestibular_papillomatosis",
+			"type": "homologous"
+		},
+		{
+			"source": "male_corpus_spongiosum",
+			"target": "male_glans",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_clitoral_erection",
+			"target": "vasocongestion",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_clitoral_erection",
+			"target": "female_erogenous_zones",
+			"type": "sexual"
+		},
+		{
+			"source": "arousal",
+			"target": "female_clitoral_erection",
+			"type": "sexual"
+		},
+		{
+			"source": "arousal",
+			"target": "male_penile_erection",
+			"type": "sexual"
+		},
+		{
+			"source": "female_skene_glands",
+			"target": "female_skene_ducts",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_skene_ducts",
+			"target": "female_meatus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_pelvis",
+			"target": "male_ischiocavernosus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_ischiocavernosus",
+			"target": "male_crura_of_penis",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_ischiocavernosus",
+			"target": "male_penile_erection",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_ischiocavernosus",
+			"target": "pelvic_floor_muscles",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_pelvis",
+			"target": "male_bulbospongiosus",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_bulbospongiosus",
+			"target": "male_bulb_of_penis",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_bulbospongiosus",
+			"target": "male_ejaculation",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_bulbospongiosus",
+			"target": "male_penile_erection",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_bulbospongiosus",
+			"target": "pelvic_floor_muscles",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_pelvis",
+			"target": "female_ischiocavernosus",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_ischiocavernosus",
+			"target": "female_crura_of_clitoris",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_ischiocavernosus",
+			"target": "female_clitoral_erection",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_ischiocavernosus",
+			"target": "pelvic_floor_muscles",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_pelvis",
+			"target": "female_bulbospongiosus",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_bulbospongiosus",
+			"target": "female_vestibular_bulbs",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_bulbospongiosus",
+			"target": "female_introitus",
+			"type": "anatomy"
+		},
+		{
+			"source": "female_bulbospongiosus",
+			"target": "female_orgasm",
+			"type": "sexual"
+		},
+		{
+			"source": "female_bulbospongiosus",
+			"target": "pelvic_floor_muscles",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_ischiocavernosus",
+			"target": "female_ischiocavernosus",
+			"type": "homologous"
+		},
+		{
+			"source": "male_bulbospongiosus",
+			"target": "female_bulbospongiosus",
+			"type": "homologous"
 		}
 	]
 }
