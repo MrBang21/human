@@ -1347,7 +1347,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.5 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.6 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1541,19 +1541,21 @@ const
 	},
 	physicsOptions = {
 		linePull: {
-			'@default': 0.5,
-			'root': 0.5,
-			'anatomy': 0.5,
-			'nerve': 0.5,
-			'sexual': 0.5,
-			'removed': 0.4,
-			'consequence': 0.2,
-			'benefit': 0.2,
-			'harm': 0.3,
-			'energetic': 0.5,
+			'@default': 0.1,
+
+			// 'root': 0.5,
+			'anatomy': 0.05,
+			// 'nerve': 0.5,
+			'sexual': 0.005,
+			// 'removed': 0.4,
+			'consequence': 0.01,
+			// 'benefit': 0.2,
+			// 'harm': 0.3,
+			// 'energetic': 0.5,
 		},
 		lineLength: {
-			'@default': 500,
+			'@default': 700,
+			/*
 			'root': 500,
 			'anatomy': 500,
 			'nerve': 500,
@@ -1561,8 +1563,21 @@ const
 			'removed': 700,
 			'consequence': 800,
 			'benefit': 600,
-			'harm': 700,
+			'harm': 500,
 			'energetic': 500,
+			*/
+		},
+		clusterStrength: {
+			'@default': 0.1,
+			// 'root': 0.5,
+			'anatomy': 0.2,
+			// 'nerve': 0.5,
+			'sexual': 0.01,
+			// 'removed': 0.4,
+			'consequence': 0.05,
+			// 'benefit': 0.2,
+			// 'harm': 0.3,
+			// 'energetic': 0.5,
 		},
 		sourcePull: 0.8,
 		targetPull: 0.2,
@@ -1579,8 +1594,8 @@ const
 		energyThreshold: 0.015,
 		alpha: 1.0,
 		alphaCoolDown: 0.001,
-		depthLength: 1.2,
-		depthPull: 10.25,
+		xdepthLength: 1,
+		xdepthPull: 0.2,
 	},
 	edgeStyles = {
 		'root': 'url(#arrow-root)',
@@ -1597,13 +1612,27 @@ const
 
 
 const Bang = {
+	/*
+	// not sure if these are actually useful but here they are if needed
+	isNull: (v) => v === null || v === undefined,
+	isString: (v) => typeof v === 'string',
+	isBoolean: (v) => typeof v === 'boolean',
+	isNumber: (v) => typeof v === 'number',
+	isInteger: (v) => Number.isInteger(v),
+	isFinite: (v) => Number.isFinite(v),
+	isObject: (v) => typeof v === 'object' && v !== null,
+	isArray: (v) => Array.isArray(v),
+	isFunction: (v) => typeof v === 'function',
+	isEmpty: (v) => Bang.isNull(v) || (Bang.isString(v) && v.trim() === '') || (Bang.isArray(v) && v.length === 0) || (Bang.isObject(v) && Object.keys(v).length === 0),
+	*/
+
 	clamp: (num, min, max) => Math.min(Math.max(num, min), max),
 	roundPx: (v) => {
-		const dpr = window.devicePixelRatio || 1;
+		const dpr = window.devicePixelRatio ?? 1;
 		return Math.round(v * dpr) / dpr;
 	},
 	getEdgeWeight: (t) => {
-		if (!t || t === 'anatomy') return 1;
+		if ((t ?? 'anatomy') === 'anatomy') return 1;
 		if (t === 'benefit') return 2;
 		if (t === 'consequence' || t === 'harm') return 3;
 		if (t === 'removed') return 4;
@@ -1646,7 +1675,7 @@ const Bang = {
 				const
 					neighborId = e.source === curr.id ? e.target : e.source,
 					neighborNode = nodes.find(n => n.id === neighborId);
-				if (neighborNode && (!checkTrait(neighborNode.trait) || !checkTypeFilter(neighborNode.type))) return;
+				if (neighborNode != null && (!checkTrait(neighborNode?.trait) || !checkTypeFilter(neighborNode?.type))) return;
 				if (!visitedEdges.has(e)) {
 					visitedEdges.add(e);
 					edgesToRender.push(e);
@@ -1659,7 +1688,7 @@ const Bang = {
 							node: neighborNode,
 							depth: curr.depth + 1,
 							isOutgoing: e.source === curr.id,
-							edgeType: e.type || 'anatomy',
+							edgeType: e.type ?? 'anatomy',
 							parentId: curr.id
 						});
 					}
@@ -1713,7 +1742,7 @@ function setMobilePanel(panel) {
 
 if (mobileBar) {
 	mobileBar.addEventListener('click', (e) => {
-		const btn = e.target.closest('button[data-panel]');
+		const btn = e?.target?.closest('button[data-panel]');
 		if (!btn) return;
 		setMobilePanel(btn.getAttribute('data-panel'));
 	});
@@ -1723,14 +1752,19 @@ if (mobileBar) {
 function updateLinesOnce() {
 	activeLineElements.forEach(item => {
 		const
-			iconOffset = connectToIcon ? (el) => el.offsetHeight / 2 : () => 0,
-			sx = Bang.roundPx(parseFloat(item.sourceEl.style.left) || 0),
-			sy = Bang.roundPx((parseFloat(item.sourceEl.style.top) || 0) - iconOffset(item.sourceEl)),
-			ex = Bang.roundPx(parseFloat(item.targetEl.style.left) || 0),
-			ey = Bang.roundPx((parseFloat(item.targetEl.style.top) || 0) - iconOffset(item.targetEl)),
+			iconOffset = connectToIcon ? (el) => (el?.offsetHeight ?? 0) / 2 : () => 0,
+			sourceLeft = parseFloat(item?.sourceEl?.style?.left),
+			sourceTop = parseFloat(item?.sourceEl?.style?.top),
+			targetLeft = parseFloat(item?.targetEl?.style?.left),
+			targetTop = parseFloat(item?.targetEl?.style?.top),
+			sx = Bang.roundPx(Number.isFinite(sourceLeft) ? sourceLeft : 0),
+			sy = Bang.roundPx((Number.isFinite(sourceTop) ? sourceTop : 0) - iconOffset(item?.sourceEl)),
+			ex = Bang.roundPx(Number.isFinite(targetLeft) ? targetLeft : 0),
+			ey = Bang.roundPx((Number.isFinite(targetTop) ? targetTop : 0) - iconOffset(item?.targetEl)),
 			dx = ex - sx,
 			dy = ey - sy,
-			len = Math.hypot(dx, dy) || 1,
+			lenRaw = Math.hypot(dx, dy),
+			len = lenRaw === 0 ? 1 : lenRaw,
 			px = -dy / len,
 			py = dx / len,
 			lengthFactor = 1 / (1 + len * 0.01),
@@ -1742,8 +1776,8 @@ function updateLinesOnce() {
 		let k = -dx * lengthFactor;
 		if (hasReverse) {
 			const
-				srcId = item.sourceEl.id || '',
-				tarId = item.targetEl.id || '';
+				srcId = item.sourceEl.id ?? '',
+				tarId = item.targetEl.id ?? '';
 			if (srcId < tarId) {
 				k = -k;
 			}
@@ -1787,11 +1821,11 @@ function stopLinesLoop() {
 }
 
 const checkTrait = (t) => {
-	const tr = t || 'shared';
+	const tr = t ?? 'shared';
 	if (current.traitFilter === 'all') return true;
-	if (filters && filters.traits) {
-		const traitFilter = filters.traits.find(p => p.key === current.traitFilter);
-		if (traitFilter && traitFilter.items) {
+	if (filters?.traits) {
+		const traitFilter = filters?.traits.find(p => p.key === current.traitFilter);
+		if (traitFilter?.items) {
 			return traitFilter.items.includes(tr);
 		}
 	}
@@ -1799,11 +1833,11 @@ const checkTrait = (t) => {
 };
 
 const checkTypeFilter = (type) => {
-	const ty = type || 'anatomy';
+	const ty = type ?? 'anatomy';
 	if (current.typeFilter === 'all') return true;
-	if (filters && filters.types) {
-		const perspective = filters.types.find(p => p.key === current.typeFilter);
-		if (perspective && perspective.items) {
+	if (filters?.types) {
+		const perspective = filters?.types.find(p => p.key === current.typeFilter);
+		if (perspective?.items) {
 			return perspective.items.includes(ty);
 		}
 	}
@@ -1815,14 +1849,14 @@ async function loadGraphData() {
 		const response = await fetch('human.json');
 		if (!response.ok) throw new Error('Network response was not ok');
 		const data = await response.json();
-		nodes = data.nodes;
-		edges = data.edges;
-		descriptions = data.descriptions || {};
-		sources = data.sources || {};
-		filters = data.filters || {};
-		if (filters.types) {
+		nodes = data?.nodes ?? [];
+		edges = data?.edges ?? [];
+		descriptions = data?.descriptions ?? {};
+		sources = data?.sources ?? {};
+		filters = data?.filters ?? {};
+		if (filters?.types) {
 			typeFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
-			filters.types.forEach(p => {
+			filters?.types.forEach(p => {
 				const opt = document.createElement('option');
 				opt.value = p.key;
 				opt.textContent = p.name;
@@ -1831,9 +1865,9 @@ async function loadGraphData() {
 			});
 			typeFilterDropdown.value = current.typeFilter;
 		}
-		if (filters.traits) {
+		if (filters?.traits) {
 			traitFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
-			filters.traits.forEach(t => {
+			filters?.traits.forEach(t => {
 				const opt = document.createElement('option');
 				opt.value = t.key;
 				opt.textContent = t.name;
@@ -1841,10 +1875,11 @@ async function loadGraphData() {
 			});
 			traitFilterDropdown.value = current.traitFilter;
 		}
-		document.getElementById('loading').style.display = 'none';
+		document.getElementById('loading')?.style?.setProperty('display', 'none');
 		initGraph();
 	} catch (error) {
-		document.getElementById('loading').innerText = 'Error loading human.json. Ensure you are running a local server.';
+		const loadingEl = document.getElementById('loading');
+		if (loadingEl) loadingEl.innerText = 'Error loading human.json. Ensure you are running a local server.';
 	}
 }
 
@@ -1894,37 +1929,37 @@ function updateUrlPanZoom() {
 }
 
 traitFilterDropdown.addEventListener('change', (e) => {
-	current.traitFilter = e.target.value;
+	current.traitFilter = e?.target?.value ?? current.traitFilter;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	if (searchInput.value) {
+	if (searchInput?.value) {
 		searchInput.dispatchEvent(new Event('input'));
 	}
-	e.target.blur();
+	e?.target?.blur();
 });
 
 typeFilterDropdown.addEventListener('change', (e) => {
-	current.typeFilter = e.target.value;
+	current.typeFilter = e?.target?.value ?? current.typeFilter;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	if (searchInput.value) {
+	if (searchInput?.value) {
 		searchInput.dispatchEvent(new Event('input'));
 	}
-	e.target.blur();
+	e?.target?.blur();
 });
 
 depthDropdown.addEventListener('change', (e) => {
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	e.target.blur();
+	e?.target?.blur();
 });
 
 viewSelect.addEventListener('change', (e) => {
-	current.view = e.target.value;
+	current.view = e?.target?.value ?? current.view;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	if (searchInput.value) searchInput.dispatchEvent(new Event('input'));
-	e.target.blur();
+	if (searchInput?.value) searchInput.dispatchEvent(new Event('input'));
+	e?.target?.blur();
 });
 
 const getCompositeGroupKey = (node) => {
@@ -1952,11 +1987,11 @@ const layoutStackByCompositeGroup = ({
 		groupGapX = stackOptions.groupGapXEm * emSize,
 		rowGapY = stackOptions.rowGapYEm * emSize,
 		labelToBlockGap = stackOptions.labelToBlockGapEm * emSize,
-		sizeSample = centerEl || document.querySelector('.card'),
-		measuredW = sizeSample?.offsetWidth || 0,
-		measuredH = sizeSample?.offsetHeight || 0,
-		cardW = measuredW || (18 * emSize),
-		cardH = measuredH || (7.5 * emSize),
+		sizeSample = centerEl ?? document.querySelector('.card'),
+		measuredW = sizeSample?.offsetWidth ?? 0,
+		measuredH = sizeSample?.offsetHeight ?? 0,
+		cardW = measuredW > 0 ? measuredW : (18 * emSize),
+		cardH = measuredH > 0 ? measuredH : (7.5 * emSize),
 		metaById = new Map();
 	for (let d = 1; d < nodesByDepth.length; d++) {
 		nodesByDepth[d].forEach(nData => {
@@ -2105,35 +2140,35 @@ function getIdFromHash() {
 function initGraph() {
 	const
 		url = new URL(window.location),
-		initialDepth = url.searchParams.get('d') || url.searchParams.get('depth');
+		initialDepth = url.searchParams.get('d') ?? url.searchParams.get('depth');
 	if (initialDepth) depthDropdown.value = initialDepth;
-	let initialView = url.searchParams.get('v') || url.searchParams.get('view');
-	if (!initialView && url.searchParams.get('stack') === '1') {
+	let initialView = url.searchParams.get('v') ?? url.searchParams.get('view');
+	if (initialView == null && url.searchParams.get('stack') === '1') {
 		initialView = 'stacked';
 	}
-	if (initialView && viewSelect.querySelector(`option[value="${initialView}"]`)) {
+	if (initialView != null && viewSelect?.querySelector(`option[value="${initialView}"]`)) {
 		current.view = initialView;
 		viewSelect.value = initialView;
 	}
-	const initialTrait = url.searchParams.get('t') || url.searchParams.get('trait');
+	const initialTrait = url.searchParams.get('t') ?? url.searchParams.get('trait');
 	if (initialTrait) {
 		traitFilterDropdown.value = initialTrait;
 		current.traitFilter = initialTrait;
-	} else if (filters && filters.traits) {
-		const defaultTrait = filters.traits.find(t => t.default);
+	} else if (filters?.traits) {
+		const defaultTrait = filters?.traits.find(t => t.default);
 		if (defaultTrait) {
-			current.traitFilter = defaultTrait.name.toLowerCase();
+			current.traitFilter = defaultTrait?.name?.toLowerCase();
 			traitFilterDropdown.value = current.traitFilter;
 		}
 	}
-	const initialType = url.searchParams.get('p') || url.searchParams.get('perspective');
+	const initialType = url.searchParams.get('p') ?? url.searchParams.get('perspective');
 	if (initialType) {
 		typeFilterDropdown.value = initialType;
 		current.typeFilter = initialType;
-	} else if (filters && filters.types) {
-		const defaultType = filters.types.find(t => t.default);
+	} else if (filters?.types) {
+		const defaultType = filters?.types.find(t => t.default);
 		if (defaultType) {
-			current.typeFilter = defaultType.name.toLowerCase();
+			current.typeFilter = defaultType?.name?.toLowerCase();
 			typeFilterDropdown.value = current.typeFilter;
 		}
 	}
@@ -2145,9 +2180,9 @@ function initGraph() {
 			nameEl = clone.querySelector('h3'),
 			contentEl = clone.querySelector('p'),
 			useEl = clone.querySelector('use'),
-			nodeType = node.type || 'anatomy',
-			nodeTrait = node.trait || 'shared',
-			nodeCategory = node.category || 'other';
+				nodeType = node?.type ?? 'anatomy',
+				nodeTrait = node?.trait ?? 'shared',
+				nodeCategory = node?.category ?? 'other';
 		card.className = `card hidden type-${nodeType} trait-${nodeTrait} cat-${nodeCategory}`;
 		card.id = `node-${node.id}`;
 		nameEl.textContent = node.name;
@@ -2161,26 +2196,27 @@ function initGraph() {
 }
 
 searchInput.addEventListener('input', (e) => {
-	const term = e.target.value.trim();
+	const term = e?.target?.value?.trim?.() ?? '';
 	if (term.length < 2) {
 		searchResults.style.display = 'none';
 		searchIndex = -1;
 		return;
 	}
-	const regex = new RegExp(`\\b${term}`, 'i');
-	const matches = nodes.filter(n => {
-		const
-			matchesTerm = regex.test(n.name) || regex.test(n.content) || (n.aka && regex.test(n.aka)),
-			matchesFilter = checkTrait(n.trait) && checkTypeFilter(n.type);
-		return matchesTerm && matchesFilter;
-	}).sort((a, b) => {
-		const aNameMatch = regex.test(a.name);
-		const bNameMatch = regex.test(b.name);
-		if (aNameMatch !== bNameMatch) {
-			return aNameMatch ? -1 : 1;
-		}
-		return a.name.length - b.name.length;
-	});
+	const
+		regex = new RegExp(`\\b${term}`, 'i'),
+		matches = nodes.filter(n => {
+			const
+				matchesTerm = regex.test(n?.name) || regex.test(n?.content) || (n?.aka != null && regex.test(n?.aka)),
+				matchesFilter = checkTrait(n?.trait) && checkTypeFilter(n?.type);
+			return matchesTerm && matchesFilter;
+		}).sort((a, b) => {
+			const aNameMatch = regex.test(a.name);
+			const bNameMatch = regex.test(b.name);
+			if (aNameMatch !== bNameMatch) {
+				return aNameMatch ? -1 : 1;
+			}
+			return a.name.length - b.name.length;
+		});
 	searchIndex = 0;
 	searchResults.replaceChildren();
 	if (matches.length > 0) {
@@ -2194,7 +2230,7 @@ searchInput.addEventListener('input', (e) => {
 				itemEl.classList.add('selected');
 			}
 			clone.querySelector('.name').textContent = m.name;
-			clone.querySelector('.desc').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
+			clone.querySelector('.desc').textContent = `${(m?.category ?? 'misc').replace(/_/g, ' ')} • ${m?.trait ?? 'shared'}`;
 			itemEl.addEventListener('click', (ev) => {
 				ev.preventDefault();
 				const id = itemEl.getAttribute('data-id');
@@ -2278,8 +2314,10 @@ function setupInteractions(card, id) {
 			startY = clientY;
 			moveThresholdPx = (pointerType === 'touch') ? 10 : 3;
 			card.classList.add('dragging');
-			initialLeft = parseFloat(card.style.left) || 0;
-			initialTop = parseFloat(card.style.top) || 0;
+			const parsedLeft = parseFloat(card.style.left),
+				parsedTop = parseFloat(card.style.top);
+			initialLeft = Number.isFinite(parsedLeft) ? parsedLeft : 0;
+			initialTop = Number.isFinite(parsedTop) ? parsedTop : 0;
 			startLinesLoop();
 		},
 		updateDrag = (clientX, clientY) => {
@@ -2295,8 +2333,8 @@ function setupInteractions(card, id) {
 				newTop = Bang.roundPx(initialTop + dy);
 			card.style.left = `${newLeft}px`;
 			card.style.top = `${newTop}px`;
-			if (current.view === 'physics' && typeof physics.nodes !== 'undefined') {
-				const nd = physics.nodes.find(n => n.node.id === id);
+			if (current.view === 'physics' && physics?.nodes != null) {
+				const nd = physics?.nodes?.find(n => n?.node?.id === id);
 				if (nd) {
 					nd.x = newLeft;
 					nd.y = newTop;
@@ -2317,8 +2355,8 @@ function setupInteractions(card, id) {
 			card.classList.remove('dragging');
 			stopLinesLoop();
 			updateLinesOnce();
-			if (current.view === 'physics' && typeof physics.nodes !== 'undefined') {
-				const nd = physics.nodes.find(n => n.node.id === id);
+			if (current.view === 'physics' && physics?.nodes != null) {
+				const nd = physics?.nodes?.find(n => n?.node?.id === id);
 				if (nd) {
 					nd.isDragging = false;
 					if (hasMoved) {
@@ -2404,7 +2442,7 @@ function setupInteractions(card, id) {
 		});
 		// Add siblings (nodes with same parent)
 		const currentNode = nodes.find(n => n.id === id);
-		if (currentNode && currentNode.parentId) {
+		if (currentNode?.parentId != null) {
 			const siblings = nodes.filter(n => n.parentId === currentNode.parentId && n.id !== id);
 			siblings.forEach(sibling => {
 				const siblingEl = document.getElementById(`node-${sibling.id}`);
@@ -2449,98 +2487,98 @@ function getBreadcrumbPath(targetId) {
 	if (targetId === rootId) return [rootId];
 	const
 		targetNode = nodes.find(n => n.id === targetId),
-		targetTrait = targetNode ? targetNode.trait : null;
-	const findPathDirected = (edgeDirection, allowAllEdges) => {
-		let adjList = {};
-		const
-			defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']),
-			isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t || 'anatomy'),
-			isAllowedNode = (id, nodeData) => {
-				if (!nodeData) return false;
-				if (id === targetId) return true;
-				return checkTrait(nodeData.trait) && checkTypeFilter(nodeData.type);
-			},
-			weightFor = (neighborData) => {
-				let weight = 5; // Base weight (e.g. for anatomy/structure)
-				if (neighborData.type === 'root') {
-					weight = 1; // Prioritize root types even higher than anatomy
-				} else if (neighborData.category !== 'anatomy' && neighborData.category !== 'structure') {
-					weight += 20; // Deprioritize non-anatomy
-				}
-				if (targetTrait && neighborData.trait !== targetTrait) {
-					weight += 10;
-					if (neighborData.trait !== 'shared') weight += 50;
-				}
-				if (neighborData.category === 'other') {
-					weight += 20;
-				}
-				return weight;
-			},
-			addEdge = (fromId, toId, toData) => {
-				if (!adjList[fromId]) adjList[fromId] = [];
-				adjList[fromId].push({ node: toId, weight: weightFor(toData) });
-			};
-		edges.forEach(e => {
-			const type = e.type || 'anatomy';
-			if (!isAllowedEdgeType(type)) return;
+		targetTrait = targetNode?.trait ?? null,
+		findPathDirected = (edgeDirection, allowAllEdges) => {
+			let adjList = {};
 			const
-				sourceData = nodes.find(n => n.id === e.source),
-				targetData = nodes.find(n => n.id === e.target);
-			if (!sourceData || !targetData) return;
-			if (edgeDirection === 'targetToSource') {
-				// Only allow target->source traversal
-				if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
-			} else if (edgeDirection === 'sourceToTarget') {
-				// Only allow source->target traversal
-				if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
-			} else {
-				// Allow both directions (legacy fallback)
-				if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
-				if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
-			}
-		});
-		let distances = {},
-			previous = {},
-			unvisited = new Set(nodes.map(n => n.id));
-		nodes.forEach(n => distances[n.id] = Infinity);
-		distances[rootId] = 0;
-		while (unvisited.size > 0) {
-			let currNode = null;
-			for (let id of unvisited) {
-				if (currNode === null || distances[id] < distances[currNode]) {
-					currNode = id;
+				defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']),
+				isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t ?? 'anatomy'),
+				isAllowedNode = (id, nodeData) => {
+					if (nodeData == null) return false;
+					if (id === targetId) return true;
+					return checkTrait(nodeData?.trait) && checkTypeFilter(nodeData?.type);
+				},
+				weightFor = (neighborData) => {
+					let weight = 5; // Base weight (e.g. for anatomy/structure)
+					if (neighborData?.type === 'root') {
+						weight = 1; // Prioritize root types even higher than anatomy
+					} else if (neighborData?.category !== 'anatomy' && neighborData?.category !== 'structure') {
+						weight += 20; // Deprioritize non-anatomy
+					}
+					if (targetTrait != null && neighborData?.trait !== targetTrait) {
+						weight += 10;
+						if (neighborData?.trait !== 'shared') weight += 50;
+					}
+					if (neighborData?.category === 'other') {
+						weight += 20;
+					}
+					return weight;
+				},
+				addEdge = (fromId, toId, toData) => {
+					if (!adjList[fromId]) adjList[fromId] = [];
+					adjList[fromId].push({ node: toId, weight: weightFor(toData) });
+				};
+			edges.forEach(e => {
+				const type = e?.type ?? 'anatomy';
+				if (!isAllowedEdgeType(type)) return;
+				const
+					sourceData = nodes.find(n => n.id === e.source),
+					targetData = nodes.find(n => n.id === e.target);
+				if (sourceData == null || targetData == null) return;
+				if (edgeDirection === 'targetToSource') {
+					// Only allow target->source traversal
+					if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
+				} else if (edgeDirection === 'sourceToTarget') {
+					// Only allow source->target traversal
+					if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
+				} else {
+					// Allow both directions (legacy fallback)
+					if (isAllowedNode(e.target, targetData)) addEdge(e.source, e.target, targetData);
+					if (isAllowedNode(e.source, sourceData)) addEdge(e.target, e.source, sourceData);
 				}
-			}
-			if (distances[currNode] === Infinity) break;
-			if (currNode === targetId) break;
-			unvisited.delete(currNode);
-			let neighborsList = adjList[currNode] || [];
-			for (let neighbor of neighborsList) {
-				if (unvisited.has(neighbor.node)) {
-					let alt = distances[currNode] + neighbor.weight;
-					if (alt < distances[neighbor.node]) {
-						distances[neighbor.node] = alt;
-						previous[neighbor.node] = currNode;
+			});
+			let distances = {},
+				previous = {},
+				unvisited = new Set(nodes.map(n => n.id));
+			nodes.forEach(n => distances[n.id] = Infinity);
+			distances[rootId] = 0;
+			while (unvisited.size > 0) {
+				let currNode = null;
+				for (let id of unvisited) {
+					if (currNode === null || distances[id] < distances[currNode]) {
+						currNode = id;
+					}
+				}
+				if (distances[currNode] === Infinity) break;
+				if (currNode === targetId) break;
+				unvisited.delete(currNode);
+				let neighborsList = adjList?.[currNode] ?? [];
+				for (let neighbor of neighborsList) {
+					if (unvisited.has(neighbor.node)) {
+						let alt = distances[currNode] + neighbor.weight;
+						if (alt < distances[neighbor.node]) {
+							distances[neighbor.node] = alt;
+							previous[neighbor.node] = currNode;
+						}
 					}
 				}
 			}
-		}
-		if (distances[targetId] === Infinity) return null;
-		let path = [],
-			curr = targetId;
-		while (curr) {
-			path.unshift(curr);
-			curr = previous[curr];
-		}
-		return path;
-	};
+			if (distances[targetId] === Infinity) return null;
+			let path = [],
+				curr = targetId;
+			while (curr) {
+				path.unshift(curr);
+				curr = previous[curr];
+			}
+			return path;
+		};
 	let path = findPathDirected('targetToSource', false);
 	if (!path) path = findPathDirected('targetToSource', true);
 	if (!path) path = findPathDirected('sourceToTarget', false);
 	if (!path) path = findPathDirected('sourceToTarget', true);
 	if (!path) path = findPathDirected('both', false);
 	if (!path) path = findPathDirected('both', true);
-	return path || [targetId];
+	return path ?? [targetId];
 }
 
 function updateBreadcrumbs(centerId) {
@@ -2599,10 +2637,10 @@ function calcNodePositionPetal({ currentDepthShown, nodesByDepth, parentId, cent
 				isCenter = true;
 			if (d > 1) {
 				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
-				if (pData && pData.x !== undefined && pData.y !== undefined) {
+				if (pData?.x != null && pData?.y != null) {
 					px = pData.x;
 					py = pData.y;
-					pAngle = pData.angle || 0;
+					pAngle = pData?.angle ?? 0;
 					isCenter = false;
 				}
 			}
@@ -2684,21 +2722,19 @@ function physicsTick() {
 		n.fx = 0;
 		n.fy = 0;
 	});
-	if (physics.edges && physics.edges.length > 0) {
+	if ((physics?.edges?.length ?? 0) > 0) {
 		physics.edges.forEach(edge => {
-			let nSource = physics.nodes.find(n => n.node.id === edge.source),
-				nTarget = physics.nodes.find(n => n.node.id === edge.target);
-			if (nSource && nTarget && nSource.x !== undefined && nTarget.x !== undefined) {
+			let nSource = physics?.nodes?.find(n => n?.node?.id === edge?.source),
+				nTarget = physics?.nodes?.find(n => n?.node?.id === edge?.target);
+			if (nSource != null && nTarget != null && nSource?.x != null && nTarget?.x != null) {
 				const
-					edgeType = edge.type || 'anatomy',
-					targetDepth = (nTarget.depth !== undefined ? nTarget.depth : 1) || 1,
-					depthMult = Math.max(1, targetDepth * (physicsOptions.depthLength !== undefined ? physicsOptions.depthLength : 0.5)),
-					depthPullStep = (physicsOptions.depthPull !== undefined ? physicsOptions.depthPull : 0.25),
+					edgeType = edge.type ?? 'anatomy',
+					targetDepth = nTarget?.depth ?? 1,
+					depthMult = Math.max(1, targetDepth * (physicsOptions?.depthLength ?? 0.5)),
+					depthPullStep = physicsOptions?.depthPullStep ?? 0.5,
 					depthPullMult = Math.max(1, 1 + ((targetDepth - 1) * depthPullStep)),
-					elastic = (physicsOptions.linePull[edgeType] !== undefined
-						? physicsOptions.linePull[edgeType]
-						: physicsOptions.linePull['@default']) * depthPullMult,
-					dynamicElastic = (nSource.isDragging || nTarget.isDragging) ? 5.0 : elastic;
+					elastic = (physicsOptions?.linePull?.[edgeType] ?? physicsOptions?.linePull?.['@default']) * depthPullMult,
+					dynamicElastic = ((nSource?.isDragging ?? false) || (nTarget?.isDragging ?? false)) ? 5.0 : elastic;
 				let dx = nTarget.x - nSource.x,
 					dy = nTarget.y - nSource.y,
 					dist = Math.sqrt(dx * dx + dy * dy);
@@ -2707,15 +2743,13 @@ function physicsTick() {
 					dy = Math.random() * 0.1;
 					dist = Math.sqrt(dx * dx + dy * dy);
 				}
-				const lengthVal = (physicsOptions.lineLength[edgeType] !== undefined
-					? physicsOptions.lineLength[edgeType]
-					: physicsOptions.lineLength['@default']) * depthMult;
+				const lengthVal = (physicsOptions?.lineLength?.[edgeType] ?? physicsOptions?.lineLength?.['@default']) * depthMult;
 				let stretch = dist - lengthVal,
-					tp = physicsOptions.targetPull !== undefined ? physicsOptions.targetPull : 1,
-					sp = physicsOptions.sourcePull !== undefined ? physicsOptions.sourcePull : 1,
-					springMult = physicsOptions.springMultiplier !== undefined ? physicsOptions.springMultiplier : 5.0,
+					tp = physicsOptions?.targetPull ?? 1,
+					sp = physicsOptions?.sourcePull ?? 1,
+					springMult = physicsOptions?.springMultiplier ?? 5.0,
 					pullForce = stretch * dynamicElastic * temperature * springMult;
-				const forceCap = physicsOptions.forceCap !== undefined ? physicsOptions.forceCap : 3000;
+				const forceCap = physicsOptions?.forceCap ?? 3000;
 				if (pullForce > forceCap) pullForce = forceCap;
 				if (pullForce < -forceCap) pullForce = -forceCap;
 				let pullX = -(dx / dist) * pullForce,
@@ -2732,15 +2766,15 @@ function physicsTick() {
 		});
 	}
 	physics.nodes.forEach(n1 => {
-		if (n1.x === undefined || n1.y === undefined) return;
-		let gravity = physicsOptions.centerGravity !== undefined ? physicsOptions.centerGravity : 0.01;
+		if (n1?.x == null || n1?.y == null) return;
+		let gravity = physicsOptions.centerGravity ?? 0.01;
 		n1.fx += (n1.tx - n1.x) * gravity * temperature;
 		n1.fy += (n1.ty - n1.y) * gravity * temperature;
 	});
 	physics.nodes.forEach(n1 => {
-		if (n1.x === undefined || n1.y === undefined) return;
+		if (n1?.x == null || n1?.y == null) return;
 		physics.nodes.forEach(n2 => {
-			if (n1 === n2 || n2.x === undefined) return;
+			if (n1 === n2 || n2?.x == null) return;
 			let rdx = n1.x - n2.x,
 				rdy = n1.y - n2.y,
 				distSq = rdx*rdx + rdy*rdy;
@@ -2748,7 +2782,7 @@ function physicsTick() {
 				let safeDistSq = Math.max(distSq, physicsOptions.minOverlapDistSq),
 					dist = Math.sqrt(safeDistSq),
 					force = (physicsOptions.nodeRepulsion / safeDistSq) * temperature;
-				const maxRepulsion = physicsOptions.maxRepulsion !== undefined ? physicsOptions.maxRepulsion : 1500;
+				const maxRepulsion = physicsOptions.maxRepulsion ?? 1500;
 				if (force > maxRepulsion) force = maxRepulsion;
 				let edgeTaper = 1 - (dist / Math.sqrt(physicsOptions.nodeGapSq));
 				force *= Math.max(0, edgeTaper);
@@ -2759,8 +2793,8 @@ function physicsTick() {
 	});
 	physics.nodes.forEach(n1 => {
 		if (n1.isDragging || n1.isPinned) return;
-		n1.vx = (n1.vx || 0) * physicsOptions.damping + n1.fx * physicsOptions.forceMultiplier;
-		n1.vy = (n1.vy || 0) * physicsOptions.damping + n1.fy * physicsOptions.forceMultiplier;
+		n1.vx = (n1.vx ?? 0) * physicsOptions.damping + n1.fx * physicsOptions.forceMultiplier;
+		n1.vy = (n1.vy ?? 0) * physicsOptions.damping + n1.fy * physicsOptions.forceMultiplier;
 		const maxV = physicsOptions.maxVelocity;
 		if (n1.vx > maxV) n1.vx = maxV; else if (n1.vx < -maxV) n1.vx = -maxV;
 		if (n1.vy > maxV) n1.vy = maxV; else if (n1.vy < -maxV) n1.vy = -maxV;
@@ -2790,7 +2824,7 @@ function physicsTick() {
 
 function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, centerX, centerY, baseRadius, edgesToRender }) {
 	physics.nodes = [],
-	physics.edges = edgesToRender || [];
+	physics.edges = edgesToRender ?? [];
 	physicsOptions.alpha = 1.0; // Reset simulation heat on new layout
 	physics.nodes.push({
 		node: { id: current.centerId },
@@ -2823,8 +2857,8 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 			let px = centerX, py = centerY, pAngle = 0, isCenter = true;
 			if (d > 1) {
 				const pData = nodesByDepth[d - 1].find(pn => pn.node.id === pId);
-				if (pData && pData.tx !== undefined && pData.ty !== undefined) {
-					px = pData.tx; py = pData.ty; pAngle = pData.angle || 0; isCenter = false;
+				if (pData?.tx != null && pData?.ty != null) {
+					px = pData.tx; py = pData.ty; pAngle = pData?.angle ?? 0; isCenter = false;
 				}
 			}
 			const
@@ -2833,9 +2867,7 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 			children.forEach((nData, index) => {
 				const el = document.getElementById(`node-${nData.node.id}`);
 				if (!el) return;
-				const lengthVal = physicsOptions.lineLength[nData.edgeType] !== undefined
-						? physicsOptions.lineLength[nData.edgeType]
-						: physicsOptions.lineLength['@default'],
+				const lengthVal = physicsOptions?.lineLength?.[nData.edgeType] ?? physicsOptions?.lineLength?.['@default'],
 					requiredArcLength = children.length * petalOptions.requiredArcPerChildPx,
 					sizeMultiplier = petalOptions.depthRadiusMultiplierStart + (d - 1) * petalOptions.depthRadiusMultiplierStep,
 					startingRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread),
@@ -2867,15 +2899,17 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 					startY = py + startingRadius * Math.sin(angle);
 				nData.tx = px + targetDynamicRadius * Math.cos(angle);
 				nData.ty = py + targetDynamicRadius * Math.sin(angle);
-				if (nData.x === undefined || wasHidden) {
+				if (nData?.x == null || wasHidden) {
 					nData.x = startX;
 					nData.y = startY;
 					nData.vx = 0; nData.vy = 0;
 					el.style.left = `${startX}px`;
 					el.style.top = `${startY}px`;
 				} else {
-					nData.x = parseFloat(el.style.left) || startX;
-					nData.y = parseFloat(el.style.top) || startY;
+					const parsedLeft = parseFloat(el.style.left),
+						parsedTop = parseFloat(el.style.top);
+					nData.x = Number.isFinite(parsedLeft) ? parsedLeft : startX;
+					nData.y = Number.isFinite(parsedTop) ? parsedTop : startY;
 				}
 				const delay = (d - 1) * 100 + index * 30;
 				setTimeout(() => {
@@ -2901,33 +2935,35 @@ function renderGraph(centerId) {
 		locked.edges = new Set();
 	}
 	current.centerId = centerId;
-	current.view = viewSelect?.value || 'petal';
+	current.view = viewSelect?.value ?? 'petal';
 	const
-		emSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16,
+		fontSizeRaw = parseFloat(getComputedStyle(document.documentElement).fontSize),
+		emSize = Number.isFinite(fontSizeRaw) ? fontSizeRaw : 16,
 		centerX = window.innerWidth / 2,
 		centerY = (window.innerHeight / 2) + (3 * emSize),
 		path = getBreadcrumbPath(centerId),
-		parentId = path && path.length > 1 ? path[path.length - 2] : null,
+		parentId = path?.length > 1 ? path[path.length - 2] : null,
 		centerNodeData = nodes.find(n => n.id === centerId);
 	updateBreadcrumbs(centerId);
-	nodeName.textContent = centerNodeData?.name || centerId;
-	nodeContent.textContent = descriptions[centerId] || '';
+	nodeName.textContent = centerNodeData?.name ?? centerId;
+	nodeContent.textContent = descriptions?.[centerId] ?? '';
 	nodeLinks.replaceChildren();
-	if (sources[centerId]) {
-		sources[centerId].forEach(source => {
+	if (sources?.[centerId]) {
+		sources?.[centerId].forEach(source => {
 			const clone = descriptionSourceTemplate.content.cloneNode(true),
 				linkEl = clone.querySelector('a');
-			linkEl.href = source.url;
-			linkEl.textContent = source.name;
+			linkEl.href = source?.url ?? '#';
+			linkEl.textContent = source?.name ?? 'Source';
 			nodeLinks.append(clone);
 		});
 	}
-	if (descriptions[centerId]) {
+	if (descriptions?.[centerId]) {
 		nodeDescription.classList.add('visible');
 	} else {
 		nodeDescription.classList.remove('visible');
 	}
-	let currentDepthShown = parseInt(depthDropdown.value, 10) || 1,
+	const parsedDepth = parseInt(depthDropdown.value, 10);
+	let currentDepthShown = Number.isFinite(parsedDepth) ? parsedDepth : 1,
 	{ visitedNodes, visitedEdges, nodesByDepth, edgesToRender } = Bang.extractGraph(
 		centerId,
 		currentDepthShown,
@@ -2937,7 +2973,7 @@ function renderGraph(centerId) {
 		checkTypeFilter
 	);
 	if (parentId) {
-		const pIdx = nodesByDepth[1].findIndex(item => item.node.id === parentId);
+		const pIdx = nodesByDepth?.[1]?.findIndex(item => item?.node?.id === parentId) ?? -1;
 		if (pIdx > 0) {
 			nodesByDepth[1].unshift(nodesByDepth[1].splice(pIdx, 1)[0]);
 		}
@@ -2959,12 +2995,12 @@ function renderGraph(centerId) {
 	if (!centerEl) return;
 	centerEl.classList.remove('hidden');
 	centerEl.classList.add('current');
-	const centerMatches = checkTrait(centerNodeData.trait);
+	const centerMatches = checkTrait(centerNodeData?.trait);
 	if (!centerMatches) centerEl.classList.add('ghosted');
 	let renderCenterY = centerY,
 		renderParentY = null;
 	if (current.view === 'stacked') {
-		const centerH = centerEl.offsetHeight || (7.5 * emSize);
+		const centerH = centerEl.offsetHeight > 0 ? centerEl.offsetHeight : (7.5 * emSize);
 		renderParentY = (stackOptions.parentTopEm * emSize) + (centerH / 2);
 		renderCenterY = renderParentY + centerH + (stackOptions.parentSelectedGapEm * emSize);
 	}
@@ -2975,9 +3011,11 @@ function renderGraph(centerId) {
 		const urlParams = new URL(window.location).searchParams;
 		if (!previous.centerId) {
 			if (urlZ && urlParams.has('z')) {
-				current.zoom = parseFloat(urlParams.get('z')) || 1;
+				const parsedZoom = parseFloat(urlParams.get('z'));
+				current.zoom = Number.isFinite(parsedZoom) ? parsedZoom : 1;
 			} else if (urlZ && urlParams.has('zoom')) {
-				current.zoom = parseFloat(urlParams.get('zoom')) || 1;
+				const parsedZoom = parseFloat(urlParams.get('zoom'));
+				current.zoom = Number.isFinite(parsedZoom) ? parsedZoom : 1;
 			} else {
 				current.zoom = 1;
 			}
@@ -3093,13 +3131,13 @@ const requestPanZoomUpdate = () => {
 const updateVisualViewportBottomOffset = () => {
 	const vv = window.visualViewport;
 	if (!vv) {
-		document.documentElement.style.setProperty('--vv-bottom-offset', '0px');
+		document?.documentElement?.style?.setProperty('--vv-bottom-offset', '0px');
 		return;
 	}
 	const
 		visualBottom = vv.offsetTop + vv.height,
 		overlap = Math.max(0, window.innerHeight - visualBottom);
-	document.documentElement.style.setProperty('--vv-bottom-offset', `${overlap}px`);
+	document?.documentElement?.style?.setProperty('--vv-bottom-offset', `${overlap}px`);
 };
 
 if (window.visualViewport) {
@@ -3131,8 +3169,18 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 	requestPanZoomUpdate();
 };
 
+const isInUiChrome = (target, includeDescription = false) => {
+	if (target?.closest?.('#top-bar') != null) return true;
+	if (target?.closest?.('#legend') != null) return true;
+	if (target?.closest?.('#mobile-bar') != null) return true;
+	if (target?.closest?.('#results') != null) return true;
+	if (target?.closest?.('footer') != null) return true;
+	if (includeDescription && target?.closest?.('#description') != null) return true;
+	return false;
+};
+
 appContainer.addEventListener('wheel', (e) => {
-	if (e.target.closest('#results') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('footer')) return;
+	if (isInUiChrome(e?.target, false)) return;
 	e.preventDefault();
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
 	setZoomAt(current.zoom * zoomDelta, e.clientX, e.clientY);
@@ -3142,7 +3190,7 @@ appContainer.addEventListener('wheel', (e) => {
 
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
-	if (e.target.closest('.card') || e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#results') || e.target.closest('footer')) return;
+	if (e?.target?.closest?.('.card') != null || isInUiChrome(e?.target, false)) return;
 	is.graphPanning = true;
 	startPan.x = e.clientX;
 	startPan.y = e.clientY;
@@ -3197,10 +3245,10 @@ document.addEventListener('keydown', (e) => {
 			console.log('Locking hover lock for node:', nodeId);
 			// Lock current hover
 			locked.node = nodeId;
-			locked.nodes = hoveredCard._relatedNodes || new Set();
-			locked.edges = hoveredCard._relatedEdges || new Set();
+			locked.nodes = hoveredCard._relatedNodes ?? new Set();
+			locked.edges = hoveredCard._relatedEdges ?? new Set();
 			// If there was a previous lock, show the new related items
-			if (locked.nodes && locked.edges) {
+			if (locked?.nodes != null && locked?.edges != null) {
 				document.querySelectorAll('.card').forEach(el => {
 					if (locked.nodes.has(el)) {
 						el.classList.add('related');
@@ -3233,8 +3281,8 @@ const getTwoPointers = () => {
 
 graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.pointerType !== 'touch') return;
-	if (e.target.closest('.card')) return;
-	if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#description') || e.target.closest('#results') || e.target.closest('footer')) return;
+	if (e?.target?.closest?.('.card')) return;
+	if (isInUiChrome(e?.target, true)) return;
 	e.preventDefault();
 	try {
 		graphContainer.setPointerCapture(e.pointerId);
@@ -3317,13 +3365,13 @@ graphContainer.addEventListener('pointercancel', (e) => {
 
 if (!('PointerEvent' in window)) {
 	const getTouchPair = (touches) => {
-		if (!touches || touches.length < 2) return null;
+		if ((touches?.length ?? 0) < 2) return null;
 		return [touches[0], touches[1]];
 	};
 	graphContainer.addEventListener('touchstart', (e) => {
-		if (e.target.closest('.card')) return;
-		if (e.target.closest('#top-bar') || e.target.closest('#legend') || e.target.closest('#mobile-bar') || e.target.closest('#description') || e.target.closest('#results') || e.target.closest('footer')) return;
-		if (!e.touches || e.touches.length === 0) return;
+		if (e?.target?.closest?.('.card')) return;
+		if (isInUiChrome(e?.target, true)) return;
+		if ((e?.touches?.length ?? 0) === 0) return;
 		e.preventDefault();
 		if (e.touches.length === 1) {
 			window.__isTouchPinching = false;
@@ -3346,7 +3394,7 @@ if (!('PointerEvent' in window)) {
 		}
 	}, { passive: false });
 	graphContainer.addEventListener('touchmove', (e) => {
-		if (!e.touches || e.touches.length === 0) return;
+		if ((e?.touches?.length ?? 0) === 0) return;
 		e.preventDefault();
 		if (window.__isTouchPinching && e.touches.length >= 2) {
 			const pair = getTouchPair(e.touches);
@@ -3376,10 +3424,10 @@ if (!('PointerEvent' in window)) {
 	}, { passive: false });
 	graphContainer.addEventListener('touchend', (e) => {
 		e.preventDefault();
-		if (!e.touches || e.touches.length < 2) {
+		if ((e?.touches?.length ?? 0) < 2) {
 			window.__isTouchPinching = false;
 		}
-		if (!e.touches || e.touches.length === 0) {
+		if ((e?.touches?.length ?? 0) === 0) {
 			is.touchFallbackPanning = false;
 		}
 	}, { passive: false });
