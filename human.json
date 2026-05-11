@@ -85,8 +85,11 @@
 				"key": "shared",
 				"name": "Shared",
 				"items": [
-					"shared"
-				]
+					"shared",
+					"female",
+					"male"
+				],
+				"default": true
 			},
 			{
 				"key": "female",
@@ -896,7 +899,7 @@
 			"name": "Inner Thighs",
 			"content": "Sensitive skin highly reactive proximal to the genitals",
 			"type": "anatomy",
-			"category": "region",
+			"category": "sexual",
 			"trait": "shared"
 		},
 		{
@@ -950,9 +953,9 @@
 		{
 			"id": "genital",
 			"name": "Genital",
-			"content": "Area containing the reproductive organs",
+			"content": "Area containing the genitalia, highly sensitive and central to sexual function",
 			"type": "anatomy",
-			"category": "region",
+			"category": "sexual",
 			"trait": "shared"
 		},
 		{
@@ -1971,7 +1974,7 @@
 			"id": "climax",
 			"name": "Shared Climax",
 			"content": "Shared physiological peak of sexual arousal and the threshold of inevitability.",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -1979,7 +1982,7 @@
 			"id": "male_climax",
 			"name": "Male Climax",
 			"content": "The peak of sexual arousal in males, often marked by the sensation of ejaculatory inevitability.",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -1987,7 +1990,7 @@
 			"id": "female_climax",
 			"name": "Female Climax",
 			"content": "The peak of sexual arousal in females, immediately preceding and triggering orgasmic contractions.",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2019,7 +2022,7 @@
 			"id": "female_orgasm",
 			"name": "Female Orgasm",
 			"content": "Full orgasm experience in anatomical females.",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2027,7 +2030,7 @@
 			"id": "male_orgasm",
 			"name": "Male Orgasm",
 			"content": "Full orgasm experience in anatomical males.",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2043,7 +2046,7 @@
 			"id": "female_clitoral_orgasm",
 			"name": "Clitoral Orgasm",
 			"content": "Orgasm primarily triggered by direct or indirect clitoral stimulation",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2051,7 +2054,7 @@
 			"id": "female_vaginal_orgasm",
 			"name": "Vaginal Orgasm",
 			"content": "Orgasm triggered by internal vaginal stimulation",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2059,7 +2062,7 @@
 			"id": "female_blended_orgasm",
 			"name": "Blended Orgasm",
 			"content": "Simultaneous clitoral and vaginal/cervical orgasm",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2067,7 +2070,7 @@
 			"id": "female_cervical_orgasm",
 			"name": "Cervical Orgasm",
 			"content": "Deep, full-body orgasm from stimulation of the cervix",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2075,7 +2078,7 @@
 			"id": "female_ejaculation_orgasm",
 			"name": "Female Ejaculation Orgasm",
 			"content": "Orgasm accompanied by expulsion of fluid from the Skene's glands",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2083,7 +2086,7 @@
 			"id": "male_prostatic_orgasm",
 			"name": "Prostatic Orgasm",
 			"content": "Deep, wave-like orgasm from prostate (P-spot) stimulation",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2091,7 +2094,7 @@
 			"id": "male_ejaculatory_orgasm",
 			"name": "Ejaculatory Orgasm",
 			"content": "Male orgasm accompanied by rhythmic contractions and expulsion of semen",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2099,7 +2102,7 @@
 			"id": "male_dry_orgasm",
 			"name": "Dry Orgasm (Non-Ejaculatory)",
 			"content": "Full orgasmic contractions and intense pleasure without semen expulsion",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2107,7 +2110,7 @@
 			"id": "male_ejaculation_without_orgasm",
 			"name": "Ejaculation Without Orgasm",
 			"content": "Physical expulsion of semen without the pleasurable orgasmic peak",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2115,7 +2118,7 @@
 			"id": "male_ejaculation",
 			"name": "Ejaculation",
 			"content": "Release of semen during male orgasm",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2123,7 +2126,7 @@
 			"id": "female_anal_orgasm",
 			"name": "Female Anal Orgasm",
 			"content": "Orgasm from anal stimulation in females, often involving pudendal pathways and pelvic floor contraction",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2131,7 +2134,7 @@
 			"id": "male_anal_orgasm",
 			"name": "Male Anal Orgasm",
 			"content": "Orgasm from anal stimulation in males, often linked to prostate and pelvic nerve activation",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2139,7 +2142,7 @@
 			"id": "sexual_pleasure",
 			"name": "Shared Sexual Pleasure",
 			"content": "Shared experience of erotic reward and pleasurable sexual sensation",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2147,7 +2150,7 @@
 			"id": "female_sexual_pleasure",
 			"name": "Female Sexual Pleasure",
 			"content": "Pleasure pathways in females shaped by clitoral, vaginal, pelvic, and cognitive inputs",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2155,7 +2158,7 @@
 			"id": "male_sexual_pleasure",
 			"name": "Male Sexual Pleasure",
 			"content": "Pleasure pathways in males shaped by penile, prostatic, pelvic, and cognitive inputs",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2163,7 +2166,7 @@
 			"id": "nipple_orgasm",
 			"name": "Nipple Orgasm",
 			"content": "Orgasmic response that may occur with intense nipple and areolar stimulation",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2171,7 +2174,7 @@
 			"id": "exercise_induced_orgasm",
 			"name": "Exercise-Induced Orgasm",
 			"content": "Orgasm or orgasm-like release associated with specific core or pelvic exertion",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2179,7 +2182,7 @@
 			"id": "sleep_orgasm",
 			"name": "Sleep Orgasm",
 			"content": "Nocturnal orgasm occurring during sleep-associated arousal states",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2187,7 +2190,7 @@
 			"id": "multiple_orgasm",
 			"name": "Multiple Orgasm",
 			"content": "Successive orgasms with minimal or no refractory period.",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2195,7 +2198,7 @@
 			"id": "refractory_period",
 			"name": "Refractory Period",
 			"content": "Recovery phase after orgasm in which further sexual stimulation does not easily produce another climax",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2243,7 +2246,7 @@
 			"id": "male_penile_erection",
 			"name": "Penile Erection",
 			"content": "Vasocongestion and engorgement of penile erectile tissue triggered by nitric oxide and pelvic nerves",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2251,7 +2254,7 @@
 			"id": "female_lubrication",
 			"name": "Vaginal Lubrication",
 			"content": "Transudation of plasma fluid through vaginal walls plus Bartholin and Skene secretions during arousal",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2259,7 +2262,7 @@
 			"id": "arousal",
 			"name": "Sexual Arousal",
 			"content": "Physiological and psychological state of heightened sexual readiness common to all humans",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2267,7 +2270,7 @@
 			"id": "vasocongestion",
 			"name": "Vasocongestion",
 			"content": "Increased blood flow to genital tissues producing swelling, erection, and lubrication",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2315,7 +2318,7 @@
 			"id": "sexual_response_cycle",
 			"name": "Sexual Response Cycle",
 			"content": "Excitement \u2192 Plateau \u2192 Orgasm \u2192 Resolution (Masters & Johnson model, applies to all genders)",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2323,7 +2326,7 @@
 			"id": "myotonia",
 			"name": "Myotonia",
 			"content": "Increased muscle tension throughout the body during the plateau phase",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2331,7 +2334,7 @@
 			"id": "plateau_phase",
 			"name": "Plateau Phase",
 			"content": "Sustained high arousal with maximal vasocongestion and rhythmic breathing",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "shared"
 		},
@@ -2339,7 +2342,7 @@
 			"id": "male_refractory_period_length",
 			"name": "Male Refractory Period",
 			"content": "Typical 15\u201330 minutes (longer with age) during which another erection/orgasm is difficult",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "male"
 		},
@@ -2347,7 +2350,7 @@
 			"id": "female_refractory_period",
 			"name": "Female Refractory Period",
 			"content": "Often minimal or absent, enabling multiple orgasms in quick succession",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -2355,7 +2358,7 @@
 			"id": "female_clitoral_erection",
 			"name": "Clitoral Erection",
 			"content": "Engorgement of the clitoral body, crura, and vestibular bulbs during arousal",
-			"type": "anatomy",
+			"type": "sexual",
 			"category": "sexual",
 			"trait": "female"
 		},
@@ -3319,6 +3322,11 @@
 		{
 			"source": "male_genital",
 			"target": "male_penis",
+			"type": "anatomy"
+		},
+		{
+			"source": "male_genital",
+			"target": "male_scrotum",
 			"type": "anatomy"
 		},
 		{
