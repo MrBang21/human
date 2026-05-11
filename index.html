@@ -2546,6 +2546,7 @@ function getBreadcrumbPath(targetId) {
 function updateBreadcrumbs(centerId) {
 	const path = getBreadcrumbPath(centerId);
 	breadcrumbs.replaceChildren();
+	let currentCrumb = null;
 	path.forEach((nodeId, index) => {
 		const nodeData = nodes.find(n => n.id === nodeId);
 		if (!nodeData) return;
@@ -2555,6 +2556,7 @@ function updateBreadcrumbs(centerId) {
 		span.textContent = nodeData.name;
 		if (isLast) {
 			span.className = 'current';
+			currentCrumb = span;
 		} else {
 			span.className = 'item';
 			span.onclick = () => {
@@ -2570,6 +2572,11 @@ function updateBreadcrumbs(centerId) {
 			breadcrumbs.append(separator);
 		}
 	});
+	if (currentCrumb) {
+		requestAnimationFrame(() => {
+			currentCrumb.scrollIntoView({ block: 'nearest', inline: 'end' });
+		});
+	}
 }
 
 function calcNodePositionPetal({ currentDepthShown, nodesByDepth, parentId, centerX, centerY, baseRadius }) {
