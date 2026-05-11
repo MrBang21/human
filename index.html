@@ -3264,8 +3264,8 @@ graphContainer.addEventListener('pointermove', (e) => {
 		if (!pair) return;
 		const
 			d = Math.max(1, Bang.dist2(pair[0], pair[1])),
-			ratio = d / touchPinchStartDist,
-			newZoom = Bang.clamp(touchPinchStartZoom * ratio, minZoom, maxZoom),
+			ratio = d / Math.max(1, touch.pinch.start.distance),
+			newZoom = Bang.clamp(touch.pinch.start.zoom * ratio, minZoom, maxZoom),
 			midClientX = (pair[0].x + pair[1].x) / 2,
 			midClientY = (pair[0].y + pair[1].y) / 2,
 			rect = appContainer.getBoundingClientRect(),
@@ -3320,7 +3320,7 @@ if (!('PointerEvent' in window)) {
 		e.preventDefault();
 		if (e.touches.length === 1) {
 			window.__isTouchPinching = false;
-			is.touch.fallbackPanning = true;
+			is.touchFallbackPanning = true;
 			touch.fallback.start.x = e.touches[0].clientX;
 			touch.fallback.start.y = e.touches[0].clientY;
 			touch.fallback.initial.x = pan.x;
@@ -3329,7 +3329,7 @@ if (!('PointerEvent' in window)) {
 		}
 		if (e.touches.length >= 2) {
 			window.__isTouchPinching = true;
-			is.touch.fallbackPanning = false;
+			is.touchFallbackPanning = false;
 			const pair = getTouchPair(e.touches);
 			if (!pair) return;
 			touch.fallback.pinch.start.distance = Math.max(1, Bang.dist2({ x: pair[0].clientX, y: pair[0].clientY }, { x: pair[1].clientX, y: pair[1].clientY }));
@@ -3361,7 +3361,7 @@ if (!('PointerEvent' in window)) {
 			requestPanZoomUpdate();
 			return;
 		}
-		if (is.touch.fallbackPanning && e.touches.length === 1) {
+		if (is.touchFallbackPanning && e.touches.length === 1) {
 			pan.x = touch.fallback.initial.x + (e.touches[0].clientX - touch.fallback.start.x);
 			pan.y = touch.fallback.initial.y + (e.touches[0].clientY - touch.fallback.start.y);
 			requestPanZoomUpdate();
@@ -3373,13 +3373,13 @@ if (!('PointerEvent' in window)) {
 			window.__isTouchPinching = false;
 		}
 		if (!e.touches || e.touches.length === 0) {
-			is.touch.fallbackPanning = false;
+			is.touchFallbackPanning = false;
 		}
 	}, { passive: false });
 	graphContainer.addEventListener('touchcancel', (e) => {
 		e.preventDefault();
 		window.__isTouchPinching = false;
-		is.touch.fallbackPanning = false;
+		is.touchFallbackPanning = false;
 	}, { passive: false });
 }
 
