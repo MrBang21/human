@@ -102,8 +102,17 @@
 	--icon-l: 0.7;
 	--icon-c: 0.14;
 
-	--selected-l: 0.8;
-	--selected-c: 0.11;
+	--current-l: 0.8;
+	--current-c: 0.11;
+
+	--parent-l: 0.7;
+	--parent-c: 0.05;
+
+	--related-l: 0.75;
+	--related-c: 0.1;
+
+	--unrelated-l: 0.8;
+	--unrelated-c: 0.05;
 
 	--accent-l: 0.7;
 	--accent-c: 0.11;
@@ -142,18 +151,8 @@
 	--url: oklch(var(--accent-l) var(--accent-c) var(--hue-url));
 	--url-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url));
 
-	@media (prefers-reduced-transparency: no-preference) {
-		@supports (backdrop-filter: blur(0)) {
-			--backdrop: blur(2em);
-			--block: oklch(var(--block-l) var(--block-c) var(--block-h) / 0.2);
-			--card: oklch(var(--card-l) var(--card-c) var(--card-h) / 0.01);
-			--input: oklch(var(--input-l) var(--input-c) var(--input-h) / 0.8);
-			--button: oklch(var(--button-l) var(--button-c) var(--button-h) / 0.8);
-			--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / 0.8);
-			--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / 0.8);
-		}
-	}
 }
+
 
 @media (prefers-color-scheme: dark) {
 	:root {
@@ -196,7 +195,7 @@
 		--node-l: 0.95;
 		--node-related-l: 0.95;
 
-		--selected-l: 0.85;
+		--current-l: 0.85;
 	}
 }
 
@@ -242,18 +241,18 @@ body,
 	height: 100svh;
 }
 
-#graph-container,
-#lines-layer,
+#graph,
+#edges-layer,
 #nodes-layer {
 	position: fixed;
 	inset: 0;
 	z-index: 0;
 }
-#graph-container {
+#graph {
 	/* Enable custom pan/zoom gestures on touch devices */
 	touch-action: none;
 }
-#lines-layer {
+#edges-layer {
 	z-index: 1;
 	pointer-events: none;
 	overflow: visible;
@@ -272,11 +271,9 @@ body,
 	will-change: transform;
 }
 
-#lines-zoom {
+#edges-zoom {
 	transform-origin: 0 0;
 }
-
-
 
 .card {
 	position: fixed;
@@ -293,45 +290,76 @@ body,
 	cursor: grab;
 	text-align: center;
 	translate: -50% -50%;
-	transform-origin: center;
+	transform-origin: top center;
 	transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), scale 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease-out, opacity 0.6s ease-out, box-shadow 0.2s ease-out;
 
 	&.dragging {
 		transition: scale 0.2s ease-out, box-shadow 0.2s ease-out !important;
 	}
-
 	&:active {
 		cursor: grabbing;
 	}
-
 	&.hidden {
 		opacity: 0;
 		pointer-events: none;
 	}
-
 	&.target {
 		z-index: 2;
 		scale: 1.0;
 	}
-
 	&.source {
 		z-index: 1;
 		scale: 0.9;
 	}
-
-	&.parent {
-		z-index: 0;
-		scale: 0.8;
-		filter: saturate(0.5);
+	&.current {
+		--node-l: var(--current-l);
+		--node-c: var(--current-c);
+		scale: 1.025;
+		min-width: 14em;
+		z-index: 100;
+		&:hover {
+			scale: 1.1;
+		}
 	}
-
+	&.parent {
+		--node-l: var(--parent-l);
+		--node-c: var(--parent-c);
+		z-index: 3;
+	}
+	&.related {
+		--node-l: var(--related-l);
+		--node-c: var(--related-c);
+		z-index: 4;
+	}
+	&.unrelated {
+		--node-l: var(--unrelated-l);
+		--node-c: var(--unrelated-c);
+		z-index: 1;
+		opacity: 0.5;
+	}
+	&.hidden {
+		display: none;
+		opacity: 0;
+		pointer-events: none;
+	}
+	&.dragging {
+		z-index: 1000;
+	}
+	&.ghosted {
+		filter: grayscale(80%);
+	}
+	&.ghosted:hover {
+		filter: grayscale(20%);
+	}
+	&.current.ghosted {
+		filter: grayscale(40%);
+	}
 	&:hover {
-		--node-l: var(--selected-l);
-		--node-c: var(--selected-c);
+		--node-l: var(--current-l);
+		--node-c: var(--current-c);
 		z-index: 5;
 		scale: 1.05;
 	}
-
 	&.trait-male {
 		--_icon-hue: var(--hue-male);
 	}
@@ -341,8 +369,6 @@ body,
 	&.trait-shared {
 		--_icon-hue: var(--hue-shared);
 	}
-
-
 	&.type-root {
 		--_hue: var(--hue-root);
 	}
@@ -370,7 +396,6 @@ body,
 	&.type-energetic {
 		--_hue: var(--hue-energetic);
 	}
-
 	svg {
 		position: absolute;
 		top: -1.5em;
@@ -386,59 +411,15 @@ body,
 		color: oklch(var(--icon-l) var(--icon-c) var(--_icon-hue));
 		pointer-events: none;
 	}
-
 	h3 {
 		margin: 0 0 0.5em 0;
 		font-size: 1.25em;
 		color: oklch(var(--text-l) var(--text-c) var(--_text-hue));
 	}
-
 	p {
 		margin: 0;
 		font-size: 0.95em;
 		color: var(--muted);
-	}
-
-	&.current {
-		--node-l: var(--selected-l);
-		--node-c: var(--selected-c);
-		scale: 1.025;
-		min-width: 14em;
-		z-index: 100;
-		&:hover {
-			scale: 1.1;
-		}
-	}
-
-	&.dragging {
-		z-index: 1000;
-	}
-
-	&.ghosted {
-		filter: grayscale(80%);
-	}
-
-	&.ghosted:hover {
-		filter: grayscale(20%);
-	}
-
-	&.current.ghosted {
-		filter: grayscale(40%);
-	}
-
-	&.related {
-		--node-l: var(--selected-l);
-		--node-c: var(--selected-c);
-		z-index: 4;
-	}
-	&.unrelated {
-		opacity: 0.5;
-		filter: grayscale(100%);
-	}
-	&.hidden {
-		display: none;
-		opacity: 0;
-		pointer-events: none;
 	}
 }
 
@@ -466,10 +447,9 @@ body,
 	overflow: hidden;
 	gap: .25em;
 	align-items: center;
-	flex: 0 1 min-content;
 	> * {
 		white-space: nowrap;
-		flex-shrink: 0;
+		flex: 0 1 min-content;
 	}
 	.item {
 		cursor: pointer;
@@ -526,6 +506,11 @@ select {
 		color: var(--text);
 		cursor: pointer;
 		border: 1px solid var(--border);
+	}
+	&::picker(select) {
+		min-width: 5em;
+		max-width: 10em;
+		width: max-content;
 	}
 	&::picker-icon {
 		color: var(--accent);
@@ -599,7 +584,8 @@ select {
 				&:last-child {
 					border-bottom: none;
 				}
-				&:hover {
+				&:hover,
+				&.selected {
 					background-color: var(--search-hover);
 				}
 				a {
@@ -821,73 +807,64 @@ footer {
 svg {
 	--icon-fill: currentColor;
 	--icon-stroke: currentColor;
+	--_hue: var(--accent-h);
 
 	#arrow-root,
 	.root {
 		--_hue: var(--hue-root);
 		--_width: .3em;
 	}
-
 	#arrow-anatomy,
 	.anatomy {
 		--_hue: var(--hue-anatomy);
 		--_width: .25em;
 	}
-
 	#arrow-nerve,
 	.nerve {
 		--_hue: var(--hue-nerve);
 		--_width: .2em;
 	}
-
 	#arrow-sexual,
 	.sexual {
 		--_hue: var(--hue-sexual);
 		--_width: .2em;
 	}
-
 	#arrow-removed,
 	.removed {
 		--_hue: var(--hue-removed);
 		--_width: .2em;
 		--_dash: 8 16;
 	}
-
 	#arrow-consequence,
 	.consequence {
 		--_hue: var(--hue-consequence);
 		--_width: .2em;
 		--_dash: 4 8;
 	}
-
 	#arrow-benefit,
 	.benefit {
 		--_hue: var(--hue-benefit);
 		--_width: .2em;
 		--_dash: 4 6;
 	}
-
 	#arrow-harm,
 	.harm {
 		--_hue: var(--hue-harm);
 		--_width: .2em;
 		--_dash: 6 8;
 	}
-
 	#arrow-energetic,
 	.energetic {
 		--_hue: var(--hue-energetic);
 		--_width: .15em;
 		--_dash: 6 8;
 	}
-
 	#arrow-homologous,
 	.homologous {
 		--_hue: var(--hue-homologous);
 		--_width: .2em;
 		--_dash: 10 15;
 	}
-
 	path.edge {
 		fill: none;
 		color: oklch(var(--line-l) var(--line-c) var(--_hue));
@@ -906,7 +883,6 @@ svg {
 			opacity: 0.1;
 		}
 	}
-
 	marker,
 	marker path {
 		fill: oklch(var(--node-l) var(--node-c) var(--_hue));
@@ -1109,9 +1085,17 @@ svg {
 	}
 }
 
-@media (prefers-reduced-transparency: no-preference) {
+@supports (backdrop-filter: blur(1em)) {
 	/* turn on backdrop-filter effects and box-shadow */
-
+	:root {
+		--backdrop: blur(2em);
+		--block: oklch(var(--block-l) var(--block-c) var(--block-h) / 0.2);
+		--card: oklch(var(--card-l) var(--card-c) var(--card-h) / 0.01);
+		--input: oklch(var(--input-l) var(--input-c) var(--input-h) / 0.8);
+		--button: oklch(var(--button-l) var(--button-c) var(--button-h) / 0.8);
+		--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / 0.8);
+		--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / 0.8);
+	}
 	#results {
 		box-shadow: 0 .5em 1em 0 var(--shadow);
 		backdrop-filter: var(--backdrop);
@@ -1307,8 +1291,8 @@ svg {
 		<button type="button" data-panel="legend" aria-pressed="false">Legend</button>
 		<button type="button" data-panel="info" aria-pressed="false">Info</button>
 	</div>
-	<div id="graph-container">
-		<svg id="lines-layer">
+	<div id="graph">
+		<svg id="edges-layer">
 			<defs id="svg-defs">
 				<marker id="arrow-root" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
@@ -1347,21 +1331,23 @@ svg {
 				<marker id="arrow-homologous" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
 					<path d="M 2 5 L 4 2 L 4 4 L 6 4 L 6 2 L 8 5 L 6 8 L 6 6 L 4 6 L 4 8 Z" />
 				</marker>
+				<!--
 				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
 					<circle cx="5" cy="5" r="5" />
 				</marker>
 				<marker id="end-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
 					<circle cx="5" cy="5" r="5" />
 				</marker>
+				-->
 			</defs>
-			<g id="lines-zoom"></g>
+			<g id="edges-zoom"></g>
 		</svg>
 		<div id="nodes-layer">
 			<div id="nodes-zoom"></div>
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.4 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.5 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1438,6 +1424,7 @@ let
 	activeMobilePanel = null,
 	activeLineElements = [],
 	resizeTimeout = null,
+	searchIndex = -1,
 	physics = {
 		nodes: [],
 		edges: [],
@@ -1499,12 +1486,13 @@ let
 const
 	urlXY = false,
 	urlZ = true,
+	connectToIcon = true,
 	appContainer = document.getElementById('app'),
-	graphContainer = document.getElementById('graph-container'),
+	graphContainer = document.getElementById('graph'),
 	nodesLayer = document.getElementById('nodes-layer'),
 	nodesZoom = document.getElementById('nodes-zoom'),
-	linesLayer = document.getElementById('lines-layer'),
-	linesZoom = document.getElementById('lines-zoom'),
+	linesLayer = document.getElementById('edges-layer'),
+	edgesZoom = document.getElementById('edges-zoom'),
 	defsHTML = document.getElementById('svg-defs').outerHTML,
 	breadcrumbs = document.getElementById('breadcrumbs'),
 	nodeDescription = document.getElementById('description'),
@@ -1591,8 +1579,8 @@ const
 		energyThreshold: 0.015,
 		alpha: 1.0,
 		alphaCoolDown: 0.001,
-		depthLength: 1,
-		depthPull: 0.8,
+		depthLength: 1.2,
+		depthPull: 10.25,
 	},
 	edgeStyles = {
 		'root': 'url(#arrow-root)',
@@ -1735,10 +1723,11 @@ if (mobileBar) {
 function updateLinesOnce() {
 	activeLineElements.forEach(item => {
 		const
+			iconOffset = connectToIcon ? (el) => el.offsetHeight / 2 : () => 0,
 			sx = Bang.roundPx(parseFloat(item.sourceEl.style.left) || 0),
-			sy = Bang.roundPx(parseFloat(item.sourceEl.style.top) || 0),
+			sy = Bang.roundPx((parseFloat(item.sourceEl.style.top) || 0) - iconOffset(item.sourceEl)),
 			ex = Bang.roundPx(parseFloat(item.targetEl.style.left) || 0),
-			ey = Bang.roundPx(parseFloat(item.targetEl.style.top) || 0),
+			ey = Bang.roundPx((parseFloat(item.targetEl.style.top) || 0) - iconOffset(item.targetEl)),
 			dx = ex - sx,
 			dy = ey - sy,
 			len = Math.hypot(dx, dy) || 1,
@@ -2172,24 +2161,38 @@ function initGraph() {
 }
 
 searchInput.addEventListener('input', (e) => {
-	const term = e.target.value.toLowerCase().trim();
+	const term = e.target.value.trim();
 	if (term.length < 2) {
 		searchResults.style.display = 'none';
+		searchIndex = -1;
 		return;
 	}
+	const regex = new RegExp(`\\b${term}`, 'i');
 	const matches = nodes.filter(n => {
 		const
-			matchesTerm = n.name.toLowerCase().includes(term) || n.content.toLowerCase().includes(term) || (n.aka && n.aka.toLowerCase().includes(term)),
+			matchesTerm = regex.test(n.name) || regex.test(n.content) || (n.aka && regex.test(n.aka)),
 			matchesFilter = checkTrait(n.trait) && checkTypeFilter(n.type);
 		return matchesTerm && matchesFilter;
+	}).sort((a, b) => {
+		const aNameMatch = regex.test(a.name);
+		const bNameMatch = regex.test(b.name);
+		if (aNameMatch !== bNameMatch) {
+			return aNameMatch ? -1 : 1;
+		}
+		return a.name.length - b.name.length;
 	});
+	searchIndex = 0;
 	searchResults.replaceChildren();
 	if (matches.length > 0) {
-		matches.forEach(m => {
+		matches.forEach((m, idx) => {
 			const
 				clone = searchResultTemplate.content.cloneNode(true),
 				itemEl = clone.querySelector('li');
 			itemEl.setAttribute('data-id', m.id);
+			itemEl.setAttribute('data-index', idx);
+			if (idx === searchIndex) {
+				itemEl.classList.add('selected');
+			}
 			clone.querySelector('.name').textContent = m.name;
 			clone.querySelector('.desc').textContent = `${(m.category || 'misc').replace(/_/g, ' ')} • ${m.trait || 'shared'}`;
 			itemEl.addEventListener('click', (ev) => {
@@ -2199,6 +2202,7 @@ searchInput.addEventListener('input', (e) => {
 				renderGraph(id);
 				searchInput.value = '';
 				searchResults.style.display = 'none';
+				searchIndex = -1;
 			});
 			searchResults.append(clone);
 		});
@@ -2212,8 +2216,47 @@ searchInput.addEventListener('input', (e) => {
 		itemEl.style.cursor = 'default';
 		searchResults.append(clone);
 		searchResults.style.display = 'block';
+		searchIndex = -1;
 	}
 });
+
+searchInput.addEventListener('keydown', (e) => {
+	if (e.key === 'ArrowDown') {
+		e.preventDefault();
+		const items = searchResults.querySelectorAll('li[data-index]');
+		if (items.length === 0) return;
+		searchIndex = Math.min(searchIndex + 1, items.length - 1);
+		updateSearchSelection(items);
+	} else if (e.key === 'ArrowUp') {
+		e.preventDefault();
+		const items = searchResults.querySelectorAll('li[data-index]');
+		if (items.length === 0) return;
+		searchIndex = Math.max(searchIndex - 1, 0);
+		updateSearchSelection(items);
+	} else if (e.key === 'Enter') {
+		e.preventDefault();
+		const selected = searchResults.querySelector('li.selected[data-id]');
+		if (selected) {
+			const id = selected.getAttribute('data-id');
+			updateUrlState(id);
+			renderGraph(id);
+			searchInput.value = '';
+			searchResults.style.display = 'none';
+			searchIndex = -1;
+		}
+	}
+});
+
+function updateSearchSelection(items) {
+	items.forEach((item, idx) => {
+		if (idx === searchIndex) {
+			item.classList.add('selected');
+			item.scrollIntoView({ block: 'nearest' });
+		} else {
+			item.classList.remove('selected');
+		}
+	});
+}
 
 document.addEventListener('click', (e) => {
 	if (!document.getElementById('search-container').contains(e.target)) {
@@ -2643,10 +2686,11 @@ function physicsTick() {
 					edgeType = edge.type || 'anatomy',
 					targetDepth = (nTarget.depth !== undefined ? nTarget.depth : 1) || 1,
 					depthMult = Math.max(1, targetDepth * (physicsOptions.depthLength !== undefined ? physicsOptions.depthLength : 0.5)),
-					depthPullMult = Math.max(1, targetDepth * (physicsOptions.depthPull !== undefined ? physicsOptions.depthPull : 0.5)),
+					depthPullStep = (physicsOptions.depthPull !== undefined ? physicsOptions.depthPull : 0.25),
+					depthPullMult = Math.max(1, 1 + ((targetDepth - 1) * depthPullStep)),
 					elastic = (physicsOptions.linePull[edgeType] !== undefined
 						? physicsOptions.linePull[edgeType]
-						: physicsOptions.linePull['@default']) / depthPullMult,
+						: physicsOptions.linePull['@default']) * depthPullMult,
 					dynamicElastic = (nSource.isDragging || nTarget.isDragging) ? 5.0 : elastic;
 				let dx = nTarget.x - nSource.x,
 					dy = nTarget.y - nSource.y,
@@ -2902,7 +2946,7 @@ function renderGraph(centerId) {
 		el.classList.remove('unrelated');
 	});
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
-	linesZoom.replaceChildren();
+	edgesZoom.replaceChildren();
 	activeLineElements = [];
 	const centerEl = document.getElementById(`node-${centerId}`);
 	if (!centerEl) return;
@@ -2991,8 +3035,8 @@ function renderGraph(centerId) {
 			marker = edgeStyles[edgeType];
 		pathLine.classList.add('edge', `${edgeType}`);
 		pathLine.setAttribute('marker-mid', marker);
-		pathLine.setAttribute('marker-start', 'url(#start-marker)');
-		pathLine.setAttribute('marker-end', 'url(#end-marker)');
+		// pathLine.setAttribute('marker-start', 'url(#start-marker)');
+		// pathLine.setAttribute('marker-end', 'url(#end-marker)');
 		const
 			sourceNode = nodes.find(n => n.id === e.source) || {},
 			targetNode = nodes.find(n => n.id === e.target) || {},
@@ -3000,7 +3044,7 @@ function renderGraph(centerId) {
 			targetMatches = checkTrait(targetNode.trait) && checkTypeFilter(targetNode.type),
 			edgeMatches = checkTypeFilter(e.type);
 		if (!edgeMatches && (!sourceMatches || !targetMatches)) pathLine.setAttribute('opacity', '0.25');
-		linesZoom.append(pathLine);
+		edgesZoom.append(pathLine);
 		activeLineElements.push({
 			line: pathLine,
 			sourceEl: sourceEl,
@@ -3065,7 +3109,7 @@ const applyPanZoomTransform = () => {
 		ty = Bang.roundPx(pan.y),
 		z = current.zoom;
 	nodesZoom.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
-	linesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
+	edgesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
 };
 
 const setZoomAt = (newZoom, clientX, clientY) => {
