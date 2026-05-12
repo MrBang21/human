@@ -91,9 +91,9 @@
 	--text-c: 0.18;
 	--text-hover-c: 0.2;
 
-	--line-l: 0.8;
-	--line-related-l: 0.85;
-	--line-c: 0.11;
+	--edge-l: 0.8;
+	--edge-related-l: 0.85;
+	--edge-c: 0.11;
 
 	--node-l: 0.7;
 	--node-related-l: 0.75;
@@ -190,8 +190,8 @@
 		--accent-hover-l: 0.8;
 		--accent-active-l: 0.9;
 
-		--line-l: 0.7;
-		--line-related-l: 0.75;
+		--edge-l: 0.7;
+		--edge-related-l: 0.75;
 		--node-l: 0.95;
 		--node-related-l: 0.95;
 
@@ -242,9 +242,15 @@ body,
 }
 
 #graph,
-#edges-layer,
-#nodes-layer {
+#graph-layer,
+#edges-group,
+#nodes-layer,
+#nodes-group {
+	display: block;
 	position: fixed;
+	overflow: visible;
+	width: 100%;
+	height: 100%;
 	inset: 0;
 	z-index: 0;
 }
@@ -252,26 +258,21 @@ body,
 	/* Enable custom pan/zoom gestures on touch devices */
 	touch-action: none;
 }
-#edges-layer {
+#graph-layer {
 	z-index: 1;
 	pointer-events: none;
-	overflow: visible;
-	width: 100%;
-	height: 100%;
-	display: block;
 }
 #nodes-layer {
 	inset: 0;
 	z-index: 2;
 }
 
-#nodes-zoom {
-	position: fixed;
+#nodes-group {
 	transform-origin: 0 0;
 	will-change: transform;
 }
 
-#edges-zoom {
+#edges-group {
 	transform-origin: 0 0;
 }
 
@@ -424,7 +425,7 @@ body,
 }
 
 #top-bar {
-	position: fixed;
+	position: absolute;
 	inset: 1em 1em auto 1em;
 	z-index: 200;
 	display: flex;
@@ -462,8 +463,7 @@ body,
 	}
 	.separator {
 		color: var(--muted);
-		font-size: 12px;
-		margin: 0 4px;
+		margin: 0;
 	}
 	.current {
 		color: var(--text);
@@ -677,6 +677,7 @@ footer {
 	z-index: 200;
 	display: none;
 	border-radius: .5em;
+	overscroll-behavior: contain;
 	&.visible {
 		display: block;
 	}
@@ -696,6 +697,7 @@ footer {
 		margin: 0;
 		padding: 0;
 		list-style: none;
+		position: relative;
 		li {
 			margin-bottom: 0.25em;
 			overflow: clip;
@@ -707,14 +709,16 @@ footer {
 				text-overflow: ellipsis;
 			}
 		}
-		&:not(:empty)::before {
-			content: "Sources:";
-			display: block;
-			font-weight: bold;
-			font-size: 1.1em;
+		&:not(:empty) {
 			margin-top: 1em;
-			margin-bottom: 0.5em;
-			color: var(--text);
+			&::before {
+				content: "Sources:";
+				display: block;
+				font-weight: bold;
+				font-size: 1.1em;
+				margin-bottom: 0.5em;
+				color: var(--text);
+			}
 		}
 	}
 }
@@ -726,6 +730,7 @@ footer {
 #legend {
 	inset: auto auto 1em 1em;
 	padding: 1em;
+	font-size: 0.75em;
 	.name {
 		font-weight: bold;
 		margin-bottom: .5em;
@@ -744,7 +749,7 @@ footer {
 		background-color: var(--border);
 		margin: .5em 0;
 	}
-	.line {
+	.edge {
 		width: 64px;
 		height: 24px;
 		margin-right: 1em;
@@ -772,10 +777,6 @@ footer {
 		&.energetic {
 			--_hue: var(--hue-energetic);
 		}
-		line {
-			stroke: oklch(var(--text-l) var(--text-c) var(--_hue));
-			stroke-width: 3;
-		}
 	}
 	.trait {
 		font-weight: bold;
@@ -797,7 +798,6 @@ footer {
 footer {
 	inset: auto 1em 1em auto;
 	padding: .5em 1em;
-	font-size: 12px;
 	color: var(--muted);
 	border: none;
 	background-color: transparent;
@@ -867,7 +867,7 @@ svg {
 	}
 	path.edge {
 		fill: none;
-		color: oklch(var(--line-l) var(--line-c) var(--_hue));
+		color: oklch(var(--edge-l) var(--edge-c) var(--_hue));
 		stroke-width: var(--_width, 2);
 		stroke-dasharray: var(--_dash, none);
 		stroke: currentColor;
@@ -876,7 +876,7 @@ svg {
 		shape-rendering: geometricPrecision;
 		&.related {
 			stroke-width: calc(var(--_width, 2) * 1.5);
-			--line-l: var(--line-related-l);
+			--edge-l: var(--edge-related-l);
 			--node-l: var(--node-related-l); /* we need the marker somehow */
 		}
 		&.unrelated {
@@ -1206,7 +1206,7 @@ svg {
 				</select>
 			</div>
 			<div class="select">
-				<select id="view-select" title="Select graph layout">
+				<select id="layout-select" title="Select graph layout">
 					<button>
 						<selectedcontent></selectedcontent>
 					</button>
@@ -1229,47 +1229,47 @@ svg {
 	<div id="legend">
 		<div class="name">Connection Types</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
 			</svg> Default Anatomy
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
 			</svg> Neuronal / Nerve
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
 			</svg> Sexual / Erogenous
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
 			</svg> Excised / Removed
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
 			</svg> Adverse Consequence
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
 			</svg> Claimed Benefit
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
 			</svg> Direct Harm
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
 			</svg> Energetic
 		</div>
 		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="line">
+			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
 				<path class="edge homologous" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-homologous)" />
 			</svg> Homologous
 		</div>
@@ -1292,7 +1292,7 @@ svg {
 		<button type="button" data-panel="info" aria-pressed="false">Info</button>
 	</div>
 	<div id="graph">
-		<svg id="edges-layer">
+		<svg id="graph-layer">
 			<defs id="svg-defs">
 				<marker id="arrow-root" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
@@ -1340,14 +1340,14 @@ svg {
 				</marker>
 				-->
 			</defs>
-			<g id="edges-zoom"></g>
+			<g id="edges-group"></g>
 		</svg>
 		<div id="nodes-layer">
-			<div id="nodes-zoom"></div>
+			<div id="nodes-group"></div>
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.6 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.8.7 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1422,7 +1422,7 @@ let
 		zoom: 1,
 	},
 	activeMobilePanel = null,
-	activeLineElements = [],
+	activeEdgeElements = [],
 	resizeTimeout = null,
 	searchIndex = -1,
 	physics = {
@@ -1452,7 +1452,7 @@ let
 	initialPan = { x: 0, y: 0 },
 	is = {
 		animationLoopRunning: false,
-		linesLoopScheduled: false,
+		edgesLoopScheduled: false,
 		graphPanning: false,
 		touchPanning: false,
 		touchPinching: false,
@@ -1489,10 +1489,10 @@ const
 	connectToIcon = true,
 	appContainer = document.getElementById('app'),
 	graphContainer = document.getElementById('graph'),
-	nodesLayer = document.getElementById('nodes-layer'),
-	nodesZoom = document.getElementById('nodes-zoom'),
-	linesLayer = document.getElementById('edges-layer'),
-	edgesZoom = document.getElementById('edges-zoom'),
+	// nodesLayer = document.getElementById('nodes-layer'),
+	nodesGroup = document.getElementById('nodes-group'),
+	// graphLayer = document.getElementById('graph-layer'),
+	edgesGroup = document.getElementById('edges-group'),
 	defsHTML = document.getElementById('svg-defs').outerHTML,
 	breadcrumbs = document.getElementById('breadcrumbs'),
 	nodeDescription = document.getElementById('description'),
@@ -1502,15 +1502,15 @@ const
 	traitFilterDropdown = document.getElementById('trait-filter'),
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
-	viewSelect = document.getElementById('view-select'),
+	layoutDropdown = document.getElementById('layout-select'),
 	searchInput = document.getElementById('search'),
 	searchResults = document.getElementById('results'),
 	cardTemplate = document.getElementById('card-template'),
 	searchResultTemplate = document.getElementById('search-result-template'),
 	descriptionSourceTemplate = document.getElementById('description-source-template'),
 	mobileBar = document.getElementById('mobile-bar'),
-	minZoom = 0.05,
-	maxZoom = 10,
+	minZoom = 0.1,
+	maxZoom = 2,
 	touchPointers = new Map(),
 	mobilePanels = [
 		'search',
@@ -1540,9 +1540,8 @@ const
 		petalTotalSpreadRad: Math.PI * 0.8,
 	},
 	physicsOptions = {
-		linePull: {
+		edgePull: {
 			'@default': 0.1,
-
 			// 'root': 0.5,
 			'anatomy': 0.05,
 			// 'nerve': 0.5,
@@ -1553,9 +1552,8 @@ const
 			// 'harm': 0.3,
 			// 'energetic': 0.5,
 		},
-		lineLength: {
+		edgeLength: {
 			'@default': 700,
-			/*
 			'root': 500,
 			'anatomy': 500,
 			'nerve': 500,
@@ -1565,7 +1563,7 @@ const
 			'benefit': 600,
 			'harm': 500,
 			'energetic': 500,
-			*/
+			'homologous': 400,
 		},
 		clusterStrength: {
 			'@default': 0.1,
@@ -1749,8 +1747,8 @@ if (mobileBar) {
 	updateMobileBarUI();
 }
 
-function updateLinesOnce() {
-	activeLineElements.forEach(item => {
+function updateEdgesOnce() {
+	activeEdgeElements.forEach(item => {
 		const
 			iconOffset = connectToIcon ? (el) => (el?.offsetHeight ?? 0) / 2 : () => 0,
 			sourceLeft = parseFloat(item?.sourceEl?.style?.left),
@@ -1768,7 +1766,7 @@ function updateLinesOnce() {
 			px = -dy / len,
 			py = dx / len,
 			lengthFactor = 1 / (1 + len * 0.01),
-			hasReverse = activeLineElements.some(other =>
+			hasReverse = activeEdgeElements.some(other =>
 				other !== item &&
 				other.sourceEl === item.targetEl &&
 				other.targetEl === item.sourceEl
@@ -1790,7 +1788,7 @@ function updateLinesOnce() {
 			{ mid, left, right } = Bang.splitCubic(
 				sx, sy, c1x, c1y, c2x, c2y, ex, ey
 			);
-		item.line.setAttribute(
+		item.edge.setAttribute(
 			'd',
 			`M ${sx} ${sy}` +
 			`C ${left.c1.x} ${left.c1.y}, ${left.c2.x} ${left.c2.y}, ${mid.x} ${mid.y}` +
@@ -1799,24 +1797,24 @@ function updateLinesOnce() {
 	});
 }
 
-function updateLinesLoop() {
-	is.linesLoopScheduled = false;
-	updateLinesOnce();
+function updateEdgesLoop() {
+	is.edgesLoopScheduled = false;
+	updateEdgesOnce();
 	if (!is.animationLoopRunning) return;
-	is.linesLoopScheduled = true;
-	requestAnimationFrame(updateLinesLoop);
+	is.edgesLoopScheduled = true;
+	requestAnimationFrame(updateEdgesLoop);
 }
 
-function startLinesLoop() {
+function startEdgesLoop() {
 	if (is.animationLoopRunning) return;
 	is.animationLoopRunning = true;
-	if (!is.linesLoopScheduled) {
-		is.linesLoopScheduled = true;
-		requestAnimationFrame(updateLinesLoop);
+	if (!is.edgesLoopScheduled) {
+		is.edgesLoopScheduled = true;
+		requestAnimationFrame(updateEdgesLoop);
 	}
 }
 
-function stopLinesLoop() {
+function stopEdgesLoop() {
 	is.animationLoopRunning = false;
 }
 
@@ -1954,7 +1952,7 @@ depthDropdown.addEventListener('change', (e) => {
 	e?.target?.blur();
 });
 
-viewSelect.addEventListener('change', (e) => {
+layoutDropdown.addEventListener('change', (e) => {
 	current.view = e?.target?.value ?? current.view;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
@@ -2146,9 +2144,9 @@ function initGraph() {
 	if (initialView == null && url.searchParams.get('stack') === '1') {
 		initialView = 'stacked';
 	}
-	if (initialView != null && viewSelect?.querySelector(`option[value="${initialView}"]`)) {
+	if (initialView != null && layoutDropdown?.querySelector(`option[value="${initialView}"]`)) {
 		current.view = initialView;
-		viewSelect.value = initialView;
+		layoutDropdown.value = initialView;
 	}
 	const initialTrait = url.searchParams.get('t') ?? url.searchParams.get('trait');
 	if (initialTrait) {
@@ -2189,10 +2187,10 @@ function initGraph() {
 		contentEl.textContent = node.content;
 		useEl.setAttribute('href', `#icon-${nodeCategory}`);
 		setupInteractions(card, node.id);
-		nodesZoom.append(clone);
+		nodesGroup.append(clone);
 	});
 	renderGraph(current.centerId);
-	updateLinesOnce();
+	updateEdgesOnce();
 }
 
 searchInput.addEventListener('input', (e) => {
@@ -2318,7 +2316,7 @@ function setupInteractions(card, id) {
 				parsedTop = parseFloat(card.style.top);
 			initialLeft = Number.isFinite(parsedLeft) ? parsedLeft : 0;
 			initialTop = Number.isFinite(parsedTop) ? parsedTop : 0;
-			startLinesLoop();
+			startEdgesLoop();
 		},
 		updateDrag = (clientX, clientY) => {
 			if (!isDragging) return;
@@ -2353,8 +2351,8 @@ function setupInteractions(card, id) {
 			if (!isDragging) return;
 			isDragging = false;
 			card.classList.remove('dragging');
-			stopLinesLoop();
-			updateLinesOnce();
+			stopEdgesLoop();
+			updateEdgesOnce();
 			if (current.view === 'physics' && physics?.nodes != null) {
 				const nd = physics?.nodes?.find(n => n?.node?.id === id);
 				if (nd) {
@@ -2433,9 +2431,9 @@ function setupInteractions(card, id) {
 			relatedNodes = new Set([card]),
 			relatedEdges = new Set();
 		// Add connected nodes and edges
-		activeLineElements.forEach(item => {
+		activeEdgeElements.forEach(item => {
 			if (item.sourceEl.id === `node-${id}` || item.targetEl.id === `node-${id}`) {
-				relatedEdges.add(item.line);
+				relatedEdges.add(item.edge);
 				relatedNodes.add(item.sourceEl);
 				relatedNodes.add(item.targetEl);
 			}
@@ -2450,9 +2448,9 @@ function setupInteractions(card, id) {
 			});
 		}
 		// Include edges that connect the related node cluster (hovered node, direct relatives, siblings)
-		activeLineElements.forEach(item => {
+		activeEdgeElements.forEach(item => {
 			if (relatedNodes.has(item.sourceEl) && relatedNodes.has(item.targetEl)) {
-				relatedEdges.add(item.line);
+				relatedEdges.add(item.edge);
 			}
 		});
 		// Store for potential locking
@@ -2465,11 +2463,11 @@ function setupInteractions(card, id) {
 				el.classList.add('unrelated');
 			}
 		});
-		activeLineElements.forEach(item => {
-			if (relatedEdges.has(item.line)) {
-				item.line.classList.add('related');
+		activeEdgeElements.forEach(item => {
+			if (relatedEdges.has(item.edge)) {
+				item.edge.classList.add('related');
 			} else {
-				item.line.classList.add('unrelated');
+				item.edge.classList.add('unrelated');
 			}
 		});
 	});
@@ -2733,7 +2731,7 @@ function physicsTick() {
 					depthMult = Math.max(1, targetDepth * (physicsOptions?.depthLength ?? 0.5)),
 					depthPullStep = physicsOptions?.depthPullStep ?? 0.5,
 					depthPullMult = Math.max(1, 1 + ((targetDepth - 1) * depthPullStep)),
-					elastic = (physicsOptions?.linePull?.[edgeType] ?? physicsOptions?.linePull?.['@default']) * depthPullMult,
+					elastic = (physicsOptions?.edgePull?.[edgeType] ?? physicsOptions?.edgePull?.['@default']) * depthPullMult,
 					dynamicElastic = ((nSource?.isDragging ?? false) || (nTarget?.isDragging ?? false)) ? 5.0 : elastic;
 				let dx = nTarget.x - nSource.x,
 					dy = nTarget.y - nSource.y,
@@ -2743,7 +2741,7 @@ function physicsTick() {
 					dy = Math.random() * 0.1;
 					dist = Math.sqrt(dx * dx + dy * dy);
 				}
-				const lengthVal = (physicsOptions?.lineLength?.[edgeType] ?? physicsOptions?.lineLength?.['@default']) * depthMult;
+				const lengthVal = (physicsOptions?.edgeLength?.[edgeType] ?? physicsOptions?.edgeLength?.['@default']) * depthMult;
 				let stretch = dist - lengthVal,
 					tp = physicsOptions?.targetPull ?? 1,
 					sp = physicsOptions?.sourcePull ?? 1,
@@ -2810,7 +2808,7 @@ function physicsTick() {
 			el.style.top = `${nData.y}px`;
 		}
 	});
-	updateLinesOnce();
+	updateEdgesOnce();
 	physicsOptions.alpha -= physicsOptions.alphaCoolDown;
 	if ((totalEnergy > physicsOptions.energyThreshold || physicsOptions.alpha > 0.95) && temperature > 0) {
 		requestAnimationFrame(physicsTick);
@@ -2867,7 +2865,7 @@ function calcNodePositionPhysics({ currentDepthShown, nodesByDepth, parentId, ce
 			children.forEach((nData, index) => {
 				const el = document.getElementById(`node-${nData.node.id}`);
 				if (!el) return;
-				const lengthVal = physicsOptions?.lineLength?.[nData.edgeType] ?? physicsOptions?.lineLength?.['@default'],
+				const lengthVal = physicsOptions?.edgeLength?.[nData.edgeType] ?? physicsOptions?.edgeLength?.['@default'],
 					requiredArcLength = children.length * petalOptions.requiredArcPerChildPx,
 					sizeMultiplier = petalOptions.depthRadiusMultiplierStart + (d - 1) * petalOptions.depthRadiusMultiplierStep,
 					startingRadius = Math.max(baseRadius * sizeMultiplier, requiredArcLength / totalSpread),
@@ -2935,7 +2933,7 @@ function renderGraph(centerId) {
 		locked.edges = new Set();
 	}
 	current.centerId = centerId;
-	current.view = viewSelect?.value ?? 'petal';
+	current.view = layoutDropdown?.value ?? 'petal';
 	const
 		fontSizeRaw = parseFloat(getComputedStyle(document.documentElement).fontSize),
 		emSize = Number.isFinite(fontSizeRaw) ? fontSizeRaw : 16,
@@ -2989,8 +2987,8 @@ function renderGraph(centerId) {
 		el.classList.remove('unrelated');
 	});
 	document.querySelectorAll('.group-label').forEach(el => el.remove());
-	edgesZoom.replaceChildren();
-	activeLineElements = [];
+	edgesGroup.replaceChildren();
+	activeEdgeElements = [];
 	const centerEl = document.getElementById(`node-${centerId}`);
 	if (!centerEl) return;
 	centerEl.classList.remove('hidden');
@@ -3075,31 +3073,31 @@ function renderGraph(centerId) {
 		if (!sourceEl || !targetEl) return;
 		if (sourceEl.classList.contains('hidden') || targetEl.classList.contains('hidden')) return;
 		const
-			pathLine = document.createElementNS('http://www.w3.org/2000/svg', 'path'),
+			pathEdge = document.createElementNS('http://www.w3.org/2000/svg', 'path'),
 			edgeType = e.type || 'anatomy',
 			marker = edgeStyles[edgeType];
-		pathLine.classList.add('edge', `${edgeType}`);
-		pathLine.setAttribute('marker-mid', marker);
-		// pathLine.setAttribute('marker-start', 'url(#start-marker)');
-		// pathLine.setAttribute('marker-end', 'url(#end-marker)');
+		pathEdge.classList.add('edge', `${edgeType}`);
+		pathEdge.setAttribute('marker-mid', marker);
+		// pathEdge.setAttribute('marker-start', 'url(#start-marker)');
+		// pathEdge.setAttribute('marker-end', 'url(#end-marker)');
 		const
 			sourceNode = nodes.find(n => n.id === e.source) || {},
 			targetNode = nodes.find(n => n.id === e.target) || {},
 			sourceMatches = checkTrait(sourceNode.trait) && checkTypeFilter(sourceNode.type),
 			targetMatches = checkTrait(targetNode.trait) && checkTypeFilter(targetNode.type),
 			edgeMatches = checkTypeFilter(e.type);
-		if (!edgeMatches && (!sourceMatches || !targetMatches)) pathLine.setAttribute('opacity', '0.25');
-		edgesZoom.append(pathLine);
-		activeLineElements.push({
-			line: pathLine,
+		if (!edgeMatches && (!sourceMatches || !targetMatches)) pathEdge.setAttribute('opacity', '0.25');
+		edgesGroup.append(pathEdge);
+		activeEdgeElements.push({
+			edge: pathEdge,
 			sourceEl: sourceEl,
 			targetEl: targetEl
 		});
 	});
-	startLinesLoop();
+	startEdgesLoop();
 	setTimeout(() => {
-		stopLinesLoop();
-		updateLinesOnce();
+		stopEdgesLoop();
+		updateEdgesOnce();
 	}, 2000);
 };
 
@@ -3153,8 +3151,8 @@ const applyPanZoomTransform = () => {
 		tx = Bang.roundPx(pan.x),
 		ty = Bang.roundPx(pan.y),
 		z = current.zoom;
-	nodesZoom.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
-	edgesZoom.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
+	nodesGroup.style.transform = `translate(${tx}px, ${ty}px) scale(${z})`;
+	edgesGroup.setAttribute('transform', `translate(${tx} ${ty}) scale(${z})`);
 };
 
 const setZoomAt = (newZoom, clientX, clientY) => {
@@ -3258,13 +3256,13 @@ document.addEventListener('keydown', (e) => {
 						el.classList.remove('related');
 					}
 				});
-				activeLineElements.forEach(item => {
-					if (locked.edges.has(item.line)) {
-						item.line.classList.add('related');
-						item.line.classList.remove('unrelated');
+				activeEdgeElements.forEach(item => {
+					if (locked.edges.has(item.edge)) {
+						item.edge.classList.add('related');
+						item.edge.classList.remove('unrelated');
 					} else {
-						item.line.classList.add('unrelated');
-						item.line.classList.remove('related');
+						item.edge.classList.add('unrelated');
+						item.edge.classList.remove('related');
 					}
 				});
 			}
