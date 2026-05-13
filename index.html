@@ -140,12 +140,17 @@
 	--hue-anatomy: 200;
 	--hue-nerve: 160;
 	--hue-sexual: 320;
-	--hue-removed: 20;
-	--hue-consequence: 60;
-	--hue-benefit: 160;
-	--hue-harm: 20;
 	--hue-energetic: 300;
 	--hue-homologous: 280;
+
+	--hue-benefit: 160;
+
+	--hue-surgery: 20;
+	--hue-consequence: 40;
+	--hue-risk: 100;
+	--hue-removed: 40;
+	--hue-harm: 20;
+
 	--hue-url: 240;
 
 	--url: oklch(var(--accent-l) var(--accent-c) var(--hue-url));
@@ -382,11 +387,17 @@ body,
 	&.type-sexual {
 		--_hue: var(--hue-sexual);
 	}
+	&.type-surgery {
+		--_hue: var(--hue-surgery);
+	}
 	&.type-removed {
 		--_hue: var(--hue-removed);
 	}
 	&.type-consequence {
 		--_hue: var(--hue-consequence);
+	}
+	&.type-risk {
+		--_hue: var(--hue-risk);
 	}
 	&.type-benefit {
 		--_hue: var(--hue-benefit);
@@ -756,6 +767,9 @@ footer {
 		width: 64px;
 		height: 24px;
 		margin-right: 1em;
+		&.root {
+			--_hue: var(--hue-root);
+		}
 		&.anatomy {
 			--_hue: var(--hue-anatomy);
 		}
@@ -765,20 +779,29 @@ footer {
 		&.sexual {
 			--_hue: var(--hue-sexual);
 		}
-		&.removed {
-			--_hue: var(--hue-removed);
+		&.energetic {
+			--_hue: var(--hue-energetic);
 		}
-		&.consequence {
-			--_hue: var(--hue-consequence);
+		&.homologous {
+			--_hue: var(--hue-homologous);
 		}
 		&.benefit {
 			--_hue: var(--hue-benefit);
 		}
+		&.surgery {
+			--_hue: var(--hue-surgery);
+		}
+		&.consequence {
+			--_hue: var(--hue-consequence);
+		}
+		&.risk {
+			--_hue: var(--hue-risk);
+		}
+		&.removed {
+			--_hue: var(--hue-removed);
+		}
 		&.harm {
 			--_hue: var(--hue-harm);
-		}
-		&.energetic {
-			--_hue: var(--hue-energetic);
 		}
 	}
 	.trait {
@@ -794,6 +817,50 @@ footer {
 		}
 		&.shared {
 			color: oklch(var(--icon-l) var(--icon-c) var(--hue-shared));
+		}
+	}
+}
+
+@media (width > 700px) {
+	aside {
+		display: flex;
+		align-items: stretch;
+		--legend-peek: 1ch;
+		--extra-width: 10em;
+		position: fixed;
+		overflow: clip;
+		opacity: 0.95;
+		box-shadow: 0 0 0 0 var(--shadow);
+		width: fit-content;
+		transition: transform 0.3s ease-out, opacity 0.3s ease-out, box-shadow 0.2s ease-out;
+		&::before {
+			content: "Legend";
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-orientation: upright;
+			writing-mode: vertical-rl;
+			background-color: var(--accent);
+			color: var(--body);
+			font-weight: bold;
+			padding: 0.5em;
+			cursor: pointer;
+			user-select: none;
+			width: var(--legend-peek);
+		}
+		> div {
+			flex: 1 0 var(--extra-width);
+			padding: 1em;
+		}
+		&#legend {
+			flex-direction: row-reverse;
+			padding: 0 0 0 var(--extra-width);
+			inset: auto auto 1em 0;
+			--transform: translateX(calc(-100% + var(--legend-peek)));
+			&:hover, &:focus-within, &.open {
+				--transform: translateX(calc(-1 * var(--extra-width)));
+				z-index: 200;
+			}
 		}
 	}
 }
@@ -833,30 +900,6 @@ svg {
 		--_hue: var(--hue-sexual);
 		--_width: .2em;
 	}
-	#arrow-removed,
-	.removed {
-		--_hue: var(--hue-removed);
-		--_width: .2em;
-		--_dash: 8 16;
-	}
-	#arrow-consequence,
-	.consequence {
-		--_hue: var(--hue-consequence);
-		--_width: .2em;
-		--_dash: 4 8;
-	}
-	#arrow-benefit,
-	.benefit {
-		--_hue: var(--hue-benefit);
-		--_width: .2em;
-		--_dash: 4 6;
-	}
-	#arrow-harm,
-	.harm {
-		--_hue: var(--hue-harm);
-		--_width: .2em;
-		--_dash: 6 8;
-	}
 	#arrow-energetic,
 	.energetic {
 		--_hue: var(--hue-energetic);
@@ -869,6 +912,43 @@ svg {
 		--_width: .2em;
 		--_dash: 10 15;
 	}
+	#arrow-benefit,
+	.benefit {
+		--_hue: var(--hue-benefit);
+		--_width: .2em;
+		--_dash: 4 6;
+	}
+	#arrow-surgery,
+	.surgery {
+		--_hue: var(--hue-surgery);
+		--_width: .2em;
+		--_dash: 4 8;
+	}
+	#arrow-consequence,
+	.consequence {
+		--_hue: var(--hue-consequence);
+		--_width: .2em;
+		--_dash: 4 8;
+	}
+	#arrow-risk,
+	.risk {
+		--_hue: var(--hue-risk);
+		--_width: .2em;
+		--_dash: 4 8;
+	}
+	#arrow-removed,
+	.removed {
+		--_hue: var(--hue-removed);
+		--_width: .2em;
+		--_dash: 8 16;
+	}
+	#arrow-harm,
+	.harm {
+		--_hue: var(--hue-harm);
+		--_width: .2em;
+		--_dash: 6 8;
+	}
+
 	path.edge {
 		fill: none;
 		color: oklch(var(--edge-l) var(--edge-c) var(--_hue));
@@ -914,7 +994,7 @@ svg {
 	z-index: 100;
 }
 
-@media (max-width: 700px) {
+@media (width <= 700px) {
 	#mobile-bar {
 		position: fixed;
 		left: .5em;
@@ -1230,65 +1310,77 @@ svg {
 		<p></p>
 		<ul></ul>
 	</div>
-	<div id="legend">
-		<div class="name">Connection Types</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
-			</svg> Default Anatomy
+	<aside id="legend">
+		<div class="content">
+			<div class="name">Connection Types</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
+				</svg> Default Anatomy
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
+				</svg> Neuronal / Nerve
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
+				</svg> Sexual / Erogenous
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
+				</svg> Energetic
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge homologous" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-homologous)" />
+				</svg> Homologous
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
+				</svg> Claimed Benefit
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge surgery" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-surgery)" />
+				</svg> Surgery
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
+				</svg> Adverse Consequence
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge risk" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-risk)" />
+				</svg> Increased Risk
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
+				</svg> Excised / Removed
+			</div>
+			<div class="item">
+				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+					<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
+				</svg> Direct Harm
+			</div>
+			<div class="divider"></div>
+			<div class="name">Biological Traits</div>
+			<div class="item">
+				<div class="trait male">Aa</div> Male
+			</div>
+			<div class="item">
+				<div class="trait female">Aa</div> Female
+			</div>
+			<div class="item">
+				<div class="trait shared">Aa</div> Shared
+			</div>
 		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
-			</svg> Neuronal / Nerve
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
-			</svg> Sexual / Erogenous
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
-			</svg> Excised / Removed
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
-			</svg> Adverse Consequence
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
-			</svg> Claimed Benefit
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
-			</svg> Direct Harm
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
-			</svg> Energetic
-		</div>
-		<div class="item">
-			<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-				<path class="edge homologous" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-homologous)" />
-			</svg> Homologous
-		</div>
-		<div class="divider"></div>
-		<div class="name">Biological Traits</div>
-		<div class="item">
-			<div class="trait male">Aa</div> Male
-		</div>
-		<div class="item">
-			<div class="trait female">Aa</div> Female
-		</div>
-		<div class="item">
-			<div class="trait shared">Aa</div> Shared
-		</div>
-	</div>
+	</aside>
 	<div id="mobile-bar" aria-label="Mobile controls">
 		<button type="button" data-panel="search" aria-pressed="false">Search</button>
 		<button type="button" data-panel="filters" aria-pressed="false">Filters</button>
@@ -1317,23 +1409,31 @@ svg {
 						10,5
 						Z" />
 				</marker>
-				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-					<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
-				</marker>
-				<marker id="arrow-consequence" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
-				</marker>
-				<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-					<path d="M 0 0 L 10 5 L 0 10 z" />
-				</marker>
-				<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
-					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
-				</marker>
 				<marker id="arrow-energetic" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
 				<marker id="arrow-homologous" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
 					<path d="M 2 5 L 4 2 L 4 4 L 6 4 L 6 2 L 8 5 L 6 8 L 6 6 L 4 6 L 4 8 Z" />
+				</marker>
+
+				<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z" />
+				</marker>
+
+				<marker id="arrow-surgery" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 10 5 L 0 10 z M 2 2 L 8 8 M 8 2 L 2 8" />
+				</marker>
+				<marker id="arrow-consequence" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
+				</marker>
+				<marker id="arrow-risk" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
+				</marker>
+				<marker id="arrow-removed" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 8 5 L 0 10 Z M 8 0 L 10 0 L 10 10 L 8 10 Z" />
+				</marker>
+				<marker id="arrow-harm" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+					<path d="M 0 0 L 6 5 L 0 10 Z M 4 0 L 10 5 L 4 10 Z" />
 				</marker>
 				<!--
 				<marker id="start-marker" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="10" markerHeight="10" orient="auto" markerUnits="userSpaceOnUse">
@@ -1351,7 +1451,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.8.7 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.9 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1562,12 +1662,14 @@ const
 			'anatomy': 500,
 			'nerve': 500,
 			'sexual': 500,
-			'removed': 700,
-			'consequence': 800,
-			'benefit': 600,
-			'harm': 500,
 			'energetic': 500,
 			'homologous': 400,
+			'benefit': 600,
+			'surgery': 700,
+			'consequence': 800,
+			'risk': 600,
+			'removed': 700,
+			'harm': 500,
 		},
 		clusterStrength: {
 			'@default': 0.1,
@@ -1604,12 +1706,14 @@ const
 		'anatomy': 'url(#arrow-anatomy)',
 		'nerve': 'url(#arrow-nerve)',
 		'sexual': 'url(#arrow-sexual)',
-		'removed': 'url(#arrow-removed)',
-		'consequence': 'url(#arrow-consequence)',
-		'benefit': 'url(#arrow-benefit)',
-		'harm': 'url(#arrow-harm)',
 		'energetic': 'url(#arrow-energetic)',
-		'homologous': 'url(#arrow-homologous)'
+		'homologous': 'url(#arrow-homologous)',
+		'benefit': 'url(#arrow-benefit)',
+		'surgery': 'url(#arrow-surgery)',
+		'consequence': 'url(#arrow-consequence)',
+		'risk': 'url(#arrow-risk)',
+		'removed': 'url(#arrow-removed)',
+		'harm': 'url(#arrow-harm)',
 	};
 
 
@@ -1634,11 +1738,21 @@ const Bang = {
 		return Math.round(v * dpr) / dpr;
 	},
 	getEdgeWeight: (t) => {
-		if ((t ?? 'anatomy') === 'anatomy') return 1;
-		if (t === 'benefit') return 2;
-		if (t === 'consequence' || t === 'harm') return 3;
-		if (t === 'removed') return 4;
-		return 5;
+		switch (t) {
+			case 'root': return 1;
+			case 'anatomy': return 0.9;
+			case 'nerve': return 0.8;
+			case 'sexual': return 0.7;
+			case 'energetic': return 0.6;
+			case 'homologous': return 0.5;
+			case 'benefit': return 0.1;
+			case 'surgery': return 0.05;
+			case 'consequence': return 0.04;
+			case 'risk': return 0.03;
+			case 'removed': return 0.02;
+			case 'harm': return 0.01;
+			default: return 0.5;
+		}
 	},
 	dist2: (a, b) => Math.hypot(b.x - a.x, b.y - a.y),
 	splitCubic: (x0, y0, x1, y1, x2, y2, x3, y3) => {
@@ -1966,9 +2080,9 @@ layoutDropdown.addEventListener('change', (e) => {
 
 const getCompositeGroupKey = (node) => {
 	const type = node?.type ?? 'unknown_type',
-		category = node?.category ?? 'unknown_category',
+		tag = node?.tag ?? 'unknown_tag',
 		trait = node?.trait ?? 'unknown_trait';
-	return `${type}|${category}|${trait}`;
+	return `${type}|${tag}|${trait}`;
 };
 
 const layoutStackByCompositeGroup = ({
@@ -2184,12 +2298,12 @@ function initGraph() {
 			useEl = clone.querySelector('use'),
 				nodeType = node?.type ?? 'anatomy',
 				nodeTrait = node?.trait ?? 'shared',
-				nodeCategory = node?.category ?? 'other';
-		card.className = `card hidden type-${nodeType} trait-${nodeTrait} cat-${nodeCategory}`;
+				nodetag = node?.tag ?? 'other';
+		card.className = `card hidden type-${nodeType} trait-${nodeTrait} cat-${nodetag}`;
 		card.id = `node-${node.id}`;
 		nameEl.textContent = node.name;
 		contentEl.textContent = node.content;
-		useEl.setAttribute('href', `#icon-${nodeCategory}`);
+		useEl.setAttribute('href', `#icon-${nodetag}`);
 		setupInteractions(card, node.id);
 		nodesGroup.append(clone);
 	});
@@ -2232,7 +2346,7 @@ searchInput.addEventListener('input', (e) => {
 				itemEl.classList.add('selected');
 			}
 			clone.querySelector('.name').textContent = m.name;
-			clone.querySelector('.desc').textContent = `${(m?.category ?? 'misc').replace(/_/g, ' ')} • ${m?.trait ?? 'shared'}`;
+			clone.querySelector('.desc').textContent = `${(m?.tag ?? 'misc').replace(/_/g, ' ')} • ${m?.trait ?? 'shared'}`;
 			itemEl.addEventListener('click', (ev) => {
 				ev.preventDefault();
 				const id = itemEl.getAttribute('data-id');
@@ -2493,7 +2607,14 @@ function getBreadcrumbPath(targetId) {
 		findPathDirected = (edgeDirection, allowAllEdges) => {
 			let adjList = {};
 			const
-				defaultEdgeTypes = new Set(['anatomy', 'benefit', 'consequence', 'harm']),
+				defaultEdgeTypes = new Set([
+					'anatomy',
+					//'benefit',
+					//'consequence',
+					//'harm',
+					//'risk',
+					//'surgery',
+				]),
 				isAllowedEdgeType = (t) => allowAllEdges || defaultEdgeTypes.has(t ?? 'anatomy'),
 				isAllowedNode = (id, nodeData) => {
 					if (nodeData == null) return false;
@@ -2504,14 +2625,14 @@ function getBreadcrumbPath(targetId) {
 					let weight = 5; // Base weight (e.g. for anatomy/structure)
 					if (neighborData?.type === 'root') {
 						weight = 1; // Prioritize root types even higher than anatomy
-					} else if (neighborData?.category !== 'anatomy' && neighborData?.category !== 'structure') {
+					} else if (neighborData?.tag !== 'anatomy' && neighborData?.tag !== 'structure') {
 						weight += 20; // Deprioritize non-anatomy
 					}
 					if (targetTrait != null && neighborData?.trait !== targetTrait) {
 						weight += 10;
 						if (neighborData?.trait !== 'shared') weight += 50;
 					}
-					if (neighborData?.category === 'other') {
+					if (neighborData?.tag === 'other') {
 						weight += 20;
 					}
 					return weight;
