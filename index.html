@@ -825,14 +825,13 @@ footer {
 	aside {
 		display: flex;
 		align-items: stretch;
-		--legend-peek: 1ch;
+		--legend-peek: 2em;
 		--extra-width: 10em;
 		position: fixed;
 		overflow: clip;
-		opacity: 0.95;
+		opacity: 0.1;
 		box-shadow: 0 0 0 0 var(--shadow);
 		width: fit-content;
-		transition: transform 0.3s ease-out, opacity 0.3s ease-out, box-shadow 0.2s ease-out;
 		&::before {
 			content: "Legend";
 			display: flex;
@@ -846,7 +845,7 @@ footer {
 			padding: 0.5em;
 			cursor: pointer;
 			user-select: none;
-			width: var(--legend-peek);
+			width: 1ch;
 		}
 		> div {
 			flex: 1 0 var(--extra-width);
@@ -856,10 +855,11 @@ footer {
 			flex-direction: row-reverse;
 			padding: 0 0 0 var(--extra-width);
 			inset: auto auto 1em 0;
-			--transform: translateX(calc(-100% + var(--legend-peek)));
+			transform: translateX(calc(-100% + var(--legend-peek)));
 			&:hover, &:focus-within, &.open {
-				--transform: translateX(calc(-1 * var(--extra-width)));
+				transform: translateX(calc(-1 * var(--extra-width)));
 				z-index: 200;
+				opacity: 1;
 			}
 		}
 	}
@@ -1166,6 +1166,11 @@ svg {
 			background-color 0.3s ease,
 			border-color 0.3s ease,
 			opacity 0.5s ease;
+	}
+	aside {
+		transition:
+			transform 0.3s ease-out,
+			opacity 0.3s ease-out;
 	}
 }
 
