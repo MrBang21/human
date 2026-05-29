@@ -131,10 +131,12 @@
 		"ejaculatory_reflex": "The ejaculatory reflex is a two-phase spinal reflex triggered by threshold stimulation of the glans penis or urethra, mediated through the pudendal nerve and sacral spinal segments (S2-S4). The emission phase involves rhythmic contractions of the prostate, seminal vesicles, and vas deferens to propel semen into the prostatic urethra, followed by the expulsion phase where bulbospongiosus muscle contractions forcefully expel semen.",
 		"erogenous_zones": "Erogenous zones are areas of the human body that have heightened sensitivity, which when stimulated, create a sexual response or enhance sexual arousal. They often possess a high density of specialized nerve endings.",
 		"exercise_induced_orgasm": "Orgasm or orgasm-like pleasure triggered during specific core or pelvic muscle exertion (sometimes called coregasm).",
+		"genital_cutting_complications": "Adverse medical outcomes resulting from genital cutting, including immediate risks (hemorrhage, infection, surgical error, death) and long-term consequences (scarring, adhesions, meatal stenosis, chronic pain, loss of sensitivity, and psychological trauma).",
 		"gluteal_fold": "The infragluteal fold where thigh and buttock meet, an area that can be tactilely sensitive.",
 		"hindu_tradition": "In Hindu tradition, circumcision is considered strictly forbidden because the intact penis is viewed as a source of great power or vitality (Ojas).",
 		"inguinal_crease": "The groin fold at the junction of the lower abdomen and thigh, often responsive to light touch.",
 		"intact_erogenous_sensitivity": "Intact erogenous sensitivity refers to the finely tuned, multi-layered complex of nerves preserved within natural, unamputated genital structures. For both males and females, this includes millions of microscopic touch receptors on mucosal surfaces that convey specific types of sexual pleasure, pressure, and stretch to the brain, which are physically severed or degraded if the mucosal tissues are removed or chronically exposed.",
+		"loss_of_erogenous_tissue": "The permanent removal of specialized sexual tissue (such as the foreskin, clitoral hood, or frenulum) that contains specific nerve endings (e.g., Meissner's corpuscles, Merkel cells) and mucosal properties essential for sexual sensation and protection.",
 		"lower_back": "Lumbar skin and soft tissue region that can function as a secondary erogenous area.",
 		"medhra_marma": "In Ayurvedic medicine, the Medhra Marma is a critical energetic and physiological point located on the penis. Proper function of this marma is viewed as essential for preserving Ojas (vitality and immunity) and facilitating the unobstructed flow of sexual energy.",
 		"merkel_cells": "Merkel discs are slowly adapting mechanoreceptors concentrated in areas of fine tactile discrimination, including fingertips, palms, and genitalia. They respond to sustained pressure and texture, contributing to the richness of touch-based sexual sensation.",
@@ -149,6 +151,7 @@
 		"plateau_phase": "The sustained high-arousal stage of the sexual response cycle preceding orgasm.",
 		"prana_trapping": "A concept within yogic physiology suggesting that improper structural manipulation, trauma, or amputation (such as circumcision) to key marma points can trap or block prana (life force). This blockage is theorized to manifest as emotional instability, relationship difficulties, and obstructed creativity.",
 		"prepuce": "The prepuce is a retractable, multi-layered fold of skin and mucous membrane that covers and protects the glans in both male and female genitalia. It contains a rich network of blood vessels, specialized nerve endings (including Meissner's corpuscles), and smooth muscle fibers, making it highly responsive to tactile stimulation and a key component of human sexual pleasure.",
+		"psychological_impact_of_cutting": "The mental health consequences of genital cutting, including post-traumatic stress disorder (PTSD), anxiety, depression, and feelings of violation or loss of bodily integrity.",
 		"pudendal_nerve": "The major somatic nerve of the perineum, it emerges from the sacral plexus and carries sensory, motor, and autonomic fibers to the genital region. It innervates the clitoris, penis, perineum, and external anal sphincter, heavily mediating the tactile sensory aspect of sexual pleasure.",
 		"refractory_period": "The recovery phase after orgasm when immediate repeat orgasm is physiologically less likely.",
 		"sacral_plexus": "The sacral plexus is a neural network formed by the integration of sacral spinal nerve roots (S1-S4) with lumbosacral trunk fibers. It gives rise to the major somatic and autonomic nerves of the pelvis and genital region, including the pudendal nerve and pelvic splanchnic nerves that innervate sexual structures.",
@@ -311,6 +314,26 @@
 				"name": "Exercise-induced orgasm and sexual pleasure among women"
 			}
 		],
+		"genital_cutting_complications": [
+			{
+				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
+				"name": "Complications of Male Circumcision"
+			},
+			{
+				"url": "https://www.who.int/news-room/fact-sheets/detail/female-genital-mutilation",
+				"name": "WHO Medical Complications of FGM/C"
+			}
+		],
+		"loss_of_erogenous_tissue": [
+			{
+				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
+				"name": "Anatomy and Physiology of the Foreskin"
+			},
+			{
+				"url": "https://pubmed.ncbi.nlm.nih.gov/2909820/",
+				"name": "Touch and the Somatosensory System: Merkel Cell-Neurite Complexes"
+			}
+		],
 		"merkel_cells": [
 			{
 				"url": "https://pubmed.ncbi.nlm.nih.gov/2909820/",
@@ -351,6 +374,16 @@
 			{
 				"url": "https://my.clevelandclinic.org/health/articles/9119-sexual-response-cycle",
 				"name": "Sexual Response Cycle"
+			}
+		],
+		"psychological_impact_of_cutting": [
+			{
+				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
+				"name": "Psychological Effects of Male Circumcision"
+			},
+			{
+				"url": "https://www.who.int/news-room/fact-sheets/detail/female-genital-mutilation",
+				"name": "WHO Psychological Impact of FGM/C"
 			}
 		],
 		"pudendal_nerve": [
@@ -409,6 +442,16 @@
 			{
 				"url": "https://www.kenhub.com/en/library/anatomy/pudendal-nerve",
 				"name": "Pudendal nerve: Anatomy and clinical notes"
+			}
+		],
+		"female_genital_cutting": [
+			{
+				"url": "https://www.unicef.org/forcedisplacement/female-genital-mutilation",
+				"name": "UNICEF Data on FGM/C"
+			},
+			{
+				"url": "https://www.who.int/news-room/fact-sheets/detail/female-genital-mutilation",
+				"name": "WHO Fact Sheet on FGM/C"
 			}
 		],
 		"female_lubrication": [
@@ -485,6 +528,28 @@
 			{
 				"url": "https://link.springer.com/chapter/10.1007/978-94-007-6407-1_2",
 				"name": "Routine Infant Circumcision: Vital Issues that the Circumcision Proponents may be Overlooking"
+			},
+			{
+				"url": "https://www.youtube.com/watch?v=6PfiR9HFidI",
+				"name": "Everything About Circumcision Is A Lie… Everything"
+			},
+			{
+				"url": "https://norm.org/the-lost-list/",
+				"name": "The Lost List"
+			},
+			{
+				"url": "https://norm.org/the-lost-list/",
+				"name": "The Lost List"
+			}
+		],
+		"male_circumcision_complications": [
+			{
+				"url": "https://circumcision.org/psychological-effects/",
+				"name": "Psychological Effects"
+			},
+			{
+				"url": "https://www.psychologytoday.com/us/blog/moral-landscapes/201501/circumcisions-psychological-damage",
+				"name": "Circumcision’s Psychological Damage"
 			}
 		],
 		"male_dorsal_nerve": [
@@ -2563,7 +2628,7 @@
 			"id": "bioelectrical_sabotage",
 			"name": "Bioelectrical Sabotage",
 			"content": "The concept that surgical removal of specialized genital tissue disrupts natural energetic pathways.",
-			"type": "consequence",
+			"type": "energetic",
 			"tag": "downgrade",
 			"trait": "shared"
 		},
@@ -2571,7 +2636,7 @@
 			"id": "prana_trapping",
 			"name": "Prana Trapping / Energy Block",
 			"content": "Improper manipulation of the reproductive marma points is believed to trap life force (prana).",
-			"type": "consequence",
+			"type": "energetic",
 			"tag": "downgrade",
 			"trait": "shared"
 		},
@@ -3679,7 +3744,7 @@
 		{
 			"source": "female_vulva",
 			"target": "svadhishthana_chakra",
-			"type": "anatomy"
+			"type": "energetic"
 		},
 		{
 			"source": "female_vulva",
@@ -4059,7 +4124,7 @@
 		{
 			"source": "male_penis",
 			"target": "medhra_marma",
-			"type": "anatomy"
+			"type": "energetic"
 		},
 		{
 			"source": "male_penis",
@@ -5299,12 +5364,12 @@
 		{
 			"source": "medhra_marma",
 			"target": "svadhishthana_chakra",
-			"type": "benefit"
+			"type": "energetic"
 		},
 		{
 			"source": "svadhishthana_chakra",
 			"target": "ojas_vitality",
-			"type": "benefit"
+			"type": "energetic"
 		},
 		{
 			"source": "female_clitoral_glans",
@@ -5384,7 +5449,7 @@
 		{
 			"source": "female_genital_cutting",
 			"target": "prana_trapping",
-			"type": "surgery"
+			"type": "energetic"
 		},
 		{
 			"source": "female_genital_cutting",
@@ -5419,7 +5484,7 @@
 		{
 			"source": "energetic_system",
 			"target": "prana_trapping",
-			"type": "consequence"
+			"type": "energetic"
 		},
 		{
 			"source": "psychological_trauma",
@@ -5824,27 +5889,27 @@
 		{
 			"source": "nadis",
 			"target": "bioelectrical_sabotage",
-			"type": "harm"
+			"type": "energetic"
 		},
 		{
 			"source": "prana_trapping",
 			"target": "svadhishthana_chakra",
-			"type": "harm"
+			"type": "energetic"
 		},
 		{
 			"source": "female_genital_cutting",
 			"target": "bioelectrical_sabotage",
-			"type": "harm"
+			"type": "energetic"
 		},
 		{
 			"source": "male_circumcision",
 			"target": "bioelectrical_sabotage",
-			"type": "harm"
+			"type": "energetic"
 		},
 		{
 			"source": "male_circumcision",
 			"target": "prana_trapping",
-			"type": "harm"
+			"type": "energetic"
 		}
 	]
 }
