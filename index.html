@@ -45,24 +45,24 @@
 	accent-color: var(--accent);
 	--mobile-bar-height: 3.25em;
 	--vv-bottom-offset: 0px;
-	--body: oklch(0.95 0 0); /* oklch(0.95 0 0); */
+	--body: oklch(.95 0 0); /* oklch(0.95 0 0); */
 	--card: oklch(1 0 0);
-	--text: oklch(0.3 0 0);
-	--muted: oklch(0.4 0 0);
-	--shadow: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / 0.5);
-	--shadow-hover: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / 0.8);
+	--text: oklch(.3 0 0);
+	--muted: oklch(.4 0 0);
+	--shadow: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / .5);
+	--shadow-hover: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / .8);
 
 	--block-l: 1;
 	--block-c: 0;
 	--block-h: 0;
 	--block: oklch(var(--block-l) var(--block-c) var(--block-h));
 
-	--border-l: 0.8;
+	--border-l: .8;
 	--border-c: 0;
 	--border-h: 0;
 	--border: oklch(var(--border-l) var(--border-c) var(--border-h));
 
-	--card-l: 0.975;
+	--card-l: .975;
 	--card-c: 0;
 	--card-hover-l: 1;
 	--card-hover-c: 0;
@@ -84,52 +84,52 @@
 	--button-active-l: 1;
 	--button-active-c: 0;
 
-	--search-hover: oklch(0.95 0 0);
+	--search-hover: oklch(.95 0 0);
 
-	--text-l: 0.6;
-	--text-hover-l: 0.7;
-	--text-c: 0.18;
-	--text-hover-c: 0.2;
+	--text-l: .6;
+	--text-hover-l: .7;
+	--text-c: .18;
+	--text-hover-c: .2;
 
-	--edge-l: 0.8;
-	--edge-related-l: 0.85;
-	--edge-c: 0.11;
+	--edge-l: .8;
+	--edge-related-l: .85;
+	--edge-c: .11;
 
-	--node-l: 0.7;
-	--node-related-l: 0.75;
-	--node-c: 0.12;
+	--node-l: .7;
+	--node-related-l: .75;
+	--node-c: .12;
 
-	--icon-l: 0.7;
-	--icon-c: 0.14;
+	--icon-l: .7;
+	--icon-c: .14;
 
-	--current-l: 0.8;
-	--current-c: 0.11;
+	--current-l: .8;
+	--current-c: .11;
 
-	--parent-l: 0.7;
-	--parent-c: 0.05;
+	--parent-l: .7;
+	--parent-c: .05;
 
-	--related-l: 0.75;
-	--related-c: 0.1;
+	--related-l: .75;
+	--related-c: .1;
 
-	--unrelated-l: 0.8;
-	--unrelated-c: 0.05;
+	--unrelated-l: .8;
+	--unrelated-c: .05;
 
-	--accent-l: 0.7;
-	--accent-c: 0.11;
+	--accent-l: .7;
+	--accent-c: .11;
 	--accent-h: 220;
 
-	--accent-hover-l: 0.7;
-	--accent-hover-c: 0.2;
+	--accent-hover-l: .7;
+	--accent-hover-c: .2;
 
-	--accent-active-l: 0.8;
-	--accent-active-c: 0.2;
+	--accent-active-l: .8;
+	--accent-active-c: .2;
 
 	--accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
 	--accent-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--accent-h));
 	--accent-active: oklch(var(--accent-active-l) var(--accent-active-c) var(--accent-h));
 
-	--shadow-l: 0.3;
-	--shadow-c: 0.1;
+	--shadow-l: .3;
+	--shadow-c: .1;
 	--shadow-h: var(--accent-h);
 
 	--hue-female: 340;
@@ -154,45 +154,45 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		color-scheme: dark;
-		--body: oklch(0.2 0 0);
-		--text: oklch(0.8 0 0);
-		--muted: oklch(0.7 0 0);
+		--body: oklch(.2 0 0);
+		--text: oklch(.8 0 0);
+		--muted: oklch(.7 0 0);
 
-		--block-l: 0.2;
-		--border-l: 0.3;
+		--block-l: .2;
+		--border-l: .3;
 
-		--search-hover: oklch(0.3 0 0);
+		--search-hover: oklch(.3 0 0);
 
-		--text-l: 0.8;
-		--text-c: 0.12;
-		--text-hover-l: 0.9;
-		--text-hover-c: 0.15;
+		--text-l: .8;
+		--text-c: .12;
+		--text-hover-l: .9;
+		--text-hover-c: .15;
 
-		--card-l: 0.25;
-		--card-c: 0.0;
-		--card-hover-l: 0.25;
+		--card-l: .25;
+		--card-c: .0;
+		--card-hover-l: .25;
 		--card-hover-c: 0;
 		--card-h: 240;
 
-		--icon-l: 0.8;
-		--icon-c: 0.15;
+		--icon-l: .8;
+		--icon-c: .15;
 
-		--shadow-l: 0.7;
-		--shadow-c: 0.1;
+		--shadow-l: .7;
+		--shadow-c: .1;
 
-		--input-l: 0.2;
-		--button-l: 0.2;
+		--input-l: .2;
+		--button-l: .2;
 
-		--accent-l: 0.7;
-		--accent-hover-l: 0.8;
-		--accent-active-l: 0.9;
+		--accent-l: .7;
+		--accent-hover-l: .8;
+		--accent-active-l: .9;
 
-		--edge-l: 0.7;
-		--edge-related-l: 0.75;
-		--node-l: 0.95;
-		--node-related-l: 0.95;
+		--edge-l: .7;
+		--edge-related-l: .75;
+		--node-l: .95;
+		--node-related-l: .95;
 
-		--current-l: 0.85;
+		--current-l: .85;
 	}
 }
 
@@ -205,7 +205,7 @@
 }
 
 html {
-	font-size: clamp(.875rem, 1vw + 0.25rem, 1.125rem);
+	font-size: clamp(.875rem, 1vw + .25rem, 1.125rem);
 }
 
 body {
@@ -294,10 +294,10 @@ body,
 	text-align: center;
 	translate: -50% -50%;
 	transform-origin: top center;
-	transition: left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), scale 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s ease-out, opacity 0.6s ease-out, box-shadow 0.2s ease-out;
+	transition: left .8s cubic-bezier(.34, 1.56, .64, 1), top .8s cubic-bezier(.34, 1.56, .64, 1), scale .6s cubic-bezier(.16, 1, .3, 1), filter .6s ease-out, opacity .6s ease-out, box-shadow .2s ease-out;
 
 	&.dragging {
-		transition: scale 0.2s ease-out, box-shadow 0.2s ease-out !important;
+		transition: scale .2s ease-out, box-shadow .2s ease-out !important;
 	}
 	&:active {
 		cursor: grabbing;
@@ -312,7 +312,7 @@ body,
 	}
 	&.source {
 		z-index: 1;
-		scale: 0.9;
+		scale: .9;
 	}
 	&.current {
 		--node-l: var(--current-l);
@@ -338,7 +338,7 @@ body,
 		--node-l: var(--unrelated-l);
 		--node-c: var(--unrelated-c);
 		z-index: 1;
-		opacity: 0.5;
+		opacity: .5;
 	}
 	&.hidden {
 		display: none;
@@ -421,13 +421,13 @@ body,
 		pointer-events: none;
 	}
 	h3 {
-		margin: 0 0 0.5em 0;
+		margin: 0 0 .5em 0;
 		font-size: 1.25em;
 		color: oklch(var(--text-l) var(--text-c) var(--_text-hue));
 	}
 	p {
 		margin: 0;
-		font-size: 0.95em;
+		font-size: .95em;
 		color: var(--muted);
 	}
 }
@@ -632,7 +632,7 @@ footer {
 	border: none;
 	background-color: transparent;
 	text-align: right;
-	font-size: 0.5em;
+	font-size: .5em;
 }
 
 svg {
@@ -708,7 +708,6 @@ svg {
 		--_width: .2em;
 		--_dash: 6 8;
 	}
-
 	path.edge {
 		fill: none;
 		color: oklch(var(--edge-l) var(--edge-c) var(--_hue));
@@ -724,7 +723,7 @@ svg {
 			--node-l: var(--node-related-l); /* we need the marker somehow */
 		}
 		&.unrelated {
-			opacity: 0.1;
+			opacity: .1;
 		}
 	}
 	marker,
@@ -776,13 +775,13 @@ svg {
 		display: flex;
 	}
 	h2 {
-		margin: 0 0 0.5em 0;
+		margin: 0 0 .5em 0;
 		font-size: 1.4em;
 		color: var(--text);
 	}
 	p {
 		margin: 0;
-		font-size: 0.95em;
+		font-size: .95em;
 		color: var(--muted);
 		line-height: 1.5;
 		white-space: pre-wrap;
@@ -793,11 +792,11 @@ svg {
 		list-style: none;
 		position: relative;
 		li {
-			margin-bottom: 0.25em;
+			margin-bottom: .25em;
 			overflow: clip;
 			a {
 				display: block;
-				font-size: 0.9em;
+				font-size: .9em;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -810,14 +809,12 @@ svg {
 				display: block;
 				font-weight: bold;
 				font-size: 1.1em;
-				margin-bottom: 0.5em;
+				margin-bottom: .5em;
 				color: var(--text);
 			}
 		}
 	}
 }
-
-
 
 #search {
 	position: relative;
@@ -840,7 +837,7 @@ svg {
 		list-style: none;
 		padding: 0;
 		margin: 0;
-		z-index: 3000000;
+		z-index: 10000;
 		li {
 			cursor: pointer;
 			border-bottom: 1px solid var(--border);
@@ -866,15 +863,15 @@ svg {
 			.name {
 				font-weight: 600;
 				color: var(--text);
-				margin-bottom: 4px;
+				margin-bottom: .25em;
 				margin-top: 0;
 				font-size: 1.1em;
 			}
 			.desc {
-				font-size: 11px;
+				font-size: .9em;
 				color: var(--muted);
 				text-transform: uppercase;
-				letter-spacing: 0.5px;
+				letter-spacing: .5px;
 			}
 		}
 	}
@@ -916,15 +913,15 @@ svg {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		&:disabled {
-			opacity: 0.5;
+			opacity: .5;
 			cursor: not-allowed;
 		}
 		&[aria-pressed="true"] {
 			border-color: var(--accent);
 			color: var(--accent);
 			--background-color: var(--search-hover);
-			--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / 0.2);
-			--button-c: 0.20;
+			--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / .2);
+			--button-c: .20;
 			--button-h: 20;
 		}
 	}
@@ -993,11 +990,9 @@ svg {
 	}
 	aside {
 		display: flex;
-		width: fit-content;
-		max-height: calc(100vh - 6em);
+		max-height: calc(50vh);
 		transform: translateX(var(--_translateX, 0));
-		z-index: 100;
-		opacity: 0.5;
+		opacity: .5;
 		&::before {
 			display: flex;
 			justify-content: center;
@@ -1007,7 +1002,7 @@ svg {
 			background-color: var(--accent);
 			color: var(--body);
 			font-weight: bold;
-			padding: 0.5em;
+			padding: .5em;
 			cursor: pointer;
 			user-select: none;
 			width: 1ch;
@@ -1016,17 +1011,13 @@ svg {
 			flex: 1 0 var(--_width);
 			padding: 1em;
 			overflow-y: auto;
-			opacity: 0.1;
 		}
 		&:hover,
 		&:focus,
 		&:focus-within,
 		&.open {
-			z-index: 200;
 			opacity: 1;
-			> div {
-				opacity: 1;
-			}
+			transform: translateX(var(--_alt-translateX, 0));
 		}
 		&#legends {
 			&::before {
@@ -1036,12 +1027,7 @@ svg {
 			padding: 0 0 0 var(--_width);
 			inset: auto auto 3em 0;
 			--_translateX: calc(-100% + var(--_peek));
-			&:hover,
-			&:focus,
-			&:focus-within,
-			&.open {
-				--_translateX: calc(-1 * var(--_width));
-			}
+			--_alt-translateX: calc(-1 * var(--_width));
 		}
 		&#options {
 			&::before {
@@ -1051,12 +1037,7 @@ svg {
 			padding: 0 var(--_width) 0 0;
 			inset: auto 0 3em auto;
 			--_translateX: calc(100% - var(--_peek));
-			&:hover,
-			&:focus,
-			&:focus-within,
-			&.open {
-				--_translateX: var(--_width);
-			}
+			--_alt-translateX: var(--_width);
 		}
 	}
 }
@@ -1067,63 +1048,63 @@ svg {
 	a,
 	h3,
 	.item {
-		transition: color 0.3s ease;
+		transition: color .3s ease;
 	}
 	input,
 	select,
 	button {
 		transition:
-			border-color 0.3s ease,
-			background-color 0.3s ease,
-			color 0.3s ease;
+			border-color .3s ease,
+			background-color .3s ease,
+			color .3s ease;
 	}
 	select::picker-icon {
-		transition: rotate 0.3s ease;
+		transition: rotate .3s ease;
 	}
 	#results li {
-		transition: background-color 0.2s ease;
+		transition: background-color .2s ease;
 	}
 	.toggle {
 		transition:
-			border-color 0.3s ease,
-			background-color 0.3s ease,
-			color 0.3s ease;
+			border-color .3s ease,
+			background-color .3s ease,
+			color .3s ease;
 	}
 	svg {
 		transition:
-			fill 0.3s ease,
-			color 0.3s ease;
+			fill .3s ease,
+			color .3s ease;
 		/*
 		path:not(.edge) {
-			transition: fill 0.3s ease;
+			transition: fill .3s ease;
 		}
 		*/
 		path.edge {
 			transition:
-				stroke-opacity 0.3s ease,
-				opacity 0.3s ease,
-				stroke 0.3s ease,
-				stroke-width 0.3s ease;
+				stroke-opacity .3s ease,
+				opacity .3s ease,
+				stroke .3s ease,
+				stroke-width .3s ease;
 		}
 	}
 	#mobile-bar button {
 		transition:
-			border-color 0.2s ease,
-			background-color 0.2s ease,
-			color 0.2s ease;
+			border-color .2s ease,
+			background-color .2s ease,
+			color .2s ease;
 	}
 	.card {
 		transition:
-			scale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
-			box-shadow 0.3s ease,
-			background-color 0.3s ease,
-			border-color 0.3s ease,
-			opacity 0.5s ease;
+			scale .3s cubic-bezier(.25, .8, .25, 1),
+			box-shadow .3s ease,
+			background-color .3s ease,
+			border-color .3s ease,
+			opacity .5s ease;
 	}
 	aside {
 		transition:
-			transform 0.3s ease-out,
-			opacity 0.3s ease-out;
+			transform .3s ease-out,
+			opacity .3s ease-out;
 	}
 }
 
@@ -1131,12 +1112,12 @@ svg {
 	/* turn on backdrop-filter effects and box-shadow */
 	:root {
 		--backdrop: blur(2em);
-		--block: oklch(var(--block-l) var(--block-c) var(--block-h) / 0.2);
-		--card: oklch(var(--card-l) var(--card-c) var(--card-h) / 0.01);
-		--input: oklch(var(--input-l) var(--input-c) var(--input-h) / 0.8);
-		--button: oklch(var(--button-l) var(--button-c) var(--button-h) / 0.8);
-		--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / 0.8);
-		--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / 0.8);
+		--block: oklch(var(--block-l) var(--block-c) var(--block-h) / .2);
+		--card: oklch(var(--card-l) var(--card-c) var(--card-h) / .01);
+		--input: oklch(var(--input-l) var(--input-c) var(--input-h) / .8);
+		--button: oklch(var(--button-l) var(--button-c) var(--button-h) / .8);
+		--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / .8);
+		--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / .8);
 	}
 	#results {
 		box-shadow: 0 .5em 1em 0 var(--shadow);
@@ -1153,26 +1134,26 @@ svg {
 	/*
 	.card {
 		backdrop-filter: var(--backdrop);
-		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--shadow-h) / 0.5);
+		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--shadow-h) / .5);
 		box-shadow: var(--_shadow);
 		&.current {
-			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
 		}
 		&:hover {
-			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
 		}
 	}
 	*/
 	.card {
 		backface-visibility: hidden;
 		backdrop-filter: var(--backdrop);
-		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.5);
+		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .5);
 		box-shadow: var(--_shadow);
 		&.current {
-			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
 		}
 		&:hover {
-			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
+			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
 		}
 	}
 }
@@ -1403,7 +1384,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.10 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.11 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
