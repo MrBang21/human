@@ -42,7 +42,7 @@
 <style>
 :root {
 	color-scheme: light dark;
-	accent-color: var(--url);
+	accent-color: var(--accent);
 	--mobile-bar-height: 3.25em;
 	--vv-bottom-offset: 0px;
 	--body: oklch(0.95 0 0); /* oklch(0.95 0 0); */
@@ -142,20 +142,12 @@
 	--hue-sexual: 320;
 	--hue-energetic: 300;
 	--hue-homologous: 280;
-
 	--hue-benefit: 160;
-
 	--hue-surgery: 20;
 	--hue-consequence: 40;
 	--hue-risk: 100;
 	--hue-removed: 40;
 	--hue-harm: 20;
-
-	--hue-url: 240;
-
-	--url: oklch(var(--accent-l) var(--accent-c) var(--hue-url));
-	--url-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url));
-
 }
 
 
@@ -226,13 +218,18 @@ body {
 		sans-serif;
 	overflow: hidden;
 	user-select: none;
+	&.legends #legends,
+	&.options #options,
+	&.description #description {
+		display: flex;
+	}
 }
 
 a {
-	color: var(--url);
+	color: var(--accent);
 	text-decoration: none;
 	&:hover {
-		color: var(--url-hover);
+		color: var(--accent-hover);
 		text-decoration: underline;
 	}
 }
@@ -324,7 +321,7 @@ body,
 		min-width: 14em;
 		z-index: 100;
 		&:hover {
-			scale: 1.1;
+			/* scale: 1.1; */
 		}
 	}
 	&.parent {
@@ -364,7 +361,7 @@ body,
 		--node-l: var(--current-l);
 		--node-c: var(--current-c);
 		z-index: 5;
-		scale: 1.05;
+		/* scale: 1.05; */
 	}
 	&.trait-male {
 		--_icon-hue: var(--hue-male);
@@ -435,54 +432,6 @@ body,
 	}
 }
 
-#top-bar {
-	position: absolute;
-	inset: 1em 1em auto 1em;
-	z-index: 200;
-	display: flex;
-	flex-direction: row;
-	align-items: flex-start;
-	gap: 1em;
-}
-
-#breadcrumbs {
-	background-color: var(--block);
-	padding: .5em 1em;
-	border-radius: .5em;
-	corner-shape: squircle;
-	height: 2.5em;
-	line-height: 1;
-	display: flex;
-	flex-wrap: nowrap;
-	flex-direction: row;
-	justify-content: flex-end;
-	overflow: hidden;
-	gap: .25em;
-	align-items: center;
-	> * {
-		white-space: nowrap;
-		flex: 0 1 min-content;
-	}
-	.item {
-		cursor: pointer;
-		color: var(--url);
-		font-weight: 500;
-		&:hover {
-			color: var(--url-hover);
-			text-decoration: underline;
-		}
-	}
-	.separator {
-		color: var(--muted);
-		margin: 0;
-	}
-	.current {
-		color: var(--text);
-		font-weight: bold;
-		cursor: default;
-	}
-}
-
 input, select, button {
 	max-height: 2.5em;
 }
@@ -501,7 +450,7 @@ input, select, option, textarea, button {
 		color: var(--muted);
 	}
 	&:focus {
-		border-color: var(--url);
+		border-color: var(--accent);
 	}
 }
 
@@ -550,200 +499,31 @@ select {
 	}
 }
 
-#controls {
+aside {
 	display: flex;
-	gap: .25em;
-	flex: 1 1 50%;
-	justify-content: flex-end;
-	position: relative;
-	align-items: center;
-	> div {
-		background-color: transparent;
-	}
-
-	.select {
-		position: relative;
-		display: flex;
-	}
-
-	#search-container {
-		position: relative;
-		flex: 0 1 auto;
-		#search {
-			width: 100%;
-			min-width: 5em;
-		}
-		#results {
-			margin-top: .5em;
-			background-color: var(--block);
-			border-radius: .5em;
-			max-height: 350px;
-			overflow-y: auto;
-			display: none;
-			border: 1px solid var(--border);
-			border-radius: 1em;
-			corner-shape: squircle;
-			position: fixed;
-			list-style: none;
-			padding: 0;
-			margin: 0;
-			z-index: 3000000;
-			li {
-				cursor: pointer;
-				border-bottom: 1px solid var(--border);
-				background-color: var(--block);
-				&:last-child {
-					border-bottom: none;
-				}
-				&:hover,
-				&.selected {
-					background-color: var(--search-hover);
-				}
-				a {
-					display: block;
-					padding: 1em;
-					text-decoration: none;
-					color: inherit;
-				}
-				.card {
-					all: revert;
-					display: block !important;
-					font-family: inherit;
-				}
-				.name {
-					font-weight: 600;
-					color: var(--text);
-					margin-bottom: 4px;
-					margin-top: 0;
-					font-size: 1.1em;
-				}
-				.desc {
-					font-size: 11px;
-					color: var(--muted);
-					text-transform: uppercase;
-					letter-spacing: 0.5px;
-				}
-			}
-		}
-	}
-	.toggle {
-		display: flex;
-		align-items: center;
-		height: 2.5em;
-		border: 1px solid var(--border);
-		border-radius: .5em;
-		padding: 0 .5em;
-		background-color: var(--input);
-		input[type="checkbox"] {
-			margin: 0;
-			padding: 0;
-			width: 1.1em;
-			height: 1.1em;
-		}
-		label {
-			display: flex;
-			align-items: center;
-			gap: .5em;
-			cursor: pointer;
-			color: var(--muted);
-			white-space: nowrap;
-		}
-		&:focus-within {
-			border-color: var(--url);
-		}
-	}
-}
-
-#legend,
-footer {
-	position: fixed;
-	background-color: var(--block);
-	border-radius: .5em;
-	min-height: 2em;
-	z-index: 200;
-}
-
-#controls,
-#breadcrumbs {
-	border-radius: .5em;
-	min-height: 2em;
-	z-index: 200;
-}
-
-#legend,
-#breadcrumbs,
-#description {
-	border: 1px solid var(--border);
-	background-color: var(--block);
-}
-
-#description {
-	position: fixed;
-	top: 4.5em;
-	left: 1em;
-	width: 26em;
-	max-height: calc(100vh - 14em);
-	overflow-y: auto;
-	padding: 1.5em;
-	z-index: 2;
 	display: none;
-	border-radius: .5em;
-	overscroll-behavior: contain;
-	&.visible {
-		display: block;
-	}
-	h2 {
-		margin: 0 0 0.5em 0;
-		font-size: 1.4em;
-		color: var(--text);
-	}
-	p {
-		margin: 0;
-		font-size: 0.95em;
-		color: var(--muted);
-		line-height: 1.5;
-		white-space: pre-wrap;
-	}
-	ul {
-		margin: 0;
-		padding: 0;
-		list-style: none;
-		position: relative;
-		li {
-			margin-bottom: 0.25em;
-			overflow: clip;
-			a {
-				display: block;
-				font-size: 0.9em;
-				white-space: nowrap;
-				overflow: hidden;
-				text-overflow: ellipsis;
-			}
-		}
-		&:not(:empty) {
-			margin-top: 1em;
-			&::before {
-				content: "Sources:";
-				display: block;
-				font-weight: bold;
-				font-size: 1.1em;
-				margin-bottom: 0.5em;
-				color: var(--text);
-			}
-		}
-	}
-}
-
-#mobile-bar {
-	display: none;
-}
-
-#legend {
-	inset: auto auto 1em 1em;
+	position: fixed;
+	inset: auto 0 0 0;
+	z-index: 200;
+	align-items: stretch;
+	--_peek: 2em;
+	--_width: 10em;
+	overflow: clip auto;
+	touch-action: pan-y;
+	box-shadow: 0 0 0 0 var(--shadow);
+	width: fit-content;
+	max-width: calc(100svw - 1em);
+	min-height: 2em;
+	max-height: 30svh;
 	padding: 1em;
-	z-index: 1;
-	> div {
-		font-size: 0.75em;
+	transform: translateX(var(--_translateX, 0));
+	background-color: var(--block);
+	border-radius: .5em;
+	corner-shape: squircle;
+	.content {
+		flex: 1 0 var(--_width);
+		padding: 1em;
+		overflow-y: auto;
 	}
 	.name {
 		font-weight: bold;
@@ -820,52 +600,32 @@ footer {
 		}
 	}
 }
+#legends {
+	inset: auto auto calc(var(--mobile-bar-height) + 1.25em) .5em;
+}
+#options {
+	inset: auto .5em calc(var(--mobile-bar-height) + 1.25em) auto;
+}
 
-@media (width > 700px) {
-	aside {
-		display: flex;
-		align-items: stretch;
-		--legend-peek: 2em;
-		--extra-width: 10em;
-		position: fixed;
-		overflow: clip;
-		opacity: 0.1;
-		box-shadow: 0 0 0 0 var(--shadow);
-		width: fit-content;
-		&::before {
-			content: "Legend";
-			display: flex;
-			justify-content: center;
-			align-items: center;
-			text-orientation: upright;
-			writing-mode: vertical-rl;
-			background-color: var(--accent);
-			color: var(--body);
-			font-weight: bold;
-			padding: 0.5em;
-			cursor: pointer;
-			user-select: none;
-			width: 1ch;
-		}
-		> div {
-			flex: 1 0 var(--extra-width);
-			padding: 1em;
-		}
-		&#legend {
-			flex-direction: row-reverse;
-			padding: 0 0 0 var(--extra-width);
-			inset: auto auto 1em 0;
-			transform: translateX(calc(-100% + var(--legend-peek)));
-			&:hover, &:focus-within, &.open {
-				transform: translateX(calc(-1 * var(--extra-width)));
-				z-index: 200;
-				opacity: 1;
-			}
-		}
+dl {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: .5em 1em;
+	align-items: center;
+	dt {
+		text-align: right;
+		font-weight: 500;
+		color: var(--text);
+	}
+	dd {
+		margin: 0;
 	}
 }
 
 footer {
+	position: fixed;
+	min-height: 2em;
+	z-index: 200;
 	inset: auto 1em 1em auto;
 	padding: .5em 1em;
 	color: var(--muted);
@@ -973,6 +733,7 @@ svg {
 	}
 }
 
+
 .fill {
 	fill: var(--icon-fill, currentColor);
 }
@@ -982,6 +743,146 @@ svg {
 	stroke-width: 2;
 	stroke-linecap: round;
 	stroke-linejoin: round;
+}
+
+#breadcrumbs,
+#search {
+	pointer-events: auto;
+}
+
+#breadcrumbs {
+	border-radius: .5em;
+	min-height: 2em;
+	z-index: 200;
+}
+
+#legends,
+#options,
+#breadcrumbs,
+#description {
+	border: 1px solid var(--border);
+	background-color: var(--block);
+}
+
+#description {
+	display: none;
+	position: fixed;
+	flex-direction: column;
+	inset: 4em auto auto 1em;
+	width: clamp(25em, 45vw, 80em);
+	max-width: 80vw;
+	max-height: calc(100vh - 14em);
+	overflow-y: auto;
+	padding: 1em;
+	z-index: 2;
+	border-radius: .5em;
+	overscroll-behavior: contain;
+	&.visible {
+		display: flex;
+	}
+	h2 {
+		margin: 0 0 0.5em 0;
+		font-size: 1.4em;
+		color: var(--text);
+	}
+	p {
+		margin: 0;
+		font-size: 0.95em;
+		color: var(--muted);
+		line-height: 1.5;
+		white-space: pre-wrap;
+	}
+	ul {
+		margin: 0;
+		padding: 0;
+		list-style: none;
+		position: relative;
+		li {
+			margin-bottom: 0.25em;
+			overflow: clip;
+			a {
+				display: block;
+				font-size: 0.9em;
+				white-space: nowrap;
+				overflow: hidden;
+				text-overflow: ellipsis;
+			}
+		}
+		&:not(:empty) {
+			margin-top: 1em;
+			&::before {
+				content: "Sources:";
+				display: block;
+				font-weight: bold;
+				font-size: 1.1em;
+				margin-bottom: 0.5em;
+				color: var(--text);
+			}
+		}
+	}
+}
+
+
+
+#search {
+	position: relative;
+	flex: 0 1 auto;
+	#query {
+		width: 100%;
+		min-width: 5em;
+	}
+	#results {
+		margin-top: .5em;
+		background-color: var(--block);
+		border-radius: .5em;
+		max-height: 350px;
+		overflow-y: auto;
+		display: none;
+		border: 1px solid var(--border);
+		border-radius: 1em;
+		corner-shape: squircle;
+		position: fixed;
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		z-index: 3000000;
+		li {
+			cursor: pointer;
+			border-bottom: 1px solid var(--border);
+			background-color: var(--block);
+			&:last-child {
+				border-bottom: none;
+			}
+			&:hover,
+			&.selected {
+				background-color: var(--search-hover);
+			}
+			a {
+				display: block;
+				padding: 1em;
+				text-decoration: none;
+				color: inherit;
+			}
+			.card {
+				all: revert;
+				display: block !important;
+				font-family: inherit;
+			}
+			.name {
+				font-weight: 600;
+				color: var(--text);
+				margin-bottom: 4px;
+				margin-top: 0;
+				font-size: 1.1em;
+			}
+			.desc {
+				font-size: 11px;
+				color: var(--muted);
+				text-transform: uppercase;
+				letter-spacing: 0.5px;
+			}
+		}
+	}
 }
 
 #loading {
@@ -994,122 +895,179 @@ svg {
 	z-index: 100;
 }
 
-@media (width <= 700px) {
-	#mobile-bar {
-		position: fixed;
-		left: .5em;
-		right: .5em;
-		bottom: calc(.5em + var(--vv-bottom-offset));
-		min-height: var(--mobile-bar-height);
-		height: auto;
-		z-index: 300;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: .5em;
-		padding: 0 .5em;
-		border: 1px solid var(--border);
-		border-radius: 1em;
+#mobile-bar {
+	position: fixed;
+	inset: auto 0 0 0;
+	z-index: 300;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: .5em;
+	padding: .5em 1em;
+	border: 1px solid var(--border);
+	border-radius: 1em 1em 0 0;
+	corner-shape: squircle;
+	background-color: var(--block);
+	button {
+		border-radius: .5em;
 		corner-shape: squircle;
-		background-color: var(--block);
-	}
-
-	#mobile-bar button {
-		border-radius: .75em;
-		padding: .5em .75em;
+		padding: .75em .75em;
 		font: inherit;
 		line-height: 1;
-		min-width: 0;
+		min-width: 2ch;
 		flex: 1 1 0;
 		cursor: pointer;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-	}
-
-	#mobile-bar button[aria-pressed="true"] {
-		border-color: var(--url);
-		color: var(--url);
-		--background-color: var(--search-hover);
-		--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / 0.2);
-		--button-c: 0.20;
-		--button-h: 20;
-	}
-
-	#mobile-bar button:disabled {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
-
-	#top-bar {
-		inset: .5em .5em auto .5em;
-		flex-direction: column;
-		align-items: stretch;
-		gap: .5em;
-	}
-
-	#breadcrumbs {
-		width: 100%;
-		justify-content: flex-start;
-		overflow-x: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-
-	#controls {
-		display: none;
-		justify-content: flex-start;
-		flex-wrap: wrap;
-		gap: .5em;
-	}
-
-	body.mobile-panel-search #controls,
-	body.mobile-panel-filters #controls {
-		display: flex;
-	}
-
-	body.mobile-panel-search #controls > :not(#search-container) {
-		display: none;
-	}
-
-	body.mobile-panel-filters #search-container {
-		display: none;
-	}
-
-	#description {
-		left: .5em;
-		right: .5em;
-		width: auto;
-		top: 3.25em;
-		max-height: 40svh;
-		display: none;
-	}
-
-	/* Override desktop auto-open behavior on mobile.
-		Even if JS marks the node as `visible`, only the Info tab should reveal it. */
-	#description.visible {
-		display: none;
-	}
-
-	body.mobile-panel-info #description {
-		display: block;
-	}
-
-	body.mobile-panel-info #description.visible {
-		display: block;
-	}
-
-	#legend {
-		display: none;
-		inset: auto auto calc(var(--mobile-bar-height) + 1.25em) .5em;
-		max-width: calc(100svw - 1em);
-		max-height: 30svh;
-		overflow: auto;
-		-webkit-overflow-scrolling: touch;
-	}
-	body.mobile-panel-legend #legend {
-		display: block;
+		&:disabled {
+			opacity: 0.5;
+			cursor: not-allowed;
+		}
+		&[aria-pressed="true"] {
+			border-color: var(--accent);
+			color: var(--accent);
+			--background-color: var(--search-hover);
+			--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / 0.2);
+			--button-c: 0.20;
+			--button-h: 20;
+		}
 	}
 }
+
+#top-bar {
+	position: absolute;
+	inset: .5em .5em auto .5em;
+	z-index: 200;
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	gap: .5em;
+	justify-content: space-between;
+	pointer-events: none;
+}
+
+#breadcrumbs {
+	background-color: var(--block);
+	padding: .5em 1em;
+	border-radius: .5em;
+	corner-shape: squircle;
+	height: 2.5em;
+	line-height: 1;
+	display: flex;
+	flex-wrap: nowrap;
+	flex-direction: row;
+	justify-content: flex-end;
+	overflow: hidden;
+	gap: .25em;
+	align-items: center;
+	span {
+		white-space: nowrap;
+		flex: 0 1 min-content;
+	}
+	.item {
+		cursor: pointer;
+		color: var(--accent);
+		font-weight: 500;
+		&:hover {
+			color: var(--accent-hover);
+			text-decoration: underline;
+		}
+	}
+	.separator {
+		color: var(--muted);
+		margin: 0;
+	}
+	.current {
+		color: var(--text);
+		font-weight: bold;
+		cursor: default;
+	}
+}
+#description {
+	max-height: 40svh;
+}
+
+
+
+
+@media (width > 700px) {
+	#mobile-bar {
+		display: none;
+	}
+	#top-bar {
+		inset: 1em 1em auto 1em;
+	}
+	aside {
+		display: flex;
+		width: fit-content;
+		max-height: calc(100vh - 6em);
+		transform: translateX(var(--_translateX, 0));
+		z-index: 100;
+		opacity: 0.5;
+		&::before {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			text-orientation: upright;
+			writing-mode: vertical-rl;
+			background-color: var(--accent);
+			color: var(--body);
+			font-weight: bold;
+			padding: 0.5em;
+			cursor: pointer;
+			user-select: none;
+			width: 1ch;
+		}
+		.content {
+			flex: 1 0 var(--_width);
+			padding: 1em;
+			overflow-y: auto;
+			opacity: 0.1;
+		}
+		&:hover,
+		&:focus,
+		&:focus-within,
+		&.open {
+			z-index: 200;
+			opacity: 1;
+			> div {
+				opacity: 1;
+			}
+		}
+		&#legends {
+			&::before {
+				content: "Legends";
+			}
+			flex-direction: row-reverse;
+			padding: 0 0 0 var(--_width);
+			inset: auto auto 3em 0;
+			--_translateX: calc(-100% + var(--_peek));
+			&:hover,
+			&:focus,
+			&:focus-within,
+			&.open {
+				--_translateX: calc(-1 * var(--_width));
+			}
+		}
+		&#options {
+			&::before {
+				content: "Options";
+			}
+			flex-direction: row;
+			padding: 0 var(--_width) 0 0;
+			inset: auto 0 3em auto;
+			--_translateX: calc(100% - var(--_peek));
+			&:hover,
+			&:focus,
+			&:focus-within,
+			&.open {
+				--_translateX: var(--_width);
+			}
+		}
+	}
+}
+
 
 @media (prefers-reduced-motion: no-preference) {
 	/* turn on transitions and animations */
@@ -1118,7 +1076,9 @@ svg {
 	.item {
 		transition: color 0.3s ease;
 	}
-	input, select, button {
+	input,
+	select,
+	button {
 		transition:
 			border-color 0.3s ease,
 			background-color 0.3s ease,
@@ -1169,8 +1129,10 @@ svg {
 	}
 	aside {
 		transition:
-			transform 0.3s ease-out,
-			opacity 0.3s ease-out;
+			transform 0.3s ease-out;
+		> div {
+			transition: opacity 0.3s ease-out;
+		}
 	}
 }
 
@@ -1189,7 +1151,8 @@ svg {
 		box-shadow: 0 .5em 1em 0 var(--shadow);
 		backdrop-filter: var(--backdrop);
 	}
-	#legend,
+	#legends,
+	#options,
 	#breadcrumbs,
 	#description,
 	#mobile-bar,
@@ -1222,12 +1185,10 @@ svg {
 		}
 	}
 }
-
-
 </style>
 </head>
 
-<body>
+<body class="description">
 <template id="card-template">
 	<div class="card">
 		<svg class="icon" viewBox="0 0 24 24">
@@ -1239,14 +1200,12 @@ svg {
 </template>
 
 <template id="search-result-template">
-	<li>
-		<a href="" target="_blank" rel="noopener">
-			<div class="card">
-				<h3 class="name"></h3>
-				<div class="desc"></div>
-			</div>
-		</a>
-	</li>
+	<li><a href="" target="_blank" rel="noopener">
+		<div class="card">
+			<h3 class="name"></h3>
+			<div class="desc"></div>
+		</div>
+	</a></li>
 </template>
 
 <template id="description-source-template">
@@ -1263,16 +1222,36 @@ svg {
 	<div id="loading">Loading database...</div>
 	<div id="top-bar">
 		<div id="breadcrumbs"></div>
-		<div id="controls">
-			<div class="select">
-				<select id="type-filter" title="Filter by connection type">
+		<div id="search" title="Search the database">
+			<input type="search" id="query" placeholder="Search ...">
+			<ul id="results"></ul>
+		</div>
+	</div>
+	<div id="description" aria-live="polite">
+		<h2></h2>
+		<p></p>
+		<ul></ul>
+	</div>
+	<aside id="options" aria-label="Graph options">
+		<div class="content">
+			<dl class="options">
+				<dt><label for="layout-select">Graph Layout:</label></dt>
+				<dd><select id="layout-select" title="Select graph layout">
 					<button>
 						<selectedcontent></selectedcontent>
 					</button>
-				</select>
-			</div>
-			<div class="select">
-				<select id="depth-control" title="Set the number of connection layers to display">
+					<option value="petal" selected>Petal</option>
+					<option value="physics">Physics</option>
+					<option value="stacked">Stacked</option>
+				</select></dd>
+				<dt><label for="type-filter">Connection Types:</label></dt>
+				<dd><select id="type-filter" title="Filter by connection type">
+					<button>
+						<selectedcontent></selectedcontent>
+					</button>
+				</select></dd>
+				<dt><label for="depth-control">Connection Depth:</label></dt>
+				<dd><select id="depth-control" title="Set the number of connection layers to display">
 					<button>
 						<selectedcontent></selectedcontent>
 					</button>
@@ -1285,37 +1264,17 @@ svg {
 					<option value="7">7</option>
 					<option value="8">8</option>
 					<option value="9">9</option>
-				</select>
-			</div>
-			<div class="select">
-				<select id="trait-filter" title="Filter connections by biological trait">
+				</select></dd>
+				<dt><label for="trait-filter">Biological Trait:</label></dt>
+				<dd><select id="trait-filter" title="Filter connections by biological trait">
 					<button>
 						<selectedcontent></selectedcontent>
 					</button>
-				</select>
-			</div>
-			<div class="select">
-				<select id="layout-select" title="Select graph layout">
-					<button>
-						<selectedcontent></selectedcontent>
-					</button>
-					<option value="petal" selected>Petal</option>
-					<option value="physics">Physics</option>
-					<option value="stacked">Stacked</option>
-				</select>
-			</div>
-			<div class="input" id="search-container" title="Search the database">
-				<input type="text" id="search" placeholder="Search ...">
-				<ul id="results"></ul>
-			</div>
+				</select></dd>
+			</dl>
 		</div>
-	</div>
-	<div id="description" aria-live="polite">
-		<h2></h2>
-		<p></p>
-		<ul></ul>
-	</div>
-	<aside id="legend">
+	</aside>
+	<aside id="legends" aria-label="Graph legends">
 		<div class="content">
 			<div class="name">Connection Types</div>
 			<div class="item">
@@ -1387,10 +1346,9 @@ svg {
 		</div>
 	</aside>
 	<div id="mobile-bar" aria-label="Mobile controls">
-		<button type="button" data-panel="search" aria-pressed="false">Search</button>
-		<button type="button" data-panel="filters" aria-pressed="false">Filters</button>
-		<button type="button" data-panel="legend" aria-pressed="false">Legend</button>
-		<button type="button" data-panel="info" aria-pressed="false">Info</button>
+		<button type="button" data-panel="description" aria-pressed="false">Description</button>
+		<button type="button" data-panel="legends" aria-pressed="false">Legends</button>
+		<button type="button" data-panel="options" aria-pressed="false">Options</button>
 	</div>
 	<div id="graph">
 		<svg id="graph-layer">
@@ -1420,11 +1378,9 @@ svg {
 				<marker id="arrow-homologous" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
 					<path d="M 2 5 L 4 2 L 4 4 L 6 4 L 6 2 L 8 5 L 6 8 L 6 6 L 4 6 L 4 8 Z" />
 				</marker>
-
 				<marker id="arrow-benefit" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z" />
 				</marker>
-
 				<marker id="arrow-surgery" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
 					<path d="M 0 0 L 10 5 L 0 10 z M 2 2 L 8 8 M 8 2 L 2 8" />
 				</marker>
@@ -1456,7 +1412,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.9 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.10 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1612,7 +1568,7 @@ const
 	typeFilterDropdown = document.getElementById('type-filter'),
 	depthDropdown = document.getElementById('depth-control'),
 	layoutDropdown = document.getElementById('layout-select'),
-	searchInput = document.getElementById('search'),
+	searchQuery = document.getElementById('query'),
 	searchResults = document.getElementById('results'),
 	cardTemplate = document.getElementById('card-template'),
 	searchResultTemplate = document.getElementById('search-result-template'),
@@ -1622,10 +1578,9 @@ const
 	maxZoom = 2,
 	touchPointers = new Map(),
 	mobilePanels = [
-		'search',
-		'filters',
-		'legend',
-		'info'
+		'description',
+		'legends',
+		'options',
 	],
 	stackOptions = {
 		paddingXEm: 2,
@@ -1830,7 +1785,7 @@ const Bang = {
 };
 
 function clearMobilePanels() {
-	mobilePanels.forEach(p => document.body.classList.remove(`mobile-panel-${p}`));
+	mobilePanels.forEach(p => document.body.classList.remove(`${p}`));
 	activeMobilePanel = null;
 }
 
@@ -1853,11 +1808,11 @@ function setMobilePanel(panel) {
 	if (!mobilePanels.includes(panel)) return;
 	// Ensure only one panel is open at a time (mobile tab bar behavior).
 	clearMobilePanels();
-	document.body.classList.add(`mobile-panel-${panel}`);
+	document.body.classList.add(`${panel}`);
 	activeMobilePanel = panel;
 	updateMobileBarUI();
 	if (panel === 'search') {
-		requestAnimationFrame(() => searchInput?.focus());
+		requestAnimationFrame(() => searchQuery?.focus());
 	}
 }
 
@@ -2053,8 +2008,8 @@ traitFilterDropdown.addEventListener('change', (e) => {
 	current.traitFilter = e?.target?.value ?? current.traitFilter;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	if (searchInput?.value) {
-		searchInput.dispatchEvent(new Event('input'));
+	if (searchQuery?.value) {
+		searchQuery.dispatchEvent(new Event('input'));
 	}
 	e?.target?.blur();
 });
@@ -2063,8 +2018,8 @@ typeFilterDropdown.addEventListener('change', (e) => {
 	current.typeFilter = e?.target?.value ?? current.typeFilter;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	if (searchInput?.value) {
-		searchInput.dispatchEvent(new Event('input'));
+	if (searchQuery?.value) {
+		searchQuery.dispatchEvent(new Event('input'));
 	}
 	e?.target?.blur();
 });
@@ -2079,7 +2034,7 @@ layoutDropdown.addEventListener('change', (e) => {
 	current.view = e?.target?.value ?? current.view;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	if (searchInput?.value) searchInput.dispatchEvent(new Event('input'));
+	if (searchQuery?.value) searchQuery.dispatchEvent(new Event('input'));
 	e?.target?.blur();
 });
 
@@ -2316,7 +2271,23 @@ function initGraph() {
 	updateEdgesOnce();
 }
 
-searchInput.addEventListener('input', (e) => {
+document.querySelectorAll('aside').forEach(aside => {
+	aside.addEventListener('click', (e) => {
+		if (e.target.closest('.content')) return;
+		aside.classList.toggle('open');
+	});
+	aside.addEventListener('focusin', () => {
+		aside.classList.add('open');
+	});
+	aside.addEventListener('focusout', (e) => {
+		if (!aside.contains(e.relatedTarget)) {
+			aside.classList.remove('open');
+		}
+	});
+});
+
+
+searchQuery.addEventListener('input', (e) => {
 	const term = e?.target?.value?.trim?.() ?? '';
 	if (term.length < 2) {
 		searchResults.style.display = 'none';
@@ -2357,7 +2328,7 @@ searchInput.addEventListener('input', (e) => {
 				const id = itemEl.getAttribute('data-id');
 				updateUrlState(id);
 				renderGraph(id);
-				searchInput.value = '';
+				searchQuery.value = '';
 				searchResults.style.display = 'none';
 				searchIndex = -1;
 			});
@@ -2377,7 +2348,7 @@ searchInput.addEventListener('input', (e) => {
 	}
 });
 
-searchInput.addEventListener('keydown', (e) => {
+searchQuery.addEventListener('keydown', (e) => {
 	if (e.key === 'ArrowDown') {
 		e.preventDefault();
 		const items = searchResults.querySelectorAll('li[data-index]');
@@ -2397,7 +2368,7 @@ searchInput.addEventListener('keydown', (e) => {
 			const id = selected.getAttribute('data-id');
 			updateUrlState(id);
 			renderGraph(id);
-			searchInput.value = '';
+			searchQuery.value = '';
 			searchResults.style.display = 'none';
 			searchIndex = -1;
 		}
@@ -2416,7 +2387,7 @@ function updateSearchSelection(items) {
 }
 
 document.addEventListener('click', (e) => {
-	if (!document.getElementById('search-container').contains(e.target)) {
+	if (!document.getElementById('search').contains(e.target)) {
 		searchResults.style.display = 'none';
 	}
 });
@@ -2550,51 +2521,60 @@ function setupInteractions(card, id) {
 	card.addEventListener('mouseenter', () => {
 		// Skip if another node is locked
 		if (locked.node !== null && locked.node !== id) return;
-		const
-			relatedNodes = new Set([card]),
-			relatedEdges = new Set();
-		// Add connected nodes and edges
-		activeEdgeElements.forEach(item => {
-			if (item.sourceEl.id === `node-${id}` || item.targetEl.id === `node-${id}`) {
-				relatedEdges.add(item.edge);
-				relatedNodes.add(item.sourceEl);
-				relatedNodes.add(item.targetEl);
-			}
-		});
-		// Add siblings (nodes with same parent)
-		const currentNode = nodes.find(n => n.id === id);
-		if (currentNode?.parentId != null) {
-			const siblings = nodes.filter(n => n.parentId === currentNode.parentId && n.id !== id);
-			siblings.forEach(sibling => {
-				const siblingEl = document.getElementById(`node-${sibling.id}`);
-				if (siblingEl) relatedNodes.add(siblingEl);
+		// Delay to prevent flickering when moving between card children
+		if (card._hoverTimer) clearTimeout(card._hoverTimer);
+		card._hoverTimer = setTimeout(() => {
+			const
+				relatedNodes = new Set([card]),
+				relatedEdges = new Set();
+			// Add connected nodes and edges
+			activeEdgeElements.forEach(item => {
+				if (item.sourceEl.id === `node-${id}` || item.targetEl.id === `node-${id}`) {
+					relatedEdges.add(item.edge);
+					relatedNodes.add(item.sourceEl);
+					relatedNodes.add(item.targetEl);
+				}
 			});
-		}
-		// Include edges that connect the related node cluster (hovered node, direct relatives, siblings)
-		activeEdgeElements.forEach(item => {
-			if (relatedNodes.has(item.sourceEl) && relatedNodes.has(item.targetEl)) {
-				relatedEdges.add(item.edge);
+			// Add siblings (nodes with same parent)
+			const currentNode = nodes.find(n => n.id === id);
+			if (currentNode?.parentId != null) {
+				const siblings = nodes.filter(n => n.parentId === currentNode.parentId && n.id !== id);
+				siblings.forEach(sibling => {
+					const siblingEl = document.getElementById(`node-${sibling.id}`);
+					if (siblingEl) relatedNodes.add(siblingEl);
+				});
 			}
-		});
-		// Store for potential locking
-		card._relatedNodes = relatedNodes;
-		card._relatedEdges = relatedEdges;
-		document.querySelectorAll('.card').forEach(el => {
-			if (relatedNodes.has(el)) {
-				el.classList.add('related');
-			} else {
-				el.classList.add('unrelated');
-			}
-		});
-		activeEdgeElements.forEach(item => {
-			if (relatedEdges.has(item.edge)) {
-				item.edge.classList.add('related');
-			} else {
-				item.edge.classList.add('unrelated');
-			}
-		});
+			// Include edges that connect the related node cluster (hovered node, direct relatives, siblings)
+			activeEdgeElements.forEach(item => {
+				if (relatedNodes.has(item.sourceEl) && relatedNodes.has(item.targetEl)) {
+					relatedEdges.add(item.edge);
+				}
+			});
+			// Store for potential locking
+			card._relatedNodes = relatedNodes;
+			card._relatedEdges = relatedEdges;
+			document.querySelectorAll('.card').forEach(el => {
+				if (relatedNodes.has(el)) {
+					el.classList.add('related');
+				} else {
+					el.classList.add('unrelated');
+				}
+			});
+			activeEdgeElements.forEach(item => {
+				if (relatedEdges.has(item.edge)) {
+					item.edge.classList.add('related');
+				} else {
+					item.edge.classList.add('unrelated');
+				}
+			});
+		}, 1000);
 	});
 	card.addEventListener('mouseleave', () => {
+		// Cancel pending hover
+		if (card._hoverTimer) {
+			clearTimeout(card._hoverTimer);
+			card._hoverTimer = null;
+		}
 		// Don't clear if this node or any node is locked
 		if (locked.node !== null) return;
 		document.querySelectorAll('.related, .unrelated').forEach(el => {
@@ -3299,7 +3279,7 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 
 const isInUiChrome = (target, includeDescription = false) => {
 	if (target?.closest?.('#top-bar') != null) return true;
-	if (target?.closest?.('#legend') != null) return true;
+	if (target?.closest?.('#legends') != null) return true;
 	if (target?.closest?.('#mobile-bar') != null) return true;
 	if (target?.closest?.('#results') != null) return true;
 	if (target?.closest?.('footer') != null) return true;
