@@ -5562,22 +5562,42 @@
 			"type": "consequence"
 		},
 		{
-			"source": "female_fgm_type_3",
+			"source": "female_fgm_type_3a",
 			"target": "female_deinfibulation",
 			"type": "consequence"
 		},
 		{
-			"source": "female_fgm_type_3",
+			"source": "female_fgm_type_3a",
 			"target": "female_fgm_dyspareunia",
 			"type": "consequence"
 		},
 		{
-			"source": "female_fgm_type_3",
+			"source": "female_fgm_type_3a",
 			"target": "female_fgm_obstetric",
 			"type": "consequence"
 		},
 		{
-			"source": "female_fgm_type_3",
+			"source": "female_fgm_type_3a",
+			"target": "female_fgm_urinary_menstrual",
+			"type": "consequence"
+		},
+		{
+			"source": "female_fgm_type_3b",
+			"target": "female_deinfibulation",
+			"type": "consequence"
+		},
+		{
+			"source": "female_fgm_type_3b",
+			"target": "female_fgm_dyspareunia",
+			"type": "consequence"
+		},
+		{
+			"source": "female_fgm_type_3b",
+			"target": "female_fgm_obstetric",
+			"type": "consequence"
+		},
+		{
+			"source": "female_fgm_type_3b",
 			"target": "female_fgm_urinary_menstrual",
 			"type": "consequence"
 		},
