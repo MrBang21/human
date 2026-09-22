@@ -1396,7 +1396,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.13 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.15 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1571,6 +1571,7 @@ const
 	mobileBar = document.getElementById('mobile-bar'),
 	minZoom = 0.1,
 	maxZoom = 2,
+	stepZoom = 0.1,
 	touchPointers = new Map(),
 	mobilePanels = [
 		'description',
@@ -1997,6 +1998,7 @@ async function loadGraphData() {
 function updateUrlState(id) {
 	const url = new URL(window.location);
 	url.hash = id;
+	url.searchParams.set('d', current.depth);
 	url.searchParams.set('t', [...current.traitFilter].join(','));
 	url.searchParams.set('p', [...current.typeFilter].join(','));
 	switch (current.view) {
@@ -2018,6 +2020,10 @@ function updateUrlState(id) {
 	url.searchParams.delete('view');
 	url.searchParams.delete('x');
 	url.searchParams.delete('y');
+	// delete zoom if 1
+	if (current.zoom === 1) {
+		url.searchParams.delete('z');
+	}
 	history.pushState(null, null, url.toString().replaceAll('%2C', ','));
 }
 
@@ -3342,8 +3348,10 @@ const shouldBypassGraphGestures = (target) => {
 appContainer.addEventListener('wheel', (e) => {
 	if (shouldBypassGraphGestures(e?.target)) return;
 	e.preventDefault();
-	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
-	setZoomAt(current.zoom * zoomDelta, e.clientX, e.clientY);
+	const
+		direction = e.deltaY > 0 ? -1 : 1,
+		targetZoom = Math.round((current.zoom + direction * stepZoom) * 10) / 10;
+	setZoomAt(targetZoom, e.clientX, e.clientY);
 }, {
 	passive: false
 });
