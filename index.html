@@ -2018,7 +2018,6 @@ function updateUrlState(id) {
 	url.searchParams.delete('view');
 	url.searchParams.delete('x');
 	url.searchParams.delete('y');
-	url.searchParams.delete('z');
 	history.pushState(null, null, url.toString().replaceAll('%2C', ','));
 }
 
@@ -2039,7 +2038,7 @@ function updateUrlPanZoom() {
 			url.searchParams.delete('x');
 			url.searchParams.delete('y');
 		}
-		history.replaceState(null, null, url.toString());
+		history.pushState(null, null, url.toString().replaceAll('%2C', ','));
 	}, 250);
 }
 
