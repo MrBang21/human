@@ -2078,7 +2078,7 @@
 		{
 			"id": "sexual_response_cycle",
 			"name": "Sexual Response Cycle",
-			"content": "Excitement \u2192 Plateau \u2192 Orgasm \u2192 Resolution (Masters & Johnson model, applies to all genders)",
+			"content": "Excitement > Plateau > Orgasm > Resolution (Masters & Johnson model, applies to all genders)",
 			"type": "sexual",
 			"tag": "sexual",
 			"trait": "shared"
