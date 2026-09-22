@@ -33,12 +33,10 @@
 		"ejaculatory_reflex": "The ejaculatory reflex is a two-phase spinal reflex triggered by threshold stimulation of the glans penis or urethra, mediated through the pudendal nerve and sacral spinal segments (S2-S4). The emission phase involves rhythmic contractions of the prostate, seminal vesicles, and vas deferens to propel semen into the prostatic urethra, followed by the expulsion phase where bulbospongiosus muscle contractions forcefully expel semen.",
 		"erogenous_zones": "Erogenous zones are areas of the human body that have heightened sensitivity, which when stimulated, create a sexual response or enhance sexual arousal. They often possess a high density of specialized nerve endings.",
 		"exercise_induced_orgasm": "Orgasm or orgasm-like pleasure triggered during specific core or pelvic muscle exertion (sometimes called coregasm).",
-		"genital_cutting_complications": "Adverse medical outcomes resulting from genital cutting, including immediate risks (hemorrhage, infection, surgical error, death) and long-term consequences (scarring, adhesions, meatal stenosis, chronic pain, loss of sensitivity, and psychological trauma).",
 		"gluteal_fold": "The infragluteal fold where thigh and buttock meet, an area that can be tactilely sensitive.",
 		"hindu_tradition": "In Hindu tradition, circumcision is considered strictly forbidden because the intact penis is viewed as a source of great power or vitality (Ojas).",
 		"inguinal_crease": "The groin fold at the junction of the lower abdomen and thigh, often responsive to light touch.",
 		"intact_erogenous_sensitivity": "Intact erogenous sensitivity refers to the finely tuned, multi-layered complex of nerves preserved within natural, unamputated genital structures. For both males and females, this includes millions of microscopic touch receptors on mucosal surfaces that convey specific types of sexual pleasure, pressure, and stretch to the brain, which are physically severed or degraded if the mucosal tissues are removed or chronically exposed.",
-		"loss_of_erogenous_tissue": "The permanent removal of specialized sexual tissue (such as the foreskin, clitoral hood, or frenulum) that contains specific nerve endings (e.g., Meissner's corpuscles, Merkel cells) and mucosal properties essential for sexual sensation and protection.",
 		"lower_back": "Lumbar skin and soft tissue region that can function as a secondary erogenous area.",
 		"medhra_marma": "In Ayurvedic medicine, the Medhra Marma is a critical energetic and physiological point located on the penis. Proper function of this marma is viewed as essential for preserving Ojas (vitality and immunity) and facilitating the unobstructed flow of sexual energy.",
 		"merkel_cells": "Merkel discs are slowly adapting mechanoreceptors concentrated in areas of fine tactile discrimination, including fingertips, palms, and genitalia. They respond to sustained pressure and texture, contributing to the richness of touch-based sexual sensation.",
@@ -53,7 +51,6 @@
 		"plateau_phase": "The sustained high-arousal stage of the sexual response cycle preceding orgasm.",
 		"prana_trapping": "A concept within yogic physiology suggesting that improper structural manipulation, trauma, or amputation (such as circumcision) to key marma points can trap or block prana (life force). This blockage is theorized to manifest as emotional instability, relationship difficulties, and obstructed creativity.",
 		"prepuce": "The prepuce is a retractable, multi-layered fold of skin and mucous membrane that covers and protects the glans in both male and female genitalia. It contains a rich network of blood vessels, specialized nerve endings (including Meissner's corpuscles), and smooth muscle fibers, making it highly responsive to tactile stimulation and a key component of human sexual pleasure.",
-		"psychological_impact_of_cutting": "The mental health consequences of genital cutting, including post-traumatic stress disorder (PTSD), anxiety, depression, and feelings of violation or loss of bodily integrity.",
 		"pudendal_nerve": "The major somatic nerve of the perineum, it emerges from the sacral plexus and carries sensory, motor, and autonomic fibers to the genital region. It innervates the clitoris, penis, perineum, and external anal sphincter, heavily mediating the tactile sensory aspect of sexual pleasure.",
 		"refractory_period": "The recovery phase after orgasm when immediate repeat orgasm is physiologically less likely.",
 		"sacral_plexus": "The sacral plexus is a neural network formed by the integration of sacral spinal nerve roots (S1-S4) with lumbosacral trunk fibers. It gives rise to the major somatic and autonomic nerves of the pelvis and genital region, including the pudendal nerve and pelvic splanchnic nerves that innervate sexual structures.",
@@ -216,24 +213,10 @@
 				"name": "Exercise-induced orgasm and sexual pleasure among women"
 			}
 		],
-		"genital_cutting_complications": [
-			{
-				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
-				"name": "Complications of Male Circumcision"
-			},
+		"female_genital_cutting_complications": [
 			{
 				"url": "https://www.who.int/news-room/fact-sheets/detail/female-genital-mutilation",
 				"name": "WHO Medical Complications of FGM/C"
-			}
-		],
-		"loss_of_erogenous_tissue": [
-			{
-				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
-				"name": "Anatomy and Physiology of the Foreskin"
-			},
-			{
-				"url": "https://pubmed.ncbi.nlm.nih.gov/2909820/",
-				"name": "Touch and the Somatosensory System: Merkel Cell-Neurite Complexes"
 			}
 		],
 		"merkel_cells": [
@@ -276,16 +259,6 @@
 			{
 				"url": "https://my.clevelandclinic.org/health/articles/9119-sexual-response-cycle",
 				"name": "Sexual Response Cycle"
-			}
-		],
-		"psychological_impact_of_cutting": [
-			{
-				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
-				"name": "Psychological Effects of Male Circumcision"
-			},
-			{
-				"url": "https://www.who.int/news-room/fact-sheets/detail/female-genital-mutilation",
-				"name": "WHO Psychological Impact of FGM/C"
 			}
 		],
 		"pudendal_nerve": [
@@ -438,9 +411,21 @@
 			{
 				"url": "https://norm.org/the-lost-list/",
 				"name": "The Lost List"
+			},
+			{
+				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
+				"name": "Anatomy and Physiology of the Foreskin"
+			},
+			{
+				"url": "https://pubmed.ncbi.nlm.nih.gov/2909820/",
+				"name": "Touch and the Somatosensory System: Merkel Cell-Neurite Complexes"
 			}
 		],
 		"male_circumcision_complications": [
+			{
+				"url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3047099/",
+				"name": "Complications of Male Circumcision"
+			},
 			{
 				"url": "https://circumcision.org/psychological-effects/",
 				"name": "Psychological Effects"
@@ -2413,7 +2398,7 @@
 		{
 			"id": "female_fgm_type_1",
 			"name": "FGM Type 1",
-			"content": "Partial or total removal of the clitoral glans (the external and visible part of the clitoris) and/or the prepuce/clitoral hood.",
+			"content": "Partial or total removal of the clitoral glans and/or the clitoral hood.",
 			"type": "surgery",
 			"tag": "surgery",
 			"trait": "female"
@@ -2437,7 +2422,7 @@
 		{
 			"id": "female_fgm_type_2",
 			"name": "FGM Type 2",
-			"content": "Partial or total removal of the clitoral glans and the labia minora (the inner folds of the vulva), with or without removal of the labia majora (the outer folds of skin of the vulva).",
+			"content": "Partial/total removal of clitoral glans & labia minora, with or without removal of labia majora.",
 			"type": "surgery",
 			"tag": "surgery",
 			"trait": "female"
@@ -2469,7 +2454,7 @@
 		{
 			"id": "female_fgm_type_3",
 			"name": "FGM Type 3 (Infibulation)",
-			"content": "Narrowing of the vaginal opening with the creation of a covering seal. The seal is formed by cutting and repositioning the labia minora, or labia majora. The covering of the vaginal opening is done with or without removal of the clitoral prepuce/clitoral hood and glans (Type 1 FGM).",
+			"content": "Narrowing vaginal opening with a covering seal by repositioning labia, with/without clitoral removal.",
 			"type": "surgery",
 			"tag": "surgery",
 			"trait": "female"
@@ -2493,7 +2478,7 @@
 		{
 			"id": "female_fgm_type_4",
 			"name": "FGM Type 4",
-			"content": "All other harmful procedures to the female genitalia for non-medical purposes, for example pricking, piercing, incising, scraping and cauterization.",
+			"content": "All other harmful non-medical female genital procedures (e.g., pricking, piercing, scraping, cauterizing).",
 			"type": "surgery",
 			"tag": "surgery",
 			"trait": "female"
@@ -2756,11 +2741,6 @@
 		}
 	],
 	"edges": [
-		{
-			"source": "human",
-			"target": "shared",
-			"type": "root"
-		},
 		{
 			"source": "human",
 			"target": "female",
