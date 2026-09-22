@@ -44,25 +44,25 @@
 	color-scheme: light dark;
 	accent-color: var(--accent);
 	--mobile-bar-height: 3.25em;
-	--vv-bottom-offset: 0px;
-	--body: oklch(.95 0 0); /* oklch(0.95 0 0); */
+	--vv-bottom-offset: 0;
+	--body: oklch(0.95 0 0); /* oklch(0.95 0 0); */
 	--card: oklch(1 0 0);
-	--text: oklch(.3 0 0);
-	--muted: oklch(.4 0 0);
-	--shadow: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / .5);
-	--shadow-hover: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / .8);
+	--text: oklch(0.3 0 0);
+	--muted: oklch(0.4 0 0);
+	--shadow: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / 0.5);
+	--shadow-hover: oklch(var(--shadow-l) var(--shadow-c) var(--accent-h) / 0.8);
 
 	--block-l: 1;
 	--block-c: 0;
 	--block-h: 0;
 	--block: oklch(var(--block-l) var(--block-c) var(--block-h));
 
-	--border-l: .8;
+	--border-l: 0.8;
 	--border-c: 0;
 	--border-h: 0;
 	--border: oklch(var(--border-l) var(--border-c) var(--border-h));
 
-	--card-l: .975;
+	--card-l: 0.975;
 	--card-c: 0;
 	--card-hover-l: 1;
 	--card-hover-c: 0;
@@ -84,52 +84,52 @@
 	--button-active-l: 1;
 	--button-active-c: 0;
 
-	--search-hover: oklch(.95 0 0);
+	--search-hover: oklch(0.95 0 0);
 
-	--text-l: .6;
-	--text-hover-l: .7;
-	--text-c: .18;
-	--text-hover-c: .2;
+	--text-l: 0.6;
+	--text-hover-l: 0.7;
+	--text-c: 0.18;
+	--text-hover-c: 0.2;
 
-	--edge-l: .8;
-	--edge-related-l: .85;
-	--edge-c: .11;
+	--edge-l: 0.8;
+	--edge-related-l: 0.85;
+	--edge-c: 0.11;
 
-	--node-l: .7;
-	--node-related-l: .75;
-	--node-c: .12;
+	--node-l: 0.7;
+	--node-related-l: 0.75;
+	--node-c: 0.12;
 
-	--icon-l: .7;
-	--icon-c: .14;
+	--icon-l: 0.7;
+	--icon-c: 0.14;
 
-	--current-l: .8;
-	--current-c: .11;
+	--current-l: 0.8;
+	--current-c: 0.11;
 
-	--parent-l: .7;
-	--parent-c: .05;
+	--parent-l: 0.7;
+	--parent-c: 0.05;
 
-	--related-l: .75;
-	--related-c: .1;
+	--related-l: 0.75;
+	--related-c: 0.1;
 
-	--unrelated-l: .8;
-	--unrelated-c: .05;
+	--unrelated-l: 0.8;
+	--unrelated-c: 0.05;
 
-	--accent-l: .7;
-	--accent-c: .11;
+	--accent-l: 0.7;
+	--accent-c: 0.11;
 	--accent-h: 220;
 
-	--accent-hover-l: .7;
-	--accent-hover-c: .2;
+	--accent-hover-l: 0.7;
+	--accent-hover-c: 0.2;
 
-	--accent-active-l: .8;
-	--accent-active-c: .2;
+	--accent-active-l: 0.8;
+	--accent-active-c: 0.2;
 
 	--accent: oklch(var(--accent-l) var(--accent-c) var(--accent-h));
 	--accent-hover: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--accent-h));
 	--accent-active: oklch(var(--accent-active-l) var(--accent-active-c) var(--accent-h));
 
-	--shadow-l: .3;
-	--shadow-c: .1;
+	--shadow-l: 0.3;
+	--shadow-c: 0.1;
 	--shadow-h: var(--accent-h);
 
 	--hue-female: 340;
@@ -154,45 +154,45 @@
 @media (prefers-color-scheme: dark) {
 	:root {
 		color-scheme: dark;
-		--body: oklch(.2 0 0);
-		--text: oklch(.8 0 0);
-		--muted: oklch(.7 0 0);
+		--body: oklch(0.2 0 0);
+		--text: oklch(0.8 0 0);
+		--muted: oklch(0.7 0 0);
 
-		--block-l: .2;
-		--border-l: .3;
+		--block-l: 0.2;
+		--border-l: 0.3;
 
-		--search-hover: oklch(.3 0 0);
+		--search-hover: oklch(0.3 0 0);
 
-		--text-l: .8;
-		--text-c: .12;
-		--text-hover-l: .9;
-		--text-hover-c: .15;
+		--text-l: 0.8;
+		--text-c: 0.12;
+		--text-hover-l: 0.9;
+		--text-hover-c: 0.15;
 
-		--card-l: .25;
-		--card-c: .0;
-		--card-hover-l: .25;
-		--card-hover-c: 0;
+		--card-l: 0.25;
+		--card-c: 0.0;
+		--card-hover-l: 0.25;
+		--card-hover-c: 0.0;
 		--card-h: 240;
 
-		--icon-l: .8;
-		--icon-c: .15;
+		--icon-l: 0.8;
+		--icon-c: 0.15;
 
-		--shadow-l: .7;
-		--shadow-c: .1;
+		--shadow-l: 0.7;
+		--shadow-c: 0.1;
 
-		--input-l: .2;
-		--button-l: .2;
+		--input-l: 0.2;
+		--button-l: 0.2;
 
-		--accent-l: .7;
-		--accent-hover-l: .8;
-		--accent-active-l: .9;
+		--accent-l: 0.7;
+		--accent-hover-l: 0.8;
+		--accent-active-l: 0.9;
 
-		--edge-l: .7;
-		--edge-related-l: .75;
-		--node-l: .95;
-		--node-related-l: .95;
+		--edge-l: 0.7;
+		--edge-related-l: 0.75;
+		--node-l: 0.95;
+		--node-related-l: 0.95;
 
-		--current-l: .85;
+		--current-l: 0.85;
 	}
 }
 
@@ -205,7 +205,7 @@
 }
 
 html {
-	font-size: clamp(.875rem, 1vw + .25rem, 1.125rem);
+	font-size: clamp(0.875rem, 1vw + 0.25rem, 1.125rem);
 }
 
 body {
@@ -286,7 +286,7 @@ body,
 	/* Prevent the browser from hijacking touch drags */
 	touch-action: none;
 	background-color: var(--card);
-	border: .25em solid oklch(var(--node-l) var(--node-c) var(--_hue));
+	border: 0.25em solid oklch(var(--node-l) var(--node-c) var(--_hue));
 	border-radius: 1em;
 	padding: 2.25em 1em 1em 1em;
 
@@ -294,10 +294,18 @@ body,
 	text-align: center;
 	translate: -50% -50%;
 	transform-origin: top center;
-	transition: left .8s cubic-bezier(.34, 1.56, .64, 1), top .8s cubic-bezier(.34, 1.56, .64, 1), scale .6s cubic-bezier(.16, 1, .3, 1), filter .6s ease-out, opacity .6s ease-out, box-shadow .2s ease-out;
+	transition:
+		left 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+		top 0.8s cubic-bezier(0.34, 1.56, 0.64, 1),
+		scale 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+		filter 0.6s ease-out,
+		opacity 0.6s ease-out,
+		box-shadow 0.2s ease-out;
 
 	&.dragging {
-		transition: scale .2s ease-out, box-shadow .2s ease-out !important;
+		transition:
+			scale 0.2s ease-out,
+			box-shadow 0.2s ease-out !important;
 	}
 	&:active {
 		cursor: grabbing;
@@ -312,7 +320,7 @@ body,
 	}
 	&.source {
 		z-index: 1;
-		scale: .9;
+		scale: 0.9;
 	}
 	&.current {
 		--node-l: var(--current-l);
@@ -338,7 +346,7 @@ body,
 		--node-l: var(--unrelated-l);
 		--node-c: var(--unrelated-c);
 		z-index: 1;
-		opacity: .5;
+		opacity: 0.5;
 	}
 	&.hidden {
 		display: none;
@@ -415,13 +423,13 @@ body,
 		background-color: oklch(var(--card-l) var(--card-c) var(--card-h));
 		border: inherit;
 		border-radius: 50%;
-		padding: .25em;
+		padding: 0.25em;
 		corner-shape: round;
 		color: oklch(var(--icon-l) var(--icon-c) var(--_icon-hue));
 		pointer-events: none;
 	}
 	h3 {
-		margin: 0 0 .5em 0;
+		margin: 0 0 0.5em 0;
 		font-size: 1.25em;
 		color: oklch(var(--text-l) var(--text-c) var(--_text-hue));
 	}
@@ -440,11 +448,11 @@ input, select, option, textarea, button {
 	font-size: inherit;
 	line-height: inherit;
 	outline: none;
-	padding: .5em;
+	padding: 0.5em;
 	color: var(--text);
 	background-color: var(--input);
 	border: 1px solid var(--border);
-	border-radius: .5em;
+	border-radius: 0.5em;
 	corner-shape: squircle;
 	&::placeholder {
 		color: var(--muted);
@@ -452,6 +460,40 @@ input, select, option, textarea, button {
 	&:focus {
 		border-color: var(--accent);
 	}
+}
+input[type=checkbox],
+input[type=radio] {
+	appearance: none;
+	display: none;
+	+ label {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5em;
+		cursor: pointer;
+		background-color: var(--input);
+		border: 0.125em solid var(--border);
+		padding: 1em 2em;
+		border-radius: 0.5em;
+		corner-shape: squircle;
+	}
+	&:checked + label {
+		background-color: var(--accent);
+		color: var(--body);
+	}
+	&:hover + label {
+		border-color: var(--accent);
+	}
+	&:active + label {
+		border-color: var(--accent-active);
+	}
+}
+
+.group {
+	display: flex;
+	gap: 0.5em;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 button {
@@ -462,7 +504,7 @@ button {
 select {
 	&, &::picker(select) {
 		appearance: base-select;
-		border-radius: .5em;
+		border-radius: 0.5em;
 		color: var(--text);
 		cursor: pointer;
 		border: 1px solid var(--border);
@@ -479,7 +521,7 @@ select {
 		rotate: 180deg;
 	}
 	option {
-		padding: .5em;
+		padding: 0.5em;
 		border-radius: 0;
 		border: none;
 		&:hover {
@@ -499,6 +541,7 @@ select {
 	}
 }
 
+
 aside {
 	display: flex;
 	display: none;
@@ -512,36 +555,18 @@ aside {
 	touch-action: pan-y;
 	box-shadow: 0 0 0 0 var(--shadow);
 	width: fit-content;
-	max-width: calc(100svw - 1em);
+	max-width: 40em;
 	min-height: 2em;
 	max-height: 30svh;
 	padding: 1em;
 	transform: translateX(var(--_translateX, 0));
 	background-color: var(--block);
-	border-radius: .5em;
+	border-radius: 0.5em;
 	corner-shape: squircle;
 	.content {
 		flex: 1 0 var(--_width);
 		padding: 1em;
 		overflow-y: auto;
-	}
-	.name {
-		font-weight: bold;
-		margin-bottom: .5em;
-		color: var(--text);
-	}
-	.item {
-		display: flex;
-		align-items: center;
-		margin-bottom: .5em;
-		&:last-child {
-			margin-bottom: 0;
-		}
-	}
-	.divider {
-		height: .1em;
-		background-color: var(--border);
-		margin: .5em 0;
 	}
 	.edge {
 		width: 64px;
@@ -601,24 +626,33 @@ aside {
 	}
 }
 #legends {
-	inset: auto auto calc(var(--mobile-bar-height) + 1.25em) .5em;
+	inset: auto auto calc(var(--mobile-bar-height) + 1.25em) 0.5em;
 }
 #options {
-	inset: auto .5em calc(var(--mobile-bar-height) + 1.25em) auto;
+	inset: auto 0.5em calc(var(--mobile-bar-height) + 1.25em) auto;
 }
 
 dl {
 	display: grid;
-	grid-template-columns: max-content 1fr;
-	gap: .5em 1em;
-	align-items: center;
+	grid-template-columns: 1fr;
+	gap: 0.5em 1em;
+	padding: 0;
+	margin: 0;
+	dt, dd {
+		margin: 0;
+	}
 	dt {
-		text-align: right;
 		font-weight: 500;
 		color: var(--text);
+		&.divider {
+			border-top: 0.125em solid var(--border);
+			margin: 0.5em 0;
+		}
 	}
 	dd {
-		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
 	}
 }
 
@@ -627,12 +661,12 @@ footer {
 	min-height: 2em;
 	z-index: 200;
 	inset: auto 1em 1em auto;
-	padding: .5em 1em;
+	padding: 0.5em 1em;
 	color: var(--muted);
 	border: none;
 	background-color: transparent;
 	text-align: right;
-	font-size: .5em;
+	font-size: 0.5em;
 }
 
 svg {
@@ -643,69 +677,69 @@ svg {
 	#arrow-root,
 	.root {
 		--_hue: var(--hue-root);
-		--_width: .3em;
+		--_width: 0.3em;
 	}
 	#arrow-anatomy,
 	.anatomy {
 		--_hue: var(--hue-anatomy);
-		--_width: .25em;
+		--_width: 0.25em;
 	}
 	#arrow-nerve,
 	.nerve {
 		--_hue: var(--hue-nerve);
-		--_width: .2em;
+		--_width: 0.2em;
 	}
 	#arrow-sexual,
 	.sexual {
 		--_hue: var(--hue-sexual);
-		--_width: .2em;
+		--_width: 0.2em;
 	}
 	#arrow-energetic,
 	.energetic {
 		--_hue: var(--hue-energetic);
-		--_width: .15em;
+		--_width: 0.15em;
 		--_dash: 6 8;
 	}
 	#arrow-homologous,
 	.homologous {
 		--_hue: var(--hue-homologous);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 10 15;
 	}
 	#arrow-benefit,
 	.benefit {
 		--_hue: var(--hue-benefit);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 4 6;
 	}
 	#arrow-surgery,
 	.surgery {
 		--_hue: var(--hue-surgery);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 4 8;
 	}
 	#arrow-consequence,
 	.consequence {
 		--_hue: var(--hue-consequence);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 4 8;
 	}
 	#arrow-risk,
 	.risk {
 		--_hue: var(--hue-risk);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 4 8;
 	}
 	#arrow-removed,
 	.removed {
 		--_hue: var(--hue-removed);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 8 16;
 	}
 	#arrow-harm,
 	.harm {
 		--_hue: var(--hue-harm);
-		--_width: .2em;
+		--_width: 0.2em;
 		--_dash: 6 8;
 	}
 	path.edge {
@@ -723,7 +757,7 @@ svg {
 			--node-l: var(--node-related-l); /* we need the marker somehow */
 		}
 		&.unrelated {
-			opacity: .1;
+			opacity: 0.1;
 		}
 	}
 	marker,
@@ -761,7 +795,7 @@ svg {
 	display: none;
 	position: fixed;
 	flex-direction: column;
-	inset: 3.5em auto auto .5em;
+	inset: 3.5em auto auto 0.5em;
 	width: clamp(25em, 35vw, 80em);
 	max-width: 80vw;
 	max-height: calc(100vh - 14em);
@@ -769,19 +803,19 @@ svg {
 	overflow-y: auto;
 	padding: 1em;
 	z-index: 2;
-	border-radius: .5em;
+	border-radius: 0.5em;
 	overscroll-behavior: contain;
 	&.visible {
 		display: flex;
 	}
 	h2 {
-		margin: 0 0 .5em 0;
+		margin: 0 0 0.5em 0;
 		font-size: 1.4em;
 		color: var(--text);
 	}
 	p {
 		margin: 0;
-		font-size: .95em;
+		font-size: 0.95em;
 		color: var(--muted);
 		line-height: 1.5;
 		white-space: pre-wrap;
@@ -792,11 +826,11 @@ svg {
 		list-style: none;
 		position: relative;
 		li {
-			margin-bottom: .25em;
+			margin-bottom: 0.25em;
 			overflow: clip;
 			a {
 				display: block;
-				font-size: .9em;
+				font-size: 0.9em;
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
@@ -809,7 +843,7 @@ svg {
 				display: block;
 				font-weight: bold;
 				font-size: 1.1em;
-				margin-bottom: .5em;
+				margin-bottom: 0.5em;
 				color: var(--text);
 			}
 		}
@@ -882,7 +916,7 @@ svg {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	font-size: 18px;
+	font-size: 2em;
 	color: var(--muted);
 	z-index: 100;
 }
@@ -894,16 +928,16 @@ svg {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	gap: .5em;
-	padding: .5em 1em;
+	gap: 0.5em;
+	padding: 0.5em 1em;
 	border: 1px solid var(--border);
 	border-radius: 1em 1em 0 0;
 	corner-shape: squircle;
 	background-color: var(--block);
 	button {
-		border-radius: .5em;
+		border-radius: 0.5em;
 		corner-shape: squircle;
-		padding: .75em .75em;
+		padding: 0.75em;
 		font: inherit;
 		line-height: 1;
 		min-width: 2ch;
@@ -913,15 +947,15 @@ svg {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		&:disabled {
-			opacity: .5;
+			opacity: 0.5;
 			cursor: not-allowed;
 		}
 		&[aria-pressed="true"] {
 			border-color: var(--accent);
 			color: var(--accent);
 			--background-color: var(--search-hover);
-			--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / .2);
-			--button-c: .20;
+			--background-color: oklch(var(--accent-hover-l) var(--accent-hover-c) var(--hue-url) / 0.2);
+			--button-c: 0.20;
 			--button-h: 20;
 		}
 	}
@@ -929,20 +963,20 @@ svg {
 
 #top-bar {
 	position: absolute;
-	inset: .5em .5em auto .5em;
+	inset: 0.5em 0.5em auto 0.5em;
 	z-index: 200;
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
-	gap: .5em;
+	gap: 0.5em;
 	justify-content: space-between;
 	pointer-events: none;
 }
 
 #breadcrumbs {
 	background-color: var(--block);
-	padding: .5em 1em;
-	border-radius: .5em;
+	padding: 0.5em 1em;
+	border-radius: 0.5em;
 	corner-shape: squircle;
 	height: 2.5em;
 	line-height: 1;
@@ -951,7 +985,7 @@ svg {
 	flex-direction: row;
 	justify-content: flex-end;
 	overflow: hidden;
-	gap: .25em;
+	gap: 0.25em;
 	align-items: center;
 	min-height: 2em;
 	span {
@@ -978,7 +1012,7 @@ svg {
 	}
 }
 
-@media (width > 700px) {
+@media (width > 45em) {
 	#mobile-bar {
 		display: none;
 	}
@@ -992,7 +1026,7 @@ svg {
 		display: flex;
 		max-height: calc(50vh);
 		transform: translateX(var(--_translateX, 0));
-		opacity: .5;
+		opacity: 0.5;
 		&::before {
 			display: flex;
 			justify-content: center;
@@ -1002,7 +1036,7 @@ svg {
 			background-color: var(--accent);
 			color: var(--body);
 			font-weight: bold;
-			padding: .5em;
+			padding: 0.5em;
 			cursor: pointer;
 			user-select: none;
 			width: 1ch;
@@ -1048,63 +1082,58 @@ svg {
 	a,
 	h3,
 	.item {
-		transition: color .3s ease;
+		transition: color 0.3s ease;
 	}
 	input,
 	select,
 	button {
 		transition:
-			border-color .3s ease,
-			background-color .3s ease,
-			color .3s ease;
+			border-color 0.3s ease,
+			background-color 0.3s ease,
+			color 0.3s ease;
 	}
 	select::picker-icon {
-		transition: rotate .3s ease;
+		transition: rotate 0.3s ease;
 	}
 	#results li {
-		transition: background-color .2s ease;
+		transition: background-color 0.2s ease;
 	}
 	.toggle {
 		transition:
-			border-color .3s ease,
-			background-color .3s ease,
-			color .3s ease;
+			border-color 0.3s ease,
+			background-color 0.3s ease,
+			color 0.3s ease;
 	}
 	svg {
 		transition:
-			fill .3s ease,
-			color .3s ease;
-		/*
-		path:not(.edge) {
-			transition: fill .3s ease;
-		}
-		*/
+			fill 0.3s ease,
+			color 0.3s ease;
 		path.edge {
 			transition:
-				stroke-opacity .3s ease,
-				opacity .3s ease,
-				stroke .3s ease,
-				stroke-width .3s ease;
+				stroke-opacity 0.3s ease,
+				opacity 0.3s ease,
+				stroke 0.3s ease,
+				stroke-width 0.3s ease;
 		}
 	}
 	#mobile-bar button {
 		transition:
-			border-color .2s ease,
-			background-color .2s ease,
-			color .2s ease;
+			border-color 0.2s ease,
+			background-color 0.2s ease,
+			color 0.2s ease;
 	}
 	.card {
 		transition:
-			scale .3s cubic-bezier(.25, .8, .25, 1),
-			box-shadow .3s ease,
-			background-color .3s ease,
-			border-color .3s ease,
-			opacity .5s ease;
+			scale 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+			box-shadow 0.3s ease,
+			background-color 0.3s ease,
+			border-color 0.3s ease,
+			opacity 0.5s ease;
 	}
 	aside {
 		transition:
-			transform .3s ease-out,
-			opacity .3s ease-out;
+			transform 0.3s ease-out,
+			opacity 0.3s ease-out;
 	}
 }
 
@@ -1112,15 +1141,15 @@ svg {
 	/* turn on backdrop-filter effects and box-shadow */
 	:root {
 		--backdrop: blur(2em);
-		--block: oklch(var(--block-l) var(--block-c) var(--block-h) / .2);
-		--card: oklch(var(--card-l) var(--card-c) var(--card-h) / .01);
-		--input: oklch(var(--input-l) var(--input-c) var(--input-h) / .8);
-		--button: oklch(var(--button-l) var(--button-c) var(--button-h) / .8);
-		--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / .8);
-		--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / .8);
+		--block: oklch(var(--block-l) var(--block-c) var(--block-h) / 0.2);
+		--card: oklch(var(--card-l) var(--card-c) var(--card-h) / 0.01);
+		--input: oklch(var(--input-l) var(--input-c) var(--input-h) / 0.8);
+		--button: oklch(var(--button-l) var(--button-c) var(--button-h) / 0.8);
+		--button-hover: oklch(var(--button-hover-l) var(--button-hover-c) var(--button-hover-h) / 0.8);
+		--button-active: oklch(var(--button-active-l) var(--button-active-c) var(--button-active-h) / 0.8);
 	}
 	#results {
-		box-shadow: 0 .5em 1em 0 var(--shadow);
+		box-shadow: 0 0.5em 1em 0 var(--shadow);
 		backdrop-filter: var(--backdrop);
 	}
 	#legends,
@@ -1131,36 +1160,23 @@ svg {
 	.toggle {
 		backdrop-filter: var(--backdrop);
 	}
-	/*
-	.card {
-		backdrop-filter: var(--backdrop);
-		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--shadow-h) / .5);
-		box-shadow: var(--_shadow);
-		&.current {
-			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
-		}
-		&:hover {
-			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
-		}
-	}
-	*/
 	.card {
 		backface-visibility: hidden;
 		backdrop-filter: var(--backdrop);
-		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .5);
+		--_shadow: 0 0 0 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.5);
 		box-shadow: var(--_shadow);
 		&.current {
-			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
+			--_shadow: 0 0 1em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
 		}
 		&:hover {
-			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / .8);
+			--_shadow: 0 0 2em 0 oklch(var(--shadow-l) var(--shadow-c) var(--_hue) / 0.8);
 		}
 	}
 }
 </style>
 </head>
 
-<body class="description">
+<body class="description legends">
 <template id="card-template">
 	<div class="card">
 		<svg class="icon" viewBox="0 0 24 24">
@@ -1190,6 +1206,14 @@ svg {
 	<option value=""></option>
 </template>
 
+<template id="checkbox-template">
+	<input type="checkbox" id="" title=""><label for=""></label>
+</template>
+
+<template id="radio-template">
+	<input type="radio" id="" title=""><label for=""></label>
+</template>
+
 <main id="app">
 	<div id="loading">Loading database...</div>
 	<div id="top-bar">
@@ -1207,114 +1231,102 @@ svg {
 	<aside id="options" aria-label="Graph options">
 		<div class="content">
 			<dl class="options">
-				<dt><label for="layout-select">Graph Layout:</label></dt>
-				<dd><select id="layout-select" title="Select graph layout">
-					<button>
-						<selectedcontent></selectedcontent>
-					</button>
-					<option value="petal" selected>Petal</option>
-					<option value="physics">Physics</option>
-					<option value="stacked">Stacked</option>
-				</select></dd>
-				<dt><label for="type-filter">Connection Types:</label></dt>
-				<dd><select id="type-filter" title="Filter by connection type">
-					<button>
-						<selectedcontent></selectedcontent>
-					</button>
-				</select></dd>
-				<dt><label for="depth-control">Connection Depth:</label></dt>
-				<dd><select id="depth-control" title="Set the number of connection layers to display">
-					<button>
-						<selectedcontent></selectedcontent>
-					</button>
-					<option value="1">1</option>
-					<option value="2" selected>2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="6">6</option>
-					<option value="7">7</option>
-					<option value="8">8</option>
-					<option value="9">9</option>
-				</select></dd>
-				<dt><label for="trait-filter">Biological Trait:</label></dt>
-				<dd><select id="trait-filter" title="Filter connections by biological trait">
-					<button>
-						<selectedcontent></selectedcontent>
-					</button>
-				</select></dd>
+				<dt>Graph Layout:</dt>
+				<dd id="layout-select" class="group inline" role="radiogroup" aria-label="Graph layout"></dd>
+				<dt>Connection Depth:</dt>
+				<dd id="depth-control" class="group inline" role="radiogroup" aria-label="Connection depth"></dd>
+				<dt>Biological Trait:</dt>
+				<dd id="trait-filter" class="group inline" role="radiogroup" aria-label="Biological trait"></dd>
+				<dt>Types:</dt>
+				<dd id="type-filter" class="group"></dd>
 			</dl>
 		</div>
 	</aside>
 	<aside id="legends" aria-label="Graph legends">
 		<div class="content">
-			<div class="name">Connection Types</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
-				</svg> Default Anatomy
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
-				</svg> Neuronal / Nerve
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
-				</svg> Sexual / Erogenous
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
-				</svg> Energetic
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge homologous" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-homologous)" />
-				</svg> Homologous
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
-				</svg> Claimed Benefit
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge surgery" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-surgery)" />
-				</svg> Surgery
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
-				</svg> Adverse Consequence
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge risk" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-risk)" />
-				</svg> Increased Risk
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
-				</svg> Excised / Removed
-			</div>
-			<div class="item">
-				<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
-					<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
-				</svg> Direct Harm
-			</div>
-			<div class="divider"></div>
-			<div class="name">Biological Traits</div>
-			<div class="item">
-				<div class="trait male">Aa</div> Male
-			</div>
-			<div class="item">
-				<div class="trait female">Aa</div> Female
-			</div>
-			<div class="item">
-				<div class="trait shared">Aa</div> Shared
-			</div>
+			<dl>
+				<dt>Connection Types</dt>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge anatomy" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-anatomy)" />
+					</svg>
+					<span>Default Anatomy</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge nerve" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-nerve)" />
+					</svg>
+					<span>Neuronal / Nerve</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge sexual" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-sexual)" />
+					</svg>
+					<span>Sexual / Erogenous</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge energetic" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-energetic)" />
+					</svg>
+					<span>Energetic</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge homologous" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-homologous)" />
+					</svg>
+					<span>Homologous</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge benefit" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-benefit)" />
+					</svg>
+					<span>Claimed Benefit</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge surgery" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-surgery)" />
+					</svg>
+					<span>Surgery</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge consequence" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-consequence)" />
+					</svg>
+					<span>Adverse Consequence</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge risk" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-risk)" />
+					</svg>
+					<span>Increased Risk</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge removed" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-removed)" />
+					</svg>
+					<span>Excised / Removed</span>
+				</dd>
+				<dd>
+					<svg width="64" height="24" viewBox="0 0 64 24" class="edge">
+						<path class="edge harm" d="M 4 12 L 32 12 L 60 12" marker-mid="url(#arrow-harm)" />
+					</svg>
+					<span>Direct Harm</span>
+				</dd>
+				<dt class="divider"></dt>
+				<dt>Biological Traits</dt>
+				<dd>
+					<span class="trait male">Aa</span>
+					<span>Male</span>
+				</dd>
+				<dd>
+					<span class="trait female">Aa</span>
+					<span>Female</span>
+				</dd>
+				<dd>
+					<span class="trait shared">Aa</span>
+					<span>Shared</span>
+				</dd>
+			</dl>
 		</div>
 	</aside>
 	<div id="mobile-bar" aria-label="Mobile controls">
@@ -1384,7 +1396,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.11 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.12 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1451,10 +1463,19 @@ let
 	previous = {
 		centerId: '',
 	},
+	depths = [
+		1, 2, 3, 4, 5, 6, 7, 8, 9
+	],
+	layouts = [
+		{ key: 'petal', name: 'Petal' },
+		{ key: 'physics', name: 'Physics' },
+		{ key: 'stacked', name: 'Stacked' },
+	],
 	current = {
 		centerId: '',
+		depth: 2,
 		traitFilter: 'all',
-		typeFilter: 'all',
+		typeFilter: new Set(),
 		view: 'petal',
 		zoom: 1,
 	},
@@ -1536,10 +1557,12 @@ const
 	nodeName = nodeDescription.querySelector('h2'),
 	nodeContent = nodeDescription.querySelector('p'),
 	nodeLinks = nodeDescription.querySelector('ul'),
-	traitFilterDropdown = document.getElementById('trait-filter'),
-	typeFilterDropdown = document.getElementById('type-filter'),
-	depthDropdown = document.getElementById('depth-control'),
-	layoutDropdown = document.getElementById('layout-select'),
+	traitFilterContainer = document.getElementById('trait-filter'),
+	typeFilterContainer = document.getElementById('type-filter'),
+	depthContainer = document.getElementById('depth-control'),
+	layoutContainer = document.getElementById('layout-select'),
+	checkboxTemplate = document.getElementById('checkbox-template'),
+	radioTemplate = document.getElementById('radio-template'),
 	searchQuery = document.getElementById('query'),
 	searchResults = document.getElementById('results'),
 	cardTemplate = document.getElementById('card-template'),
@@ -1882,14 +1905,32 @@ const checkTrait = (t) => {
 
 const checkTypeFilter = (type) => {
 	const ty = type ?? 'anatomy';
-	if (current.typeFilter === 'all') return true;
-	if (filters?.types) {
-		const perspective = filters?.types.find(p => p.key === current.typeFilter);
-		if (perspective?.items) {
-			return perspective.items.includes(ty);
-		}
-	}
-	return true;
+	return current.typeFilter.has(ty);
+};
+
+const populateRadios = (container, name, items, currentValue) => {
+	container.replaceChildren();
+	items.forEach(item => {
+		const
+			clone = radioTemplate.content.cloneNode(true),
+			input = clone.querySelector('input'),
+			label = clone.querySelector('label'),
+			id = `${name}-${item.key}`;
+		input.id = id;
+		input.name = name;
+		input.value = String(item.key);
+		input.title = item.title ?? item.name;
+		input.checked = String(item.key) === String(currentValue);
+		label.setAttribute('for', id);
+		label.textContent = item.name;
+		container.appendChild(clone);
+	});
+};
+
+const setRadioValue = (container, value) => {
+	container.querySelectorAll('input[type="radio"]').forEach(r => {
+		r.checked = String(r.value) === String(value);
+	});
 };
 
 async function loadGraphData() {
@@ -1903,25 +1944,30 @@ async function loadGraphData() {
 		sources = data?.sources ?? {};
 		filters = data?.filters ?? {};
 		if (filters?.types) {
-			typeFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
-			filters?.types.forEach(p => {
-				const opt = document.createElement('option');
-				opt.value = p.key;
-				opt.textContent = p.name;
-				if (p.name) opt.name = p.name;
-				typeFilterDropdown.appendChild(opt);
+			typeFilterContainer.replaceChildren();
+			current.typeFilter = new Set();
+			filters?.types.forEach(t => {
+				const
+					clone = checkboxTemplate.content.cloneNode(true),
+					input = clone.querySelector('input'),
+					label = clone.querySelector('label'),
+					id = 'type-' + t.key;
+				input.id = id;
+				input.value = t.key;
+				input.title = t.name;
+				input.checked = t.default ?? false;
+				label.setAttribute('for', id);
+				label.textContent = t.name;
+				typeFilterContainer.appendChild(clone);
+				if (t.default) current.typeFilter.add(t.key);
 			});
-			typeFilterDropdown.value = current.typeFilter;
 		}
+		populateRadios(layoutContainer, 'layout', layouts.map(l => ({ key: l.key, name: l.name })), current.view);
+		populateRadios(depthContainer, 'depth', depths.map(d => ({ key: String(d), name: String(d) })), current.depth);
 		if (filters?.traits) {
-			traitFilterDropdown.querySelectorAll('option').forEach(el => el.remove());
-			filters?.traits.forEach(t => {
-				const opt = document.createElement('option');
-				opt.value = t.key;
-				opt.textContent = t.name;
-				traitFilterDropdown.appendChild(opt);
-			});
-			traitFilterDropdown.value = current.traitFilter;
+			const defaultTrait = filters?.traits.find(t => t.default);
+			if (defaultTrait) current.traitFilter = defaultTrait.key;
+			populateRadios(traitFilterContainer, 'trait', filters.traits.map(t => ({ key: t.key, name: t.name })), current.traitFilter);
 		}
 		document.getElementById('loading')?.style?.setProperty('display', 'none');
 		initGraph();
@@ -1934,9 +1980,9 @@ async function loadGraphData() {
 function updateUrlState(id) {
 	const url = new URL(window.location);
 	url.hash = id;
-	url.searchParams.set('d', depthDropdown.value);
+	url.searchParams.set('d', current.depth);
 	url.searchParams.set('t', current.traitFilter);
-	url.searchParams.set('p', current.typeFilter);
+	url.searchParams.set('p', [...current.typeFilter].join(','));
 	if (current.view === 'stacked') {
 		url.searchParams.set('v', 'stacked');
 	} else if (current.view === 'physics') {
@@ -1976,38 +2022,50 @@ function updateUrlPanZoom() {
 	}, 250);
 }
 
-traitFilterDropdown.addEventListener('change', (e) => {
-	current.traitFilter = e?.target?.value ?? current.traitFilter;
+traitFilterContainer.addEventListener('change', (e) => {
+	const r = e?.target;
+	if (!(r instanceof HTMLInputElement) || r.type !== 'radio' || !r.checked) return;
+	current.traitFilter = r.value;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
 	if (searchQuery?.value) {
 		searchQuery.dispatchEvent(new Event('input'));
 	}
-	e?.target?.blur();
+	r.blur();
 });
 
-typeFilterDropdown.addEventListener('change', (e) => {
-	current.typeFilter = e?.target?.value ?? current.typeFilter;
+typeFilterContainer.addEventListener('change', (e) => {
+	const cb = e?.target;
+	if (!(cb instanceof HTMLInputElement) || cb.type !== 'checkbox') return;
+	if (cb.checked) current.typeFilter.add(cb.value);
+	else current.typeFilter.delete(cb.value);
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
 	if (searchQuery?.value) {
 		searchQuery.dispatchEvent(new Event('input'));
 	}
-	e?.target?.blur();
+	cb.blur();
 });
 
-depthDropdown.addEventListener('change', (e) => {
+depthContainer.addEventListener('change', (e) => {
+	const r = e?.target;
+	if (!(r instanceof HTMLInputElement) || r.type !== 'radio' || !r.checked) return;
+	const parsed = parseInt(r.value, 10);
+	if (!Number.isFinite(parsed)) return;
+	current.depth = parsed;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
-	e?.target?.blur();
+	r.blur();
 });
 
-layoutDropdown.addEventListener('change', (e) => {
-	current.view = e?.target?.value ?? current.view;
+layoutContainer.addEventListener('change', (e) => {
+	const r = e?.target;
+	if (!(r instanceof HTMLInputElement) || r.type !== 'radio' || !r.checked) return;
+	current.view = r.value;
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
 	if (searchQuery?.value) searchQuery.dispatchEvent(new Event('input'));
-	e?.target?.blur();
+	r.blur();
 });
 
 const getCompositeGroupKey = (node) => {
@@ -2189,36 +2247,30 @@ function initGraph() {
 	const
 		url = new URL(window.location),
 		initialDepth = url.searchParams.get('d') ?? url.searchParams.get('depth');
-	if (initialDepth) depthDropdown.value = initialDepth;
+	if (initialDepth) {
+		const parsed = parseInt(initialDepth, 10);
+		if (Number.isFinite(parsed)) current.depth = parsed;
+	}
+	setRadioValue(depthContainer, current.depth);
 	let initialView = url.searchParams.get('v') ?? url.searchParams.get('view');
 	if (initialView == null && url.searchParams.get('stack') === '1') {
 		initialView = 'stacked';
 	}
-	if (initialView != null && layoutDropdown?.querySelector(`option[value="${initialView}"]`)) {
+	if (initialView != null && layouts.some(l => l.key === initialView)) {
 		current.view = initialView;
-		layoutDropdown.value = initialView;
 	}
+	setRadioValue(layoutContainer, current.view);
 	const initialTrait = url.searchParams.get('t') ?? url.searchParams.get('trait');
 	if (initialTrait) {
-		traitFilterDropdown.value = initialTrait;
 		current.traitFilter = initialTrait;
-	} else if (filters?.traits) {
-		const defaultTrait = filters?.traits.find(t => t.default);
-		if (defaultTrait) {
-			current.traitFilter = defaultTrait?.name?.toLowerCase();
-			traitFilterDropdown.value = current.traitFilter;
-		}
 	}
+	setRadioValue(traitFilterContainer, current.traitFilter);
 	const initialType = url.searchParams.get('p') ?? url.searchParams.get('perspective');
-	if (initialType) {
-		typeFilterDropdown.value = initialType;
-		current.typeFilter = initialType;
-	} else if (filters?.types) {
-		const defaultType = filters?.types.find(t => t.default);
-		if (defaultType) {
-			current.typeFilter = defaultType?.name?.toLowerCase();
-			typeFilterDropdown.value = current.typeFilter;
-		}
+	if (initialType != null) {
+		current.typeFilter = new Set(initialType.split(',').filter(Boolean));
+		typeFilterContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+			cb.checked = current.typeFilter.has(cb.value);
+		});
 	}
 	current.centerId = getIdFromHash();
 	nodes.forEach(node => {
@@ -3015,7 +3067,7 @@ function renderGraph(centerId) {
 		locked.edges = new Set();
 	}
 	current.centerId = centerId;
-	current.view = layoutDropdown?.value ?? 'petal';
+	current.view = layouts.some(l => l.key === current.view) ? current.view : 'petal';
 	const
 		fontSizeRaw = parseFloat(getComputedStyle(document.documentElement).fontSize),
 		emSize = Number.isFinite(fontSizeRaw) ? fontSizeRaw : 16,
@@ -3042,7 +3094,7 @@ function renderGraph(centerId) {
 	} else {
 		nodeDescription.classList.remove('visible');
 	}
-	const parsedDepth = parseInt(depthDropdown.value, 10);
+	const parsedDepth = current.depth;
 	let currentDepthShown = Number.isFinite(parsedDepth) ? parsedDepth : 1,
 	{ visitedNodes, visitedEdges, nodesByDepth, edgesToRender } = Bang.extractGraph(
 		centerId,
@@ -3249,18 +3301,19 @@ const setZoomAt = (newZoom, clientX, clientY) => {
 	requestPanZoomUpdate();
 };
 
-const isInUiChrome = (target, includeDescription = false) => {
+const shouldBypassGraphGestures = (target) => {
 	if (target?.closest?.('#top-bar') != null) return true;
 	if (target?.closest?.('#legends') != null) return true;
+	if (target?.closest?.('#options') != null) return true;
+	if (target?.closest?.('#description') != null) return true;
 	if (target?.closest?.('#mobile-bar') != null) return true;
 	if (target?.closest?.('#results') != null) return true;
 	if (target?.closest?.('footer') != null) return true;
-	if (includeDescription && target?.closest?.('#description') != null) return true;
 	return false;
 };
 
 appContainer.addEventListener('wheel', (e) => {
-	if (isInUiChrome(e?.target, false)) return;
+	if (shouldBypassGraphGestures(e?.target)) return;
 	e.preventDefault();
 	const zoomDelta = e.deltaY > 0 ? 0.9 : 1.1;
 	setZoomAt(current.zoom * zoomDelta, e.clientX, e.clientY);
@@ -3270,7 +3323,7 @@ appContainer.addEventListener('wheel', (e) => {
 
 appContainer.addEventListener('mousedown', (e) => {
 	if (e.button !== 0) return;
-	if (e?.target?.closest?.('.card') != null || isInUiChrome(e?.target, false)) return;
+	if (e?.target?.closest?.('.card') != null || shouldBypassGraphGestures(e?.target)) return;
 	is.graphPanning = true;
 	startPan.x = e.clientX;
 	startPan.y = e.clientY;
@@ -3362,7 +3415,7 @@ const getTwoPointers = () => {
 graphContainer.addEventListener('pointerdown', (e) => {
 	if (e.pointerType !== 'touch') return;
 	if (e?.target?.closest?.('.card')) return;
-	if (isInUiChrome(e?.target, true)) return;
+	if (shouldBypassGraphGestures(e?.target)) return;
 	e.preventDefault();
 	try {
 		graphContainer.setPointerCapture(e.pointerId);
@@ -3450,7 +3503,7 @@ if (!('PointerEvent' in window)) {
 	};
 	graphContainer.addEventListener('touchstart', (e) => {
 		if (e?.target?.closest?.('.card')) return;
-		if (isInUiChrome(e?.target, true)) return;
+		if (shouldBypassGraphGestures(e?.target)) return;
 		if ((e?.touches?.length ?? 0) === 0) return;
 		e.preventDefault();
 		if (e.touches.length === 1) {
