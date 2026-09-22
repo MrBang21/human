@@ -15,39 +15,9 @@
 			{"key": "homologous", "name": "Homologous", "default": true}
 		],
 		"traits": [
-			{
-				"key": "all",
-				"name": "All",
-				"items": [
-					"shared",
-					"female",
-					"male"
-				],
-				"default": true
-			},
-			{
-				"key": "female",
-				"name": "Female",
-				"items": [
-					"female",
-					"shared"
-				]
-			},
-			{
-				"key": "male",
-				"name": "Male",
-				"items": [
-					"male",
-					"shared"
-				]
-			},
-			{
-				"key": "shared",
-				"name": "Only Shared",
-				"items": [
-					"shared"
-				]
-			}
+			{"key": "female", "name": "Female", "default": true},
+			{"key": "male", "name": "Male", "default": true},
+			{"key": "shared", "name": "Shared", "default": true}
 		]
 	},
 	"descriptions": {
@@ -998,7 +968,7 @@
 		},
 		{
 			"id": "anatomy",
-			"name": "Shared Anatomy",
+			"name": "Anatomy",
 			"content": "Physical structures common to all humans",
 			"type": "anatomy",
 			"tag": "region",
@@ -1006,7 +976,7 @@
 		},
 		{
 			"id": "torso",
-			"name": "Shared Torso",
+			"name": "Torso",
 			"content": "Central part of the human body",
 			"type": "anatomy",
 			"tag": "region",
@@ -2130,7 +2100,7 @@
 		},
 		{
 			"id": "climax",
-			"name": "Shared Climax",
+			"name": "Climax",
 			"content": "Shared physiological peak of sexual arousal and the threshold of inevitability.",
 			"type": "sexual",
 			"tag": "sexual",
@@ -2138,7 +2108,7 @@
 		},
 		{
 			"id": "erogenous_zones",
-			"name": "Shared Erogenous Zones",
+			"name": "Erogenous Zones",
 			"content": "Areas of the human body highly sensitive to sexual stimulation",
 			"type": "sexual",
 			"tag": "sexual",
@@ -2146,7 +2116,7 @@
 		},
 		{
 			"id": "orgasm",
-			"name": "Shared Orgasm",
+			"name": "Orgasm",
 			"content": "Orgasm types and experiences possible across all genders.",
 			"type": "sexual",
 			"tag": "sexual",
@@ -2154,7 +2124,7 @@
 		},
 		{
 			"id": "sexual_pleasure",
-			"name": "Shared Sexual Pleasure",
+			"name": "Sexual Pleasure",
 			"content": "Shared experience of erotic reward and pleasurable sexual sensation",
 			"type": "sexual",
 			"tag": "sexual",
@@ -2954,11 +2924,6 @@
 		{
 			"source": "immunological_defense",
 			"target": "male_langerhans_cells",
-			"type": "anatomy"
-		},
-		{
-			"source": "inner_thighs",
-			"target": "thighs",
 			"type": "anatomy"
 		},
 		{
