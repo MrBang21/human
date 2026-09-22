@@ -1236,9 +1236,9 @@ svg {
 				<dt>Connection Depth:</dt>
 				<dd id="depth-control" class="group inline" role="radiogroup" aria-label="Connection depth"></dd>
 				<dt>Biological Trait:</dt>
-				<dd id="trait-filter" class="group inline" role="radiogroup" aria-label="Biological trait"></dd>
+				<dd id="trait-filter" class="group inline" role="group" aria-label="Biological trait"></dd>
 				<dt>Types:</dt>
-				<dd id="type-filter" class="group"></dd>
+				<dd id="type-filter" class="group inline" role="group" aria-label="Types"></dd>
 			</dl>
 		</div>
 	</aside>
@@ -1396,7 +1396,7 @@ svg {
 		</div>
 	</div>
 	<footer>
-		<div>Human Sensory Atlas v1.12 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
+		<div>Human Sensory Atlas v1.13 by <a href="https://x.com/MrBang21" target="_blank" rel="noopener">@MrBang21</a></div>
 		<div>Licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> - share freely with attribution.</div>
 	</footer>
 </main>
@@ -1474,7 +1474,7 @@ let
 	current = {
 		centerId: '',
 		depth: 2,
-		traitFilter: 'all',
+		traitFilter: new Set(),
 		typeFilter: new Set(),
 		view: 'petal',
 		zoom: 1,
@@ -1891,16 +1891,9 @@ function stopEdgesLoop() {
 	is.animationLoopRunning = false;
 }
 
-const checkTrait = (t) => {
-	const tr = t ?? 'shared';
-	if (current.traitFilter === 'all') return true;
-	if (filters?.traits) {
-		const traitFilter = filters?.traits.find(p => p.key === current.traitFilter);
-		if (traitFilter?.items) {
-			return traitFilter.items.includes(tr);
-		}
-	}
-	return true;
+const checkTrait = (trait) => {
+	const tr = trait ?? 'shared';
+	return current.traitFilter.has(tr);
 };
 
 const checkTypeFilter = (type) => {
@@ -1927,78 +1920,106 @@ const populateRadios = (container, name, items, currentValue) => {
 	});
 };
 
-const setRadioValue = (container, value) => {
+const populateCheckboxes = (container, name, items, currentValues) => {
+	container.replaceChildren();
+	items.forEach(item => {
+		const
+			clone = checkboxTemplate.content.cloneNode(true),
+			input = clone.querySelector('input'),
+			label = clone.querySelector('label'),
+			id = `${name}-${item.key}`;
+		input.id = id;
+		input.name = name;
+		input.value = String(item.key);
+		input.title = item.title ?? item.name;
+		input.checked = currentValues ? currentValues.has(String(item.key)) : (item.default ?? false);
+		label.setAttribute('for', id);
+		label.textContent = item.name;
+		container.appendChild(clone);
+	});
+};
+
+const checkRadio = (container, value) => {
 	container.querySelectorAll('input[type="radio"]').forEach(r => {
 		r.checked = String(r.value) === String(value);
 	});
 };
 
+const checkCheckboxes = (container, values) => {
+	container.querySelectorAll('input[type="checkbox"]').forEach(c => {
+		c.checked = values.has(String(c.value));
+	});
+};
+
 async function loadGraphData() {
-	try {
-		const response = await fetch('human.json');
+	await fetch(`human.json?v=${Date.now()}`, {
+		cache: 'no-store',
+	})
+	.then(response => {
 		if (!response.ok) throw new Error('Network response was not ok');
-		const data = await response.json();
+		return response;
+	})
+	.then(response => response.json())
+	.then(data => {
 		nodes = data?.nodes ?? [];
 		edges = data?.edges ?? [];
 		descriptions = data?.descriptions ?? {};
 		sources = data?.sources ?? {};
 		filters = data?.filters ?? {};
+		if (filters?.traits) {
+			current.traitFilter = new Set();
+			filters.traits.forEach(t => {
+				if (t.default) current.traitFilter.add(t.key);
+			});
+		}
 		if (filters?.types) {
-			typeFilterContainer.replaceChildren();
 			current.typeFilter = new Set();
-			filters?.types.forEach(t => {
-				const
-					clone = checkboxTemplate.content.cloneNode(true),
-					input = clone.querySelector('input'),
-					label = clone.querySelector('label'),
-					id = 'type-' + t.key;
-				input.id = id;
-				input.value = t.key;
-				input.title = t.name;
-				input.checked = t.default ?? false;
-				label.setAttribute('for', id);
-				label.textContent = t.name;
-				typeFilterContainer.appendChild(clone);
+			filters.types.forEach(t => {
 				if (t.default) current.typeFilter.add(t.key);
 			});
 		}
 		populateRadios(layoutContainer, 'layout', layouts.map(l => ({ key: l.key, name: l.name })), current.view);
 		populateRadios(depthContainer, 'depth', depths.map(d => ({ key: String(d), name: String(d) })), current.depth);
-		if (filters?.traits) {
-			const defaultTrait = filters?.traits.find(t => t.default);
-			if (defaultTrait) current.traitFilter = defaultTrait.key;
-			populateRadios(traitFilterContainer, 'trait', filters.traits.map(t => ({ key: t.key, name: t.name })), current.traitFilter);
-		}
+		populateCheckboxes(traitFilterContainer, 'trait', filters?.traits ?? [], current.traitFilter);
+		populateCheckboxes(typeFilterContainer, 'type', filters?.types ?? [], current.typeFilter);
 		document.getElementById('loading')?.style?.setProperty('display', 'none');
 		initGraph();
-	} catch (error) {
+	})
+	.catch(error => {
 		const loadingEl = document.getElementById('loading');
-		if (loadingEl) loadingEl.innerText = 'Error loading human.json. Ensure you are running a local server.';
-	}
+		if (loadingEl) {
+			loadingEl.style.setProperty('display', 'block');
+			loadingEl.innerText = `Error loading human: ${error.message}`;
+		}
+	});
 }
 
 function updateUrlState(id) {
 	const url = new URL(window.location);
 	url.hash = id;
-	url.searchParams.set('d', current.depth);
-	url.searchParams.set('t', current.traitFilter);
+	url.searchParams.set('t', [...current.traitFilter].join(','));
 	url.searchParams.set('p', [...current.typeFilter].join(','));
-	if (current.view === 'stacked') {
-		url.searchParams.set('v', 'stacked');
-	} else if (current.view === 'physics') {
-		url.searchParams.set('v', 'physics');
-	} else {
-		url.searchParams.delete('v');
+	switch (current.view) {
+		case 'stacked':
+			url.searchParams.set('v', 'stacked');
+			break;
+		case 'physics':
+			url.searchParams.set('v', 'physics');
+			break;
+		default:
+			url.searchParams.delete('v');
+			break;
 	}
+	// delete old search params
 	url.searchParams.delete('stack');
 	url.searchParams.delete('depth');
 	url.searchParams.delete('trait');
 	url.searchParams.delete('perspective');
 	url.searchParams.delete('view');
-	// Clear pan when entering new node or changing traits
 	url.searchParams.delete('x');
 	url.searchParams.delete('y');
-	history.pushState(null, null, url.toString());
+	url.searchParams.delete('z');
+	history.pushState(null, null, url.toString().replaceAll('%2C', ','));
 }
 
 let panZoomTimeout;
@@ -2023,15 +2044,16 @@ function updateUrlPanZoom() {
 }
 
 traitFilterContainer.addEventListener('change', (e) => {
-	const r = e?.target;
-	if (!(r instanceof HTMLInputElement) || r.type !== 'radio' || !r.checked) return;
-	current.traitFilter = r.value;
+	const cb = e?.target;
+	if (!(cb instanceof HTMLInputElement) || cb.type !== 'checkbox') return;
+	if (cb.checked) current.traitFilter.add(cb.value);
+	else current.traitFilter.delete(cb.value);
 	updateUrlState(current.centerId);
 	renderGraph(current.centerId);
 	if (searchQuery?.value) {
 		searchQuery.dispatchEvent(new Event('input'));
 	}
-	r.blur();
+	cb.blur();
 });
 
 typeFilterContainer.addEventListener('change', (e) => {
@@ -2251,7 +2273,8 @@ function initGraph() {
 		const parsed = parseInt(initialDepth, 10);
 		if (Number.isFinite(parsed)) current.depth = parsed;
 	}
-	setRadioValue(depthContainer, current.depth);
+	checkRadio(depthContainer, current.depth);
+
 	let initialView = url.searchParams.get('v') ?? url.searchParams.get('view');
 	if (initialView == null && url.searchParams.get('stack') === '1') {
 		initialView = 'stacked';
@@ -2259,19 +2282,24 @@ function initGraph() {
 	if (initialView != null && layouts.some(l => l.key === initialView)) {
 		current.view = initialView;
 	}
-	setRadioValue(layoutContainer, current.view);
+	checkRadio(layoutContainer, current.view);
+
 	const initialTrait = url.searchParams.get('t') ?? url.searchParams.get('trait');
-	if (initialTrait) {
-		current.traitFilter = initialTrait;
+	if (initialTrait != null) {
+		if (initialTrait === 'all' && filters?.traits) {
+			current.traitFilter = new Set(filters.traits.map(t => t.key));
+		} else {
+			current.traitFilter = new Set(initialTrait.split(',').filter(Boolean));
+		}
+		checkCheckboxes(traitFilterContainer, current.traitFilter);
 	}
-	setRadioValue(traitFilterContainer, current.traitFilter);
+
 	const initialType = url.searchParams.get('p') ?? url.searchParams.get('perspective');
 	if (initialType != null) {
 		current.typeFilter = new Set(initialType.split(',').filter(Boolean));
-		typeFilterContainer.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-			cb.checked = current.typeFilter.has(cb.value);
-		});
+		checkCheckboxes(typeFilterContainer, current.typeFilter);
 	}
+
 	current.centerId = getIdFromHash();
 	nodes.forEach(node => {
 		const
