@@ -1,98 +1,23 @@
 {
 	"filters": {
 		"types": [
-			{
-				"key": "all",
-				"name": "All",
-				"items": [
-					"root",
-					"anatomy",
-					"surgery",
-					"consequence",
-					"removed",
-					"benefit",
-					"risk",
-					"harm",
-					"nerve",
-					"sexual",
-					"energetic",
-					"homologous"
-				]
-			},
-			{
-				"key": "anatomy",
-				"name": "Anatomy",
-				"items": [
-					"root",
-					"anatomy",
-					"surgery",
-					"consequence",
-					"removed",
-					"benefit",
-					"risk",
-					"harm",
-					"nerve",
-					"sexual",
-					"homologous"
-				],
-				"default": true
-			},
-			{
-				"key": "energetic",
-				"name": "Energetic",
-				"items": [
-					"root",
-					"energetic",
-					"anatomy",
-					"surgery",
-					"consequence",
-					"risk",
-					"removed",
-					"benefit",
-					"harm",
-					"nerve",
-					"sexual"
-				]
-			},
-			{
-				"key": "neuro",
-				"name": "Neuro",
-				"items": [
-					"root",
-					"nerve",
-					"surgery"
-				]
-			},
-			{
-				"key": "erogenous",
-				"name": "Erogenous",
-				"items": [
-					"root",
-					"sexual",
-					"surgery",
-					"consequence",
-					"risk",
-					"removed",
-					"harm",
-					"benefit",
-					"homologous"
-				]
-			}
+			{"key": "root", "name": "Root", "default": true},
+			{"key": "anatomy", "name": "Anatomy", "default": true},
+			{"key": "surgery", "name": "Surgery", "default": true},
+			{"key": "consequence", "name": "Consequence", "default": true},
+			{"key": "removed", "name": "Removed", "default": true},
+			{"key": "benefit", "name": "Benefit", "default": true},
+			{"key": "risk", "name": "Risk", "default": true},
+			{"key": "harm", "name": "Harm", "default": true},
+			{"key": "nerve", "name": "Nerve", "default": true},
+			{"key": "sexual", "name": "Sexual", "default": true},
+			{"key": "energetic", "name": "Energetic", "default": false},
+			{"key": "homologous", "name": "Homologous", "default": true}
 		],
 		"traits": [
 			{
 				"key": "all",
 				"name": "All",
-				"items": [
-					"shared",
-					"female",
-					"male"
-				],
-				"default": true
-			},
-			{
-				"key": "shared",
-				"name": "Shared",
 				"items": [
 					"shared",
 					"female",
@@ -113,6 +38,13 @@
 				"name": "Male",
 				"items": [
 					"male",
+					"shared"
+				]
+			},
+			{
+				"key": "shared",
+				"name": "Only Shared",
+				"items": [
 					"shared"
 				]
 			}
@@ -531,7 +463,7 @@
 			},
 			{
 				"url": "https://www.youtube.com/watch?v=6PfiR9HFidI",
-				"name": "Everything About Circumcision Is A Lie… Everything"
+				"name": "Everything About Circumcision Is A Lie... Everything"
 			},
 			{
 				"url": "https://norm.org/the-lost-list/",
@@ -636,14 +568,6 @@
 			"id": "human",
 			"name": "Human",
 			"content": "Homo sapiens",
-			"type": "root",
-			"tag": "region",
-			"trait": "shared"
-		},
-		{
-			"id": "shared",
-			"name": "Shared Characteristics",
-			"content": "Biological characteristics shared across all genders",
 			"type": "root",
 			"tag": "region",
 			"trait": "shared"
@@ -3173,7 +3097,7 @@
 			"type": "anatomy"
 		},
 		{
-			"source": "shared",
+			"source": "human",
 			"target": "anatomy",
 			"type": "anatomy"
 		},
@@ -4443,7 +4367,7 @@
 			"type": "nerve"
 		},
 		{
-			"source": "shared",
+			"source": "human",
 			"target": "nervous_system",
 			"type": "nerve"
 		},
@@ -4803,7 +4727,7 @@
 			"type": "sexual"
 		},
 		{
-			"source": "shared",
+			"source": "human",
 			"target": "erogenous_zones",
 			"type": "sexual"
 		},
@@ -5668,33 +5592,33 @@
 			"type": "consequence"
 		},
 		{
-			"source": "male_erogenous_zones",
-			"target": "male_circ_friction",
+			"source": "male_circ_friction",
+			"target": "male_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "male_erogenous_zones",
-			"target": "male_circ_loss_of_sensitivity",
+			"source": "male_circ_loss_of_sensitivity",
+			"target": "male_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "male_erogenous_zones",
-			"target": "male_circ_neuroma",
+			"source": "male_circ_neuroma",
+			"target": "male_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "male_erogenous_zones",
-			"target": "male_circ_tight_erections",
+			"source": "male_circ_tight_erections",
+			"target": "male_erogenous_zones",
 			"type": "consequence"
 		},
 		{
-			"source": "male_glans",
-			"target": "male_circ_keratinization",
+			"source": "male_circ_keratinization",
+			"target": "male_glans",
 			"type": "consequence"
 		},
 		{
-			"source": "male_meatus",
-			"target": "male_circ_meatal_stenosis",
+			"source": "male_circ_meatal_stenosis",
+			"target": "male_meatus",
 			"type": "consequence"
 		},
 		{
